@@ -1,0 +1,5 @@
+node_modules
+dist
+.env
+.agp.sqlite
+.DS_Store
