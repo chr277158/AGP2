@@ -1,0 +1,786 @@
+---
+# ====== Page: Informations en retour ========================
+id: 10054
+identification: 
+  name: Informations en retour
+  alias: INFORMATIONS-EN-RETOUR1
+  title: Informations en retour
+  page-group: Administration # 74585101979246929220
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: false
+  resizable: false
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* Color feedback rating icons */
+    .feedback-positive { color: var(--ut-feedback-positive-text-color, var(--ut-palette-success)); }
+    .feedback-neutral { color: var(--ut-feedback-neutral-text-color, var(--ut-palette-warning)); }
+    .feedback-negative { color: var(--ut-feedback-negative-text-color, var(--ut-palette-danger)); }
+
+security: 
+  authorization-scheme: Droits d'administration # 74585100381861929216
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+configuration: 
+  build-option: 'Fonctionnalité: Informations en retour' # 74585097881391929213
+
+regions: 
+- # ====== Region: Région d'élément de panneau =================
+  id: 74585326674905929619
+  identification: 
+    name: Région d'élément de panneau
+    type: Contenu statique
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form--stretchInputs
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: Boutons =====================================
+  id: 74585326768047929619
+  identification: 
+    name: Boutons
+    type: Contenu statique
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+page-items: 
+- # ====== Page Item: P10054_ID ================================
+  id: 74585339143771929627
+  identification: 
+    name: P10054_ID
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: Région d'élément de panneau # 74585326674905929619
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10054_PAGE_ID ===========================
+  id: 74585339536229929627
+  identification: 
+    name: P10054_PAGE_ID
+    type: Afficher uniquement
+
+  label: 
+    label: Page
+    alignment: Left
+
+  settings: 
+    format: Texte brut
+    basé-sur: Valeur d'élément
+    afficher-les-sauts-de-ligne: true
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 20
+    region: Région d'élément de panneau # 74585326674905929619
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10054_FILED =============================
+  id: 74585339931042929627
+  identification: 
+    name: P10054_FILED
+    type: Afficher uniquement
+
+  label: 
+    label: Enregistré
+    alignment: Left
+
+  settings: 
+    format: Texte brut
+    basé-sur: Valeur d'élément
+    afficher-les-sauts-de-ligne: true
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 30
+    region: Région d'élément de panneau # 74585326674905929619
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10054_RATING_ICON =======================
+  id: 74585340369032929628
+  identification: 
+    name: P10054_RATING_ICON
+    type: Afficher uniquement
+
+  label: 
+    label: Evaluation
+    alignment: Left
+
+  settings: 
+    format: HTML (non sécurisé)
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 40
+    region: Région d'élément de panneau # 74585326674905929619
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10054_FEEDBACK ==========================
+  id: 74585340788125929628
+  identification: 
+    name: P10054_FEEDBACK
+    type: Afficher uniquement
+
+  label: 
+    label: Informations en retour
+    alignment: Left
+
+  settings: 
+    format: Texte brut
+    basé-sur: Valeur d'élément
+    afficher-les-sauts-de-ligne: true
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 50
+    region: Région d'élément de panneau # 74585326674905929619
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10054_RESPONSE ==========================
+  id: 74585341147952929628
+  identification: 
+    name: P10054_RESPONSE
+    type: Zone de texte
+
+  label: 
+    label: Réponse
+    alignment: Left
+
+  settings: 
+    redimensionnable: true
+    hauteur-automatique: false
+    compteur-de-caractères: false
+    supprimer-les-espaces: Début et fin
+
+  layout: 
+    sequence: 60
+    region: Région d'élément de panneau # 74585326674905929619
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 64
+    height: 4
+
+  validation: 
+    value-required: false
+    maximum-length: 4000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10054_FEEDBACK_STATUS ===================
+  id: 74585341556825929629
+  identification: 
+    name: P10054_FEEDBACK_STATUS
+    type: Liste SELECT
+
+  label: 
+    label: Statut
+    alignment: Left
+
+  settings: 
+    action-de-page-lors-de-la-sélection: Aucun
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: Région d'élément de panneau # 74585326674905929619
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: FEEDBACK_STATUS # 74585341676288929629
+    display-extra-values: false
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10054_USER_AGENT ========================
+  id: 74585343868393929630
+  identification: 
+    name: P10054_USER_AGENT
+    type: Afficher uniquement
+
+  label: 
+    label: Agent utilisateur
+    alignment: Left
+
+  settings: 
+    format: Texte brut
+    basé-sur: Valeur d'élément
+    afficher-les-sauts-de-ligne: true
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 100
+    region: Région d'élément de panneau # 74585326674905929619
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: SAVE ========================================
+  id: 74585326851153929619
+  identification: 
+    button-name: SAVE
+    label: Appliquer les modifications
+
+  layout: 
+    sequence: 10
+    region: Boutons # 74585326768047929619
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--gapLeft
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: DELETE ======================================
+  id: 74585327020072929619
+  identification: 
+    button-name: DELETE
+    label: Supprimer
+
+  layout: 
+    sequence: 20
+    region: Boutons # 74585326768047929619
+    slot: EDIT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--danger
+    - t-Button--simple
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation: 
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P10054_ID
+
+- # ====== Button: CANCEL ======================================
+  id: 74585337550365929626
+  identification: 
+    button-name: CANCEL
+    label: Annuler
+
+  layout: 
+    sequence: 10
+    region: Boutons # 74585326768047929619
+    slot: EDIT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: false
+
+dynamic-actions: 
+- # ====== Dynamic Action: Annuler la boîte de dialogue ========
+  id: 74585337673836929626
+  identification: 
+    name: Annuler la boîte de dialogue
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 74585337550365929626
+
+  actions: 
+  - # ====== Action: Annuler la boîte de dialogue ================
+    id: 74585338396263929626
+    identification: 
+      action: Annuler la boîte de dialogue
+
+    execution: 
+      sequence: 10
+      event: Annuler la boîte de dialogue # 74585337673836929626
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Charger les données ========================
+  id: 74585344372271929630
+  identification: 
+    name: Charger les données
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      for l_feedback in (
+         select page_id,
+                page_name,
+                case feedback_rating
+                      when 1 then '<span class="fa fa-frown-o feedback-negative" aria-hidden="true" title="N&#xE9;gatif"></span>' 
+                      when 2 then '<span class="fa fa-emoji-neutral feedback-neutral" aria-hidden="true" title="Neutre"></span>'  
+                      when 3 then '<span class="fa fa-smile-o feedback-positive" aria-hidden="true" title="Positif"></span>' 
+                      end rating_icon,
+                lower(created_by) || ' - ' || apex_util.get_since(created_on) filed,
+                feedback,
+                public_response,
+                feedback_status,
+                http_user_agent
+           from apex_team_feedback
+          where feedback_id = :P10054_ID )
+      loop
+         :P10054_PAGE_ID         := l_feedback.page_id||'. '||l_feedback.page_name;
+         :P10054_FILED           := l_feedback.filed;
+         :P10054_RATING_ICON     := l_feedback.rating_icon;
+         :P10054_FEEDBACK        := l_feedback.feedback;
+         :P10054_RESPONSE        := l_feedback.public_response;
+         :P10054_FEEDBACK_STATUS := l_feedback.feedback_status;
+         :P10054_USER_AGENT      := l_feedback.http_user_agent;
+      end loop;
+
+  execution: 
+    sequence: 10
+    point: After Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Répondre aux informations en retour ========
+  id: 74585344714297929630
+  identification: 
+    name: Répondre aux informations en retour
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      apex_util.reply_to_feedback (
+          p_feedback_id     => :P10054_ID,
+          p_status          => :P10054_FEEDBACK_STATUS,
+          p_public_response => :P10054_RESPONSE );
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Action traitée.
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: SAVE # 74585326851153929619
+
+- # ====== Process: Supprimer les informations en retour =======
+  id: 74585345160063929630
+  identification: 
+    name: Supprimer les informations en retour
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      apex_util.delete_feedback (
+          p_feedback_id => :P10054_ID );
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  success-message: 
+    success-message: Informations en retour supprimées
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: DELETE # 74585327020072929619
+
+- # ====== Process: Effacer le cache des pages =================
+  id: 74585345546934929631
+  identification: 
+    name: Effacer le cache des pages
+    type: Effacer l'état de session
+    execution-chain: None
+
+  settings: 
+    type: Effacer tous les éléments sur la page en cours
+
+  execution: 
+    sequence: 40
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: DELETE # 74585327020072929619
+
+- # ====== Process: Fermer la boîte de dialogue ================
+  id: 74585345937575929631
+  identification: 
+    name: Fermer la boîte de dialogue
+    type: Fermer la boîte de dialogue
+    execution-chain: None
+
+  settings: 
+    afficher-les-messages-de-succès: false
+
+  execution: 
+    sequence: 50
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

@@ -1,0 +1,1063 @@
+---
+# ====== Page: Principaux utilisateurs =======================
+id: 10031
+identification: 
+  name: Principaux utilisateurs
+  alias: PRINCIPAUX-UTILISATEURS
+  title: Principaux utilisateurs
+  page-group: Administration # 74585101979246929220
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+  - ui-dialog--stretch
+  - t-Dialog--noPadding
+
+dialog: 
+  chained: true
+  resizable: false
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: false
+
+css: 
+  inline: |
+    .hour-graph { display: table; width: 100%; }
+    span.hour { display: table-cell; padding: 0; font-size: 11px; text-align: center; min-width: 32px; }
+    span.hour-label { opacity: 0.5; }
+    span.hour-value { display: block; }
+    span.hour { background-color: var(--ut-palette-success); color:  var(--ut-palette-success-contrast); }
+    span.hour.is-null { background-color: var(--ut-component-highlight-background-color); color: var(--ut-component-text-default-color); }
+    span.hour.is-over1k { background-color: var(--ut-palette-primary); color:  var(--ut-palette-primary-contrast); }
+
+security: 
+  authorization-scheme: Droits d'administration # 74585100381861929216
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+help: 
+  help-text: |
+    <p>Utilisez cet état et ce graphique pour afficher les utilisateurs comportant le plus de vues de page pour la tanche de temps spécifiée.</p>
+    <p>Sélectionnez la tranche de temps de génération d'état (par défaut = 1 jour) et choisissez l'icône d'état ou de graphique en haut de la page.</p>
+    <p>Pour l'état interactif, utilisez le champ de recherche ou sélectionnez l'en-tête de colonne <strong>Utilisateur</strong> pour sélectionner un utilisateur spécifique. Vous pouvez exécuter de nombreuses fonctions en cliquant sur le bouton <strong>Actions</strong>, telles que les colonnes affichées/masquées, les lignes par page, les filtres, etc. Pour rétablir les paramètres par défaut de l'état interactif, cliquez sur le bouton <strong>Réinitialiser</strong>.</p>
+
+configuration: 
+  build-option: "Fonctionnalité: Génération d'états d'activité" # 74585097796904929213
+
+regions: 
+- # ====== Region: Principaux utilisateurs =====================
+  id: 74585262179531929479
+  identification: 
+    name: Principaux utilisateurs
+    type: Etat interactif
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select the_user,
+          '<div class="hour-graph">'||
+              '<span class="hour'|| case when h00 = 0 then ' is-null' when h00 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 0</span> <span class="hour-value">'|| 
+              case when h00 > 999 then to_char((h00/1000),'99999999D0') ||'k' else to_char(h00) end ||'</span></span>'||
+              '<span class="hour'|| case when h01 = 0 then ' is-null' when h01 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 1</span> <span class="hour-value">'|| 
+              case when h01 > 999 then to_char((h01/1000),'99999999D0') ||'k' else to_char(h01) end ||'</span></span>'||
+              '<span class="hour'|| case when h02 = 0 then ' is-null' when h02 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 2</span> <span class="hour-value">'|| 
+              case when h02 > 999 then to_char((h02/1000),'99999999D0') ||'k' else to_char(h02) end ||'</span></span>'||
+              '<span class="hour'|| case when h03 = 0 then ' is-null' when h03 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 3</span> <span class="hour-value">'|| 
+              case when h03 > 999 then to_char((h03/1000),'99999999D0') ||'k' else to_char(h03) end ||'</span></span>'||
+              '<span class="hour'|| case when h04 = 0 then ' is-null' when h04 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 4</span> <span class="hour-value">'|| 
+              case when h04 > 999 then to_char((h04/1000),'99999999D0') ||'k' else to_char(h04) end ||'</span></span>'||
+              '<span class="hour'|| case when h05 = 0 then ' is-null' when h05 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 5</span> <span class="hour-value">'|| 
+              case when h05 > 999 then to_char((h05/1000),'99999999D0') ||'k' else to_char(h05) end ||'</span></span>'||
+              '<span class="hour'|| case when h06 = 0 then ' is-null' when h06 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 6</span> <span class="hour-value">'|| 
+              case when h06 > 999 then to_char((h06/1000),'99999999D0') ||'k' else to_char(h06) end ||'</span></span>'||
+              '<span class="hour'|| case when h07 = 0 then ' is-null' when h07 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 7</span> <span class="hour-value">'|| 
+              case when h07 > 999 then to_char((h07/1000),'99999999D0') ||'k' else to_char(h07) end ||'</span></span>'||
+              '<span class="hour'|| case when h08 = 0 then ' is-null' when h08 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 8</span> <span class="hour-value">'|| 
+              case when h08 > 999 then to_char((h08/1000),'99999999D0') ||'k' else to_char(h08) end ||'</span></span>'||
+              '<span class="hour'|| case when h09 = 0 then ' is-null' when h09 > 999 then ' is-over1k' end ||'"><span class="hour-label"> 9</span> <span class="hour-value">'|| 
+              case when h09 > 999 then to_char((h09/1000),'99999999D0') ||'k' else to_char(h09) end ||'</span></span>'||
+              '<span class="hour'|| case when h10 = 0 then ' is-null' when h10 > 999 then ' is-over1k' end ||'"><span class="hour-label">10</span> <span class="hour-value">'|| 
+              case when h10 > 999 then to_char((h10/1000),'99999999D0') ||'k' else to_char(h10) end ||'</span></span>'||
+              '<span class="hour'|| case when h11 = 0 then ' is-null' when h11 > 999 then ' is-over1k' end ||'"><span class="hour-label">11</span> <span class="hour-value">'|| 
+              case when h11 > 999 then to_char((h11/1000),'99999999D0') ||'k' else to_char(h11) end ||'</span></span>'||
+              '<span class="hour'|| case when h12 = 0 then ' is-null' when h12 > 999 then ' is-over1k' end ||'"><span class="hour-label">12</span> <span class="hour-value">'|| 
+              case when h12 > 999 then to_char((h12/1000),'99999999D0') ||'k' else to_char(h12) end ||'</span></span>'||
+              '<span class="hour'|| case when h13 = 0 then ' is-null' when h13 > 999 then ' is-over1k' end ||'"><span class="hour-label">13</span> <span class="hour-value">'|| 
+              case when h13 > 999 then to_char((h13/1000),'99999999D0') ||'k' else to_char(h13) end ||'</span></span>'||
+              '<span class="hour'|| case when h14 = 0 then ' is-null' when h14 > 999 then ' is-over1k' end ||'"><span class="hour-label">14</span> <span class="hour-value">'|| 
+              case when h14 > 999 then to_char((h14/1000),'99999999D0') ||'k' else to_char(h14) end ||'</span></span>'||
+              '<span class="hour'|| case when h15 = 0 then ' is-null' when h15 > 999 then ' is-over1k' end ||'"><span class="hour-label">15</span> <span class="hour-value">'|| 
+              case when h15 > 999 then to_char((h15/1000),'99999999D0') ||'k' else to_char(h15) end ||'</span></span>'||
+              '<span class="hour'|| case when h16 = 0 then ' is-null' when h16 > 999 then ' is-over1k' end ||'"><span class="hour-label">16</span> <span class="hour-value">'|| 
+              case when h16 > 999 then to_char((h16/1000),'99999999D0') ||'k' else to_char(h16) end ||'</span></span>'||
+              '<span class="hour'|| case when h17 = 0 then ' is-null' when h17 > 999 then ' is-over1k' end ||'"><span class="hour-label">17</span> <span class="hour-value">'|| 
+              case when h17 > 999 then to_char((h17/1000),'99999999D0') ||'k' else to_char(h17) end ||'</span></span>'||
+              '<span class="hour'|| case when h18 = 0 then ' is-null' when h18 > 999 then ' is-over1k' end ||'"><span class="hour-label">18</span> <span class="hour-value">'|| 
+              case when h18 > 999 then to_char((h18/1000),'99999999D0') ||'k' else to_char(h18) end ||'</span></span>'||
+              '<span class="hour'|| case when h19 = 0 then ' is-null' when h19 > 999 then ' is-over1k' end ||'"><span class="hour-label">19</span> <span class="hour-value">'|| 
+              case when h19 > 999 then to_char((h19/1000),'99999999D0') ||'k' else to_char(h19) end ||'</span></span>'||
+              '<span class="hour'|| case when h20 = 0 then ' is-null' when h20 > 999 then ' is-over1k' end ||'"><span class="hour-label">20</span> <span class="hour-value">'|| 
+              case when h20 > 999 then to_char((h20/1000),'99999999D0') ||'k' else to_char(h20) end ||'</span></span>'||
+              '<span class="hour'|| case when h21 = 0 then ' is-null' when h21 > 999 then ' is-over1k' end ||'"><span class="hour-label">21</span> <span class="hour-value">'|| 
+              case when h21 > 999 then to_char((h21/1000),'99999999D0') ||'k' else to_char(h21) end ||'</span></span>'||
+              '<span class="hour'|| case when h22 = 0 then ' is-null' when h22 > 999 then ' is-over1k' end ||'"><span class="hour-label">22</span> <span class="hour-value">'|| 
+              case when h22 > 999 then to_char((h22/1000),'99999999D0') ||'k' else to_char(h22) end ||'</span></span>'||
+              '<span class="hour'|| case when h23 = 0 then ' is-null' when h23 > 999 then ' is-over1k' end ||'"><span class="hour-label">23</span> <span class="hour-value">'|| 
+              case when h23 > 999 then to_char((h23/1000),'99999999D0') ||'k' else to_char(h23) end ||'</span></span>'||
+              '</div>' hours,
+              page_events,
+          median_elapsed,
+          rows_fetched,
+          ir_searches,
+          errors,
+          most_recent
+          from (  
+          select userid_lc                    as the_user,
+              count(*)                        as page_events,
+              median(elap)                    as median_elapsed,
+              sum(num_rows)                   as rows_fetched,
+              sum(decode(ir_search,null,0,1)) as ir_searches,
+              sum(decode(sqlerrm,null,0,1))   as errors,
+              max(time_stamp)                 as most_recent,
+              sum(decode(to_char(time_stamp,'HH24'),0,1,0)) h00,
+              sum(decode(to_char(time_stamp,'HH24'),1,1,0)) h01,
+              sum(decode(to_char(time_stamp,'HH24'),2,1,0)) h02,
+              sum(decode(to_char(time_stamp,'HH24'),3,1,0)) h03,
+              sum(decode(to_char(time_stamp,'HH24'),4,1,0)) h04,
+              sum(decode(to_char(time_stamp,'HH24'),5,1,0)) h05,
+              sum(decode(to_char(time_stamp,'HH24'),6,1,0)) h06,
+              sum(decode(to_char(time_stamp,'HH24'),7,1,0)) h07,
+              sum(decode(to_char(time_stamp,'HH24'),8,1,0)) h08,
+              sum(decode(to_char(time_stamp,'HH24'),9,1,0)) h09,
+              sum(decode(to_char(time_stamp,'HH24'),10,1,0)) h10,
+              sum(decode(to_char(time_stamp,'HH24'),11,1,0)) h11,
+              sum(decode(to_char(time_stamp,'HH24'),12,1,0)) h12,
+              sum(decode(to_char(time_stamp,'HH24'),13,1,0)) h13,
+              sum(decode(to_char(time_stamp,'HH24'),14,1,0)) h14,
+              sum(decode(to_char(time_stamp,'HH24'),15,1,0)) h15,
+              sum(decode(to_char(time_stamp,'HH24'),16,1,0)) h16,
+              sum(decode(to_char(time_stamp,'HH24'),17,1,0)) h17,
+              sum(decode(to_char(time_stamp,'HH24'),18,1,0)) h18,
+              sum(decode(to_char(time_stamp,'HH24'),19,1,0)) h19,
+              sum(decode(to_char(time_stamp,'HH24'),20,1,0)) h20,
+              sum(decode(to_char(time_stamp,'HH24'),21,1,0)) h21,
+              sum(decode(to_char(time_stamp,'HH24'),22,1,0)) h22,
+              sum(decode(to_char(time_stamp,'HH24'),23,1,0)) h23
+          from apex_activity_log l
+          where flow_id = :APP_ID
+              and time_stamp >= sysdate - ( 1/24/60/60 * :P10031_TIMEFRAME )
+              and userid is not null
+          group by userid_lc) x
+    page-items-to-submit: 
+    - P10031_TIMEFRAME
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--noBorders
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item = Value
+    item: P10031_VIEW_AS
+    value: REPORT
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 74585263254437929479
+    link: 
+      link-column: Exclude Link Column
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: Aucune donnée n'a été trouvée.
+      when-more-data-found: "Le nombre maximal de lignes pour cet état est de #MAX_ROW_COUNT# lignes. Appliquez un filtre pour réduire le nombre d'enregistrements dans votre requête."
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: false
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Etat principal ========================
+      id: 74585269581962929503
+      identification: 
+        name: Etat principal
+        alias: 482019844
+
+    columns: 
+    - # ====== Column: THE_USER ====================================
+      id: 74585263605601929485
+      identification: 
+        column-name: THE_USER
+        type: Texte brut
+
+      heading: 
+        heading: Utilisateur
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 1
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: HOURS =======================================
+      id: 74585264086379929486
+      identification: 
+        column-name: HOURS
+        type: Texte brut
+
+      heading: 
+        heading: Activité par heure
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: false
+
+    - # ====== Column: PAGE_EVENTS =================================
+      id: 74585264404613929487
+      identification: 
+        column-name: PAGE_EVENTS
+        type: Texte brut
+
+      heading: 
+        heading: Evénements de page
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G999G990
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MEDIAN_ELAPSED ==============================
+      id: 74585264871396929488
+      identification: 
+        column-name: MEDIAN_ELAPSED
+        type: Texte brut
+
+      heading: 
+        heading: Temps médian écoulé
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G999G990D0000
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ROWS_FETCHED ================================
+      id: 74585265241981929489
+      identification: 
+        column-name: ROWS_FETCHED
+        type: Texte brut
+
+      heading: 
+        heading: Lignes extraites
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 5
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G999G990
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: IR_SEARCHES =================================
+      id: 74585265626295929491
+      identification: 
+        column-name: IR_SEARCHES
+        type: Texte brut
+
+      heading: 
+        heading: Recherche d'état interactif
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G999G999G990
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: ERRORS ======================================
+      id: 74585266096078929492
+      identification: 
+        column-name: ERRORS
+        type: Texte brut
+
+      heading: 
+        heading: Erreurs
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 7
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: 999G999G999G999G999G999G990
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: MOST_RECENT =================================
+      id: 74585266449516929493
+      identification: 
+        column-name: MOST_RECENT
+        type: Texte brut
+
+      heading: 
+        heading: Most_Recent
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 8
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: SINCE
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Principaux utilisateurs
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+- # ====== Region: Boutons =====================================
+  id: 74585262232886929479
+  identification: 
+    name: Boutons
+    type: Contenu statique
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-ButtonRegion--slimPadding
+    - t-ButtonRegion--noUI
+    - t-Form--large
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: Graphique des principaux utilisateurs =======
+  id: 74585262406571929479
+  identification: 
+    name: Graphique des principaux utilisateurs
+    type: Graphique
+
+  source: 
+    location: None
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--hideHeader js-addHiddenHeadingRoleDesc
+    - t-Region--hiddenOverflow
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item = Value
+    item: P10031_VIEW_AS
+    value: CHART
+
+  security: 
+    escape-special-characters: true
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 74585262559669929479
+    chart: 
+      type: Donut
+
+    layout: 
+      height: 600
+
+    data-cursor: 
+      cursor: Automatic
+      behavior: Automatic
+      dim-on-hover: true
+
+    settings: 
+      pie-selection-effect: Highlight
+
+    value: 
+      pie-chart-other-threshold: 0.02
+      format: Decimal
+      decimal-places: 0
+      format-scaling: Automatic
+
+    animation: 
+      on-display: None
+      on-data-change: Automatic
+
+    tooltip: 
+      show: true
+      show-series-name: true
+      show-value: true
+
+    legend: 
+      show: false
+
+    advanced: 
+      initialization-javascript-function: |
+        function( options ){ 
+        
+            this.pieSliceLabel = function(dataContext) {
+                var series_name,
+                    percent = Math.round(dataContext.value/dataContext.totalValue*100);
+                
+                if ( dataContext.seriesData ) {
+                    series_name = dataContext.seriesData.name;
+                } else {
+                    series_name = 'Other';
+                }
+                return series_name + " " + percent + "% ( " + dataContext.value + " )";
+            }
+            
+            // Set chart initialization options 
+            options.dataLabel = pieSliceLabel; 
+            return options; 
+        }
+
+    series: 
+    - # ====== Series: Série 1 =====================================
+      id: 74585273188155929508
+      identification: 
+        name: Série 1
+
+      execution: 
+        sequence: 10
+
+      source: 
+        location: Local Database
+        type: SQL Query
+        sql-query: |
+          select userid_lc as userid,
+                 count(*) as page_views
+            from apex_activity_log
+           where flow_id     = :app_id
+             and time_stamp >= sysdate - ( 1/24/60/60 * :P10031_TIMEFRAME )
+             and userid     is not null
+           group by userid_lc
+           order by 2
+        page-items-to-submit: 
+        - P10031_TIMEFRAME
+
+      order-by: 
+        type: None
+
+      column-mapping: 
+        label: USERID
+        value: PAGE_VIEWS
+
+      label: 
+        show: true
+        position: Outside Slice
+        display-as: Label
+
+page-items: 
+- # ====== Page Item: P10031_VIEW_AS ===========================
+  id: 74585262661991929479
+  identification: 
+    name: P10031_VIEW_AS
+    type: Groupe de boutons d'option
+
+  label: 
+    label: Visualiser comme
+    alignment: Left
+
+  settings: 
+    nombre-de-colonnes: 2
+    action-de-page-lors-de-la-sélection: Soumettre une page
+    exécuter-les-validations: true
+
+  layout: 
+    sequence: 20
+    region: Boutons # 74585262232886929479
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form-fieldContainer--radioButtonGroup
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: VIEW_AS_REPORT_CHART # 74585273605030929509
+    display-extra-values: false
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Static Value
+    static-value: REPORT
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: REPORT
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    escape-special-characters: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10031_TIMEFRAME =========================
+  id: 74585262880065929479
+  identification: 
+    name: P10031_TIMEFRAME
+    type: Liste SELECT
+
+  label: 
+    label: Tranche de temps
+    alignment: Left
+
+  settings: 
+    action-de-page-lors-de-la-sélection: Aucun
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 10
+    region: Boutons # 74585262232886929479
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: TIMEFRAME (4 WEEKS) # 74585227289942929440
+    display-extra-values: false
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Static Value
+    static-value: 900
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: 900
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: RESET_REPORT ================================
+  id: 74585270454768929504
+  identification: 
+    button-name: RESET_REPORT
+    label: Réinitialiser
+
+  layout: 
+    sequence: 20
+    region: Principaux utilisateurs # 74585262179531929479
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - t-Button--iconLeft
+    icon: fa-undo-alt
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:&APP_PAGE_ID.:&SESSION.::&DEBUG.:&APP_PAGE_ID.,RR::'
+      page: '&APP_PAGE_ID.'
+      clear-cache: '&APP_PAGE_ID.,RR'
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Régénérer l'état ====================
+  id: 74585262339073929479
+  identification: 
+    name: Régénérer l'état
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P10031_TIMEFRAME
+
+  actions: 
+  - # ====== Action: Régénérer ===================================
+    id: 74585271779371929506
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Principaux utilisateurs # 74585262179531929479
+
+    execution: 
+      sequence: 10
+      event: Régénérer l'état # 74585262339073929479
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Régénérer ===================================
+    id: 74585275173402929509
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Principaux utilisateurs # 74585262179531929479
+
+    execution: 
+      sequence: 30
+      event: Régénérer l'état # 74585262339073929479
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

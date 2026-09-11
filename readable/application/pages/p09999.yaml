@@ -1,0 +1,467 @@
+---
+# ====== Page: Page de connexion =============================
+id: 9999
+identification: 
+  name: Page de connexion
+  alias: LOGIN
+  title: Cc - Connexion
+
+appearance: 
+  page-mode: Normal
+  page-template: Login
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: First item on page
+  warn-on-unsaved-changes: false
+
+security: 
+  authentication: Page Is Public
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-meta-tags: false
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Connexion  ==================================
+  id: 74585102685212929224
+  identification: 
+    name: 'Connexion '
+    type: Contenu statique
+
+  source: 
+    html-code: '<img src="#APP_FILES#icons/app-icon-512.png" alt="Girl in a jacket" style="width:400px;height:200px;">'
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Login
+    template-options: 
+    - '#DEFAULT#'
+    - t-Login-region--headerHidden js-removeLandmark
+    icon: fa-lg fa-collapsible
+    render-components: Below Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  image: 
+    file-url: '#APP_FILES#icons/app-icon-512.png'
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: true
+
+page-items: 
+- # ====== Page Item: P9999_USERNAME ===========================
+  id: 74585103178199929225
+  identification: 
+    name: P9999_USERNAME
+    type: Champ de texte
+
+  label: 
+    label: Nom Utilisateur
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Aucun
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 40
+    region: 'Connexion ' # 74585102685212929224
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-user
+    width: 40
+    value-placeholder: Nom utilisateur
+
+  validation: 
+    value-required: false
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P9999_PASSWORD ===========================
+  id: 74585103527236929225
+  identification: 
+    name: P9999_PASSWORD
+    type: Mot de passe
+
+  label: 
+    label: Mot de passe
+    alignment: Left
+
+  settings: 
+    soumettre-lorsque-la-touche-entrée-est-activée: true
+
+  layout: 
+    sequence: 50
+    region: 'Connexion ' # 74585102685212929224
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-key
+    width: 40
+    value-placeholder: Mot de passe
+
+  validation: 
+    value-required: false
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P9999_REMEMBER ===========================
+  id: 74585103942481929225
+  identification: 
+    name: P9999_REMEMBER
+    type: Case à cocher
+
+  label: 
+    label: Mémoriser le nom utilisateur
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 60
+    region: 'Connexion ' # 74585102685212929224
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: apex_authentication.persistent_cookies_enabled and not apex_authentication.persistent_auth_enabled
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P9999_PERSISTENT_AUTH ====================
+  id: 74585104398777929226
+  identification: 
+    name: P9999_PERSISTENT_AUTH
+    type: Case à cocher
+
+  label: 
+    label: Se souvenir de moi
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 70
+    region: 'Connexion ' # 74585102685212929224
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: apex_authentication.persistent_auth_enabled
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: LOGIN =======================================
+  id: 74585104793747929226
+  identification: 
+    button-name: LOGIN
+    label: Ouvrir une session
+
+  layout: 
+    sequence: 40
+    region: 'Connexion ' # 74585102685212929224
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+processes: 
+- # ====== Process: Login ======================================
+  id: 74585105175889929226
+  identification: 
+    name: Login
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      apex_authentication.login(
+          p_username => :P9999_USERNAME,
+          p_password => :P9999_PASSWORD,
+          p_set_persistent_auth => nvl(:P9999_PERSISTENT_AUTH, 'N') = 'Y' );
+          :P0_MAT := :P9999_USERNAME;
+              SELECT NOM into :P0_USER
+          from T_USER where MATRICULE = :P9999_USERNAME; 
+      
+       
+        
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Définir le cookie de nom utilisateur =======
+  id: 74585105564795929227
+  identification: 
+    name: Définir le cookie de nom utilisateur
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      apex_authentication.login(
+          p_username => :P9999_USERNAME,
+          p_password => :P9999_PASSWORD,
+          p_set_persistent_auth => nvl(:P9999_PERSISTENT_AUTH, 'N') = 'Y' );
+      
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Obtenir le cookie de nom utilisateur =======
+  id: 74585105964816929227
+  identification: 
+    name: Obtenir le cookie de nom utilisateur
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      :P9999_USERNAME := apex_authentication.get_login_username_cookie;
+      :P9999_REMEMBER := case when :P9999_USERNAME is not null then 'Y' end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Effacer le cache des pages =================
+  id: 74585106349812929227
+  identification: 
+    name: Effacer le cache des pages
+    type: Effacer l'état de session
+    execution-chain: None
+
+  settings: 
+    type: Effacer tous les éléments sur la page en cours
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+branches: 
+- # ====== Branch: Branch To URL Identified By Item ============
+  id: 16584496595419737
+  identification: 
+    name: Branch To URL Identified By Item
+
+  execution: 
+    sequence: 10
+    point: After Processing
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:44:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 44 # Tableau de bord 
+
+  server-side-condition: 
+    type: Item = Value
+    item: P0_HOME
+    value: 44
+
+- # ====== Branch: Go To Page 44 ===============================
+  id: 16584721986419739
+  identification: 
+    name: Go To Page 44
+
+  execution: 
+    sequence: 100
+    point: After Submit
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:44:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 44 # Tableau de bord 
+
+  server-side-condition: 
+    type: Item = Value
+    item: P0_HOME
+    value: 44
+

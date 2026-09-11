@@ -1,0 +1,139 @@
+---
+# ====== Page: chargement des données ========================
+id: 10002
+identification: 
+  name: chargement des données
+  alias: T
+  title: chargement des données
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Breadcrumb ==================================
+  id: 16597207337970359
+  identification: 
+    name: Breadcrumb
+    type: Chemin de navigation
+
+  source: 
+    breadcrumb: Chemin de navigation # 74584700736997929123
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+dynamic-actions: 
+- # ====== Dynamic Action: New =================================
+  id: 16585667941419748
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 10
+    event-scope: Once
+
+  when: 
+    event: Page Load
+
+  client-side-condition: 
+    type: Item = Value
+    item: P0_HOME
+    value: 44
+
+  actions: 
+  - # ====== Action: Exécuter le code JavaScript =================
+    id: 16585764898419749
+    identification: 
+      action: Exécuter le code JavaScript
+
+    settings: 
+      code: |
+        apex.navigation.redirect(
+            apex.util.makeApplicationUrl({
+                pageId: 44
+            })
+        );
+
+    execution: 
+      sequence: 10
+      event: New # 16585667941419748
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Exécuter le code JavaScript =================
+    id: 16585795064419750
+    identification: 
+      action: Exécuter le code JavaScript
+
+    settings: 
+      code: |
+        apex.navigation.redirect(
+            apex.util.makeApplicationUrl({
+                pageId: 1
+            })
+        );
+
+    execution: 
+      sequence: 10
+      event: New # 16585667941419748
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+

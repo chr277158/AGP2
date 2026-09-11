@@ -1,0 +1,342 @@
+---
+# ====== Application: Suivi Des Dossiers v2.3 ================
+id: 102
+identification: 
+  name: Suivi Des Dossiers v2.3
+  alias: SUIVI_DES_APPELS_D_OFFRES177924
+  version: Release 2.3
+
+row-search: 
+  tokenize: true
+  text-query-function: None
+
+availability: 
+  status: Available with Developer Toolbar
+  build-status: Run and Build Application
+
+error-handling: 
+  default-display-location: Inline with Field and in Notification
+
+report-printing: 
+  type: Use Instance Settings
+
+advanced: 
+  friendly-urls: true
+  allow-feedback: true
+  logging: true
+  debugging: true
+  compatibility-mode: 21.2 to 24.1
+  accessible-read-only-items: false
+  pass-ecid: N
+  copyright-banner: |
+    Nom : #APP_NAME#
+    Copyright (c) 2025, #YEAR#, CHR
+
+authentication: 
+  public-user: APEX_PUBLIC_USER
+  authentication-scheme: Custom Login T_USER # 17246660092246593
+
+authorization: 
+  authorization-scheme: Droits de lecteur # 74585100429726929216
+  run-on-public-pages: false
+  run-on-background-job: true
+  source-for-role-or-group-schemes: Access Control User Role Assignments
+
+session-management: 
+  rejoin-sessions: Enabled for Public Sessions
+  maximum-session-idle-time: 43200
+
+session-state-protection: 
+  enabled: true
+
+security: 
+  deep-linking: Disabled
+  browser-cache: Enabled
+  embed-in-frames: Deny
+  referrer-policy: strict-origin
+  html-escaping-mode: Extended
+  runtime-api-usage: 
+  - Modify This Application
+
+database-session: 
+  parsing-schema: WKSP_GCT
+
+globalization: 
+  primary-language: French (France) (fr)
+  document-direction: Left-To-Right
+  language-derived-from: Application Primary Language
+  automatic-time-zone: false
+  automatic-csv-encoding: true
+
+application-format-masks: 
+  date: DS
+  timestamp: DS
+  timestamp-time-zone: DS
+
+character-value-comparison: 
+  behavior: Database session NLS setting (default)
+
+logo: 
+  type: Text
+  text: Suivi Des Dossiers
+
+progressive-web-app: 
+  enable: true
+  installable: true
+  display: Standalone
+  screen-orientation: Any
+  ios-status-bar-style: Translucent
+  enable-push-notifications: true
+  pwa-push-notifications-credentials: App 102 Push Notifications Credentials # 14433058396193118
+  contact-email: chr277158@gmail.com
+
+navigation: 
+  home-url: 
+    url: 'f?p=&APP_ID.:10002:&SESSION.'
+    page: 10002 # chargement des données
+
+  login-url: 
+    url: 'f?p=&APP_ID.:9999:&SESSION.'
+    page: 9999 # Page de connexion
+
+navigation-menu: 
+  list-template: Side Navigation Menu
+  template-options: 
+  - js-addActions
+  - js-defaultCollapsed
+  - js-navCollapsed--default
+  - t-TreeNav--classic
+  list-position: Side
+  list: Menu de navigation # 74584701217313929124
+
+navigation-bar: 
+  implementation: List
+  list: Barre de navigation # 74585095312945929210
+  list-template: Navigation Bar
+  template-options: 
+  - '#DEFAULT#'
+
+javascript: 
+  include-deprecated-or-desupported-javascript-functions: 
+  - Pre 18.1
+  - 18.x
+  include-jquery-migrate: false
+
+attributes: 
+  theme: Universal Theme # 42
+  global-page: 0
+  enable-end-users-to-choose-theme-style: true
+  add-"built-with-apex"-to-footer: false
+  auto-dismiss-success-messages: true
+
+subscription: 
+  version-number: 130603151
+
+substitutions: 
+- # ====== Substitution: APP_NAME ==============================
+  id: 16772928856602463
+  identification: 
+    name: APP_NAME
+
+  value: 
+    static-value: AGP
+
+component-settings: 
+- # ====== Component Setting: NATIVE_BOSS ======================
+  id: 6397106573282956
+  identification: 
+    name: NATIVE_BOSS
+    type: REST Data Source
+
+  subscription: 
+    version-number: 15599294849869
+
+- # ====== Component Setting: NATIVE_SELECT_MANY ===============
+  id: 7030217346734428
+  identification: 
+    name: NATIVE_SELECT_MANY
+    type: Item
+
+  subscription: 
+    version-number: 15537094385956
+
+- # ====== Component Setting: NATIVE_GEOCODING =================
+  id: 30673224840738537
+  identification: 
+    name: NATIVE_GEOCODING
+    type: Process
+
+  settings: 
+    attribute-1: RELAX_HOUSE_NUMBER
+
+  subscription: 
+    version-number: 15537094416725
+
+- # ====== Component Setting: NATIVE_OPEN_AI_ASSISTANT =========
+  id: 54316201370742050
+  identification: 
+    name: NATIVE_OPEN_AI_ASSISTANT
+    type: Dynamic Action
+
+  subscription: 
+    version-number: 15537094444156
+
+- # ====== Component Setting: NATIVE_ADFBC =====================
+  id: 13196352802827225048
+  identification: 
+    name: NATIVE_ADFBC
+    type: REST Data Source
+
+  subscription: 
+    version-number: 15492788129148
+
+- # ====== Component Setting: NATIVE_MAP_REGION ================
+  id: 26398391619977768706
+  identification: 
+    name: NATIVE_MAP_REGION
+    type: Region
+
+  subscription: 
+    version-number: 1
+
+- # ====== Component Setting: NATIVE_DATE_PICKER_APEX ==========
+  id: 26401254110325952143
+  identification: 
+    name: NATIVE_DATE_PICKER_APEX
+    type: Item
+
+  subscription: 
+    version-number: 1
+
+- # ====== Component Setting: NATIVE_COLOR_PICKER ==============
+  id: 74584697113776929121
+  identification: 
+    name: NATIVE_COLOR_PICKER
+    type: Item
+
+  subscription: 
+    version-number: 1
+
+- # ====== Component Setting: NATIVE_GEOCODED_ADDRESS ==========
+  id: 74584697703362929122
+  identification: 
+    name: NATIVE_GEOCODED_ADDRESS
+    type: Item
+
+  subscription: 
+    version-number: 1
+
+- # ====== Component Setting: NATIVE_SINGLE_CHECKBOX ===========
+  id: 74584698333002929122
+  identification: 
+    name: NATIVE_SINGLE_CHECKBOX
+    type: Item
+
+  subscription: 
+    version-number: 1
+
+- # ====== Component Setting: NATIVE_STAR_RATING ===============
+  id: 74584698674111929122
+  identification: 
+    name: NATIVE_STAR_RATING
+    type: Item
+
+  subscription: 
+    version-number: 1
+
+- # ====== Component Setting: NATIVE_YES_NO ====================
+  id: 74584698919232929122
+  identification: 
+    name: NATIVE_YES_NO
+    type: Item
+
+  subscription: 
+    version-number: 1
+
+- # ====== Component Setting: NATIVE_DISPLAY_SELECTOR ==========
+  id: 74584699521405929122
+  identification: 
+    name: NATIVE_DISPLAY_SELECTOR
+    type: Region
+
+  subscription: 
+    version-number: 1
+
+- # ====== Component Setting: NATIVE_IR ========================
+  id: 74584699820760929122
+  identification: 
+    name: NATIVE_IR
+    type: Region
+
+  subscription: 
+    version-number: 1
+
+application-settings: 
+- # ====== Application Setting: FEEDBACK_ATTACHMENTS_YN ========
+  id: 74585101315535929218
+  identification: 
+    name: FEEDBACK_ATTACHMENTS_YN
+
+  value: 
+    value: Y
+    required: false
+
+  advanced: 
+    valid-values: Y, N
+    on-upgrade-keep-value: true
+
+  subscription: 
+    version-number: 1
+
+  configuration: 
+    build-option: 'Fonctionnalité: Informations en retour' # 74585097881391929213
+
+- # ====== Application Setting: ACCESS_CONTROL_SCOPE ===========
+  id: 74585101627399929218
+  identification: 
+    name: ACCESS_CONTROL_SCOPE
+
+  value: 
+    value: ALL_USERS
+    required: false
+
+  advanced: 
+    valid-values: ACL_ONLY, ALL_USERS
+    on-upgrade-keep-value: true
+
+  subscription: 
+    version-number: 121553462
+
+  configuration: 
+    build-option: "Fonctionnalité: Contrôle d'accès" # 74585097602441929213
+
+  comments: 
+    comments: Niveau d'accès par défaut attribué aux utilisateurs authentifiés qui ne figurent pas dans la liste de contrôle d'accès
+
+pwa-shortcuts: 
+- # ====== PWA Shortcut: AGP ===================================
+  id: 7642090800529203
+  identification: 
+    name: AGP
+
+  layout: 
+    sequence: 10
+
+  link: 
+    target: 
+      url: 'f?p=&APP_ID.:1:&SESSION.'
+      page: 1 # Page d'accueil
+
+  configuration: 
+    icon-url: pwa/shortcut-icon-10.png
+
+language-mappings: 
+- # ====== Language Mapping: Arabic (Tunisia) (ar-tn) ==========
+  id: 5875177653968164
+  attributes: 
+    translation-application: 125
+    language: Arabic (Tunisia) (ar-tn)
+
+  globalization: 
+    document-direction: Right-To-Left
+

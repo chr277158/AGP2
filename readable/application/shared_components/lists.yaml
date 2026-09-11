@@ -1,0 +1,1644 @@
+---
+- # ====== List: Ajout Commande ================================
+  id: 2033250964648250
+  identification: 
+    name: Ajout Commande
+
+  subscription: 
+    version-number: 49426205
+
+  source: 
+    type: Static Values
+
+  entries: 
+  - # ====== Entry: الرجاء تحديد عدد الطلبيات &#x2F; العقود ======
+    id: 2034630469648259
+    label: 
+      label: الرجاء تحديد عدد الطلبيات &#x2F; العقود
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:34:&APP_SESSION.::&DEBUG.:::'
+        page: 34 # جدول الاشغال
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: الرجاء تحديد أرقام العقود و الشركات ==========
+    id: 2038940820648264
+    label: 
+      label: الرجاء تحديد أرقام العقود و الشركات
+
+    layout: 
+      sequence: 20
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:35:&APP_SESSION.::&DEBUG.:::'
+        page: 35 # Contrats
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: خاصيات العقد =================================
+    id: 2043966321648265
+    label: 
+      label: خاصيات العقد
+
+    layout: 
+      sequence: 30
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:36:&APP_SESSION.::&DEBUG.:::'
+        page: 36 # edit_contrat
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+- # ====== List: User Settings =================================
+  id: 14430343702193115
+  identification: 
+    name: User Settings
+
+  subscription: 
+    version-number: 39375394
+
+  source: 
+    type: Static Values
+
+  configuration: 
+    build-option: 'Feature: User Settings1' # 14426774596193106
+
+  entries: 
+  - # ====== Entry: Push Notifications ===========================
+    id: 14430761751193115
+    label: 
+      label: Push Notifications
+
+    icon: 
+      image/icon-css-classes: fa-bell-o
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:20010:&APP_SESSION.::&DEBUG.:::'
+        page: 20010 # Push Notifications
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Configure whether you want to receive push notifications on this device.
+      2.: <span class="a-pwaPush--state"></span>
+
+    configuration: 
+      build-option: 'Feature: Push Notifications' # 14426480611193103
+
+- # ====== List: Menu de navigation ============================
+  id: 74584701217313929124
+  identification: 
+    name: Menu de navigation
+
+  subscription: 
+    version-number: 130602584
+
+  source: 
+    type: Static Values
+
+  entries: 
+  - # ====== Entry: Gestion des Rappels ==========================
+    id: 1239356372610142
+    label: 
+      label: Gestion des Rappels
+
+    icon: 
+      image/icon-css-classes: fa-alarm-check
+
+    layout: 
+      sequence: 60
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 32
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:32:&SESSION.::&DEBUG.::::'
+        page: 32 # Gestion des Rappels
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: متابعة جميع الملفات ==========================
+    id: 2690094132072995
+    label: 
+      label: متابعة جميع الملفات
+
+    icon: 
+      image/icon-css-classes: fa-files-o
+
+    layout: 
+      sequence: 210
+      parent-entry: Planning # 7584408337758496
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 19
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:19:&SESSION.::&DEBUG.::::'
+        page: 19 # متابعة تقدم جميع الملفات
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits de contribution # 74585100534688929216
+
+  - # ====== Entry: قائمة الصفقات المبرمجة =======================
+    id: 2952939768556979
+    label: 
+      label: قائمة الصفقات المبرمجة
+
+    icon: 
+      image/icon-css-classes: fa-table-search
+
+    layout: 
+      sequence: 220
+      parent-entry: Planning # 7584408337758496
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 41
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:41:&SESSION.::&DEBUG.::::'
+        page: 41 # قائمة الصفقات المبرمجة
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits de contribution # 74585100534688929216
+
+  - # ====== Entry: test install =================================
+    id: 3237572549744365
+    label: 
+      label: test install
+
+    icon: 
+      image/icon-css-classes: fa-file-o
+
+    layout: 
+      sequence: 80
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 38
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:38:&SESSION.::&DEBUG.::::'
+        page: 38 # test install
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits d'administration # 74585100381861929216
+
+  - # ====== Entry: جدول الاشغال =================================
+    id: 4145064934107382
+    label: 
+      label: جدول الاشغال
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 230
+      parent-entry: Planning # 7584408337758496
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 34
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:34:&SESSION.::&DEBUG.::::'
+        page: 34 # جدول الاشغال
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Affectation des Contrats =====================
+    id: 7243802798868226
+    label: 
+      label: Affectation des Contrats
+
+    icon: 
+      image/icon-css-classes: fa-alarm-snooze
+
+    layout: 
+      sequence: 44
+      parent-entry: Contrats # 7582062024638515
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 39
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:39:&SESSION.::&DEBUG.::::'
+        page: 39 # Dossiers En Attente
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits de contribution # 74585100534688929216
+
+  - # ====== Entry: Dossiers d'Achats ============================
+    id: 7580756356607906
+    label: 
+      label: Dossiers d'Achats
+
+    layout: 
+      sequence: 20
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Contrats =====================================
+    id: 7582062024638515
+    label: 
+      label: Contrats
+
+    icon: 
+      image/icon-css-classes: fa-file-signature
+
+    layout: 
+      sequence: 40
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits de contribution # 74585100534688929216
+
+  - # ====== Entry: Modification =================================
+    id: 7583357970725453
+    label: 
+      label: Modification
+
+    icon: 
+      image/icon-css-classes: fa-wrench
+
+    layout: 
+      sequence: 50
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits d'administration # 74585100381861929216
+
+  - # ====== Entry: Planning =====================================
+    id: 7584408337758496
+    label: 
+      label: Planning
+
+    icon: 
+      image/icon-css-classes: fa-combo-chart
+
+    layout: 
+      sequence: 70
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits de contribution # 74585100534688929216
+
+  - # ====== Entry: testee =======================================
+    id: 7601219665966331
+    label: 
+      label: testee
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 110
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 22
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:22:&SESSION.::&DEBUG.::::'
+        page: 22 # testee
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits d'administration # 74585100381861929216
+
+  - # ====== Entry: متابعة تقدم الملفات ==========================
+    id: 13220368584782598
+    label: 
+      label: متابعة تقدم الملفات
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 160
+      parent-entry: Dossiers d'Achats # 7580756356607906
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 21
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:21:&SESSION.::&DEBUG.::::'
+        page: 21 # متابعة تقدم الملفات
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits d'administration # 74585100381861929216
+
+  - # ====== Entry: متابع التغيرات ===============================
+    id: 13644523045425712
+    label: 
+      label: متابع التغيرات
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 190
+      parent-entry: Modification # 7583357970725453
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 26
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:26:&SESSION.::&DEBUG.::::'
+        page: 26 # متابع التغيرات
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits d'administration # 74585100381861929216
+
+  - # ====== Entry: Contrats =====================================
+    id: 14257473747892689
+    label: 
+      label: Contrats
+
+    icon: 
+      image/icon-css-classes: fa-table-search
+
+    layout: 
+      sequence: 42
+      parent-entry: Contrats # 7582062024638515
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 35
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:35:&SESSION.::&DEBUG.::::'
+        page: 35 # Contrats
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Contrat en Cours  ============================
+    id: 14446753904010800
+    label: 
+      label: 'Contrat en Cours '
+
+    layout: 
+      sequence: 41
+      parent-entry: Contrats # 7582062024638515
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:43:&SESSION.::&DEBUG.:RP:::'
+        page: 43 # Contrats 2
+        clear-cache: RP
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: état avancement ==============================
+    id: 14594323391182770
+    label: 
+      label: état avancement
+
+    icon: 
+      image/icon-css-classes: fa-briefcase
+
+    layout: 
+      sequence: 150
+      parent-entry: Dossiers d'Achats # 7580756356607906
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 25
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:25:&SESSION.::&DEBUG.::::'
+        page: 25 # etat avancement
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits de contribution # 74585100534688929216
+
+  - # ====== Entry: Tableau de bord des Dossiers =================
+    id: 15959005058156003
+    label: 
+      label: Tableau de bord des Dossiers
+
+    icon: 
+      image/icon-css-classes: fa-analytics
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 44
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:44:&SESSION.::&DEBUG.::::'
+        page: 44 # Tableau de bord 
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: heur sup =====================================
+    id: 18843482983659114
+    label: 
+      label: heur sup
+
+    icon: 
+      image/icon-css-classes: fa-forms
+
+    layout: 
+      sequence: 250
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 48
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:48:&APP_SESSION.::&DEBUG.:::'
+        page: 48 # heur sup
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Mes Congés ===================================
+    id: 19526654042531537
+    label: 
+      label: Mes Congés
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 260
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 51
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:51:&APP_SESSION.::&DEBUG.:::'
+        page: 51 # Mes Congés
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: suivi des contrats ===========================
+    id: 45220292080235695994
+    label: 
+      label: suivi des contrats
+
+    icon: 
+      image/icon-css-classes: fa-table-pointer
+
+    layout: 
+      sequence: 43
+      parent-entry: Contrats # 7582062024638515
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 30
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:30:&SESSION.::&DEBUG.::::'
+        page: 30 # suivi des contrats
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits de contribution # 74585100534688929216
+
+  - # ====== Entry: Page d'accueil ===============================
+    id: 74585106659537929227
+    label: 
+      label: Page d'accueil
+
+    icon: 
+      image/icon-css-classes: fa-home
+
+    layout: 
+      sequence: 15
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1:&SESSION.::&DEBUG.:RP:::'
+        page: 1 # Page d'accueil
+        clear-cache: RP
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Etat - Appels D’Offres En Cours ==============
+    id: 74585108117215929229
+    label: 
+      label: Etat - Appels D’Offres En Cours
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 130
+      parent-entry: Dossiers d'Achats # 7580756356607906
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:2:&SESSION.::&DEBUG.::::'
+        page: 2 # Etat - des Dossiers
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Recherche - APPEL D’OFFFRES ==================
+    id: 74585124268016929248
+    label: 
+      label: Recherche - APPEL D’OFFFRES
+
+    icon: 
+      image/icon-css-classes: fa-table-search
+
+    layout: 
+      sequence: 140
+      parent-entry: Dossiers d'Achats # 7580756356607906
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:3:&SESSION.::&DEBUG.::::'
+        page: 3 # Recherche - DOSSIERS
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits de contribution # 74585100534688929216
+
+  - # ====== Entry: Calendrier ===================================
+    id: 74585161112295929354
+    label: 
+      label: Calendrier
+
+    icon: 
+      image/icon-css-classes: fa-calendar-o
+
+    layout: 
+      sequence: 30
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:5:&APP_SESSION.::&DEBUG.:'
+        page: 5 # Calendrier
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Administration ===============================
+    id: 74585365248551929649
+    label: 
+      label: Administration
+
+    icon: 
+      image/icon-css-classes: fa-user-wrench
+
+    layout: 
+      sequence: 120
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10000:&SESSION.::&DEBUG.::::'
+        page: 10000 # Administration
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits d'administration # 74585100381861929216
+
+  - # ====== Entry: Gestion de Compte ============================
+    id: 75262710709996761495
+    label: 
+      label: Gestion de Compte
+
+    icon: 
+      image/icon-css-classes: fa-address-book-o
+
+    layout: 
+      sequence: 90
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 11
+      - 12
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:11:&SESSION.::&DEBUG.::::'
+        page: 11 # Gestion de Compte
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Gestion des Comptes ==========================
+    id: 75264327033468501497
+    label: 
+      label: Gestion des Comptes
+
+    icon: 
+      image/icon-css-classes: fa-id-card
+
+    layout: 
+      sequence: 100
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 13
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:13:&SESSION.::&DEBUG.::::'
+        page: 13 # Gestion des Comptes
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits d'administration # 74585100381861929216
+
+  - # ====== Entry: suivi modification ===========================
+    id: 81368723887379357530
+    label: 
+      label: suivi modification
+
+    icon: 
+      image/icon-css-classes: fa-table-search
+
+    layout: 
+      sequence: 200
+      parent-entry: Modification # 7583357970725453
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 7
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:7:&SESSION.::&DEBUG.::::'
+        page: 7 # suivi modification
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits d'administration # 74585100381861929216
+
+- # ====== List: Barre de navigation ===========================
+  id: 74585095312945929210
+  identification: 
+    name: Barre de navigation
+
+  subscription: 
+    version-number: 40748964
+
+  source: 
+    type: Static Values
+
+  entries: 
+  - # ====== Entry: Installer l'application ======================
+    id: 74585361379504929647
+    label: 
+      label: Installer l'application
+
+    icon: 
+      image/icon-css-classes: fa-cloud-download
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Never
+
+    link: 
+      target: '#action$a-pwa-install'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      2.: a-pwaInstall
+
+  - # ====== Entry: Informations en retour =======================
+    id: 74585361777629929648
+    label: 
+      label: Informations en retour
+
+    icon: 
+      image/icon-css-classes: fa-comment-o
+
+    layout: 
+      sequence: 20
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10050:&SESSION.::&DEBUG.:RP,10050:P10050_PAGE_ID:&APP_PAGE_ID.:'
+        page: 10050 # Informations en retour
+        clear-cache: RP,10050
+        values: 
+          p10050_page_id: '&APP_PAGE_ID.'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      2.: icon-only
+
+    server-side-condition: 
+      type: Expression
+      language: PL/SQL
+      pl/sql-expression: apex_util.feedback_enabled
+
+    configuration: 
+      build-option: 'Fonctionnalité: Informations en retour' # 74585097881391929213
+
+  - # ====== Entry: A propos de ==================================
+    id: 74585362063831929648
+    label: 
+      label: A propos de
+
+    icon: 
+      image/icon-css-classes: fa-question-circle-o
+
+    layout: 
+      sequence: 30
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+      2.: icon-only
+
+    configuration: 
+      build-option: 'Fonctionnalité: A propos de la page' # 74585098333216929213
+
+  - # ====== Entry: Aide de la page ==============================
+    id: 74585362555070929648
+    label: 
+      label: Aide de la page
+
+    icon: 
+      image/icon-css-classes: fa-question-circle-o
+
+    layout: 
+      sequence: 40
+      parent-entry: A propos de # 74585362063831929648
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10061:&SESSION.::&DEBUG.::P10061_PAGE_ID:&APP_PAGE_ID.:'
+        page: 10061 # Aide
+        values: 
+          p10061_page_id: '&APP_PAGE_ID.'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      2.: icon-only
+
+    configuration: 
+      build-option: 'Fonctionnalité: A propos de la page' # 74585098333216929213
+
+  - # ====== Entry: --- ==========================================
+    id: 74585363062646929648
+    label: 
+      label: '---'
+
+    layout: 
+      sequence: 50
+      parent-entry: A propos de # 74585362063831929648
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: separator
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: A propos de la page ==========================
+    id: 74585363453636929648
+    label: 
+      label: A propos de la page
+
+    icon: 
+      image/icon-css-classes: fa-info-circle-o
+
+    layout: 
+      sequence: 60
+      parent-entry: A propos de # 74585362063831929648
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10060:&SESSION.::&DEBUG.:10060'
+        page: 10060 # A propos de
+        clear-cache: 10060
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    configuration: 
+      build-option: 'Fonctionnalité: A propos de la page' # 74585098333216929213
+
+  - # ====== Entry: &P0_USER. ====================================
+    id: 74585363700161929648
+    label: 
+      label: '&P0_USER.'
+
+    icon: 
+      image/icon-css-classes: fa-user
+
+    layout: 
+      sequence: 70
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: '#'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      2.: has-username
+
+  - # ====== Entry: --- ==========================================
+    id: 74585364239053929649
+    label: 
+      label: '---'
+
+    layout: 
+      sequence: 80
+      parent-entry: '&P0_USER.' # 74585363700161929648
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: separator
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Fermer la session ============================
+    id: 74585364661062929649
+    label: 
+      label: Fermer la session
+
+    icon: 
+      image/icon-css-classes: fa-sign-out
+
+    layout: 
+      sequence: 90
+      parent-entry: '&P0_USER.' # 74585363700161929648
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: '&LOGOUT_URL.'
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+- # ====== List: Navigation de page ============================
+  id: 74585193239194929389
+  identification: 
+    name: Navigation de page
+
+  subscription: 
+    version-number: 41074673
+
+  source: 
+    type: Static Values
+
+  entries: 
+  - # ====== Entry: Etat - Appels D’Offres En Cours ==============
+    id: 74585193621128929390
+    label: 
+      label: Etat - Appels D’Offres En Cours
+
+    icon: 
+      image/icon-css-classes: fa-table
+
+    layout: 
+      sequence: 20
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:2:&SESSION.::&DEBUG.::::'
+        page: 2 # Etat - des Dossiers
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Recherche - APPEL D’OFFFRES ==================
+    id: 74585194093358929390
+    label: 
+      label: Recherche - APPEL D’OFFFRES
+
+    icon: 
+      image/icon-css-classes: fa-table-search
+
+    layout: 
+      sequence: 30
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:3:&APP_SESSION.::&DEBUG.:'
+        page: 3 # Recherche - DOSSIERS
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Calendrier ===================================
+    id: 74585194465630929390
+    label: 
+      label: Calendrier
+
+    icon: 
+      image/icon-css-classes: fa-calendar-o
+
+    layout: 
+      sequence: 40
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:5:&APP_SESSION.::&DEBUG.:'
+        page: 5 # Calendrier
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: Créer un Nouveau Appel d'Offres ==============
+    id: 74770775560878476440
+    label: 
+      label: Créer un Nouveau Appel d'Offres
+
+    icon: 
+      image/icon-css-classes: fa-folder-plus
+
+    layout: 
+      sequence: 50
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:6:&SESSION.::&DEBUG.::::'
+        page: 6 # creer_nouveau
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+    security: 
+      authorization-scheme: Droits de contribution # 74585100534688929216
+
+- # ====== List: Configuration de l'application ================
+  id: 74585366390875929650
+  identification: 
+    name: Configuration de l'application
+
+  subscription: 
+    version-number: 1
+
+  source: 
+    type: Static Values
+
+  configuration: 
+    build-option: 'Fonctionnalité: Options de configuration' # 74585098032741929213
+
+  entries: 
+  - # ====== Entry: Options de configuration =====================
+    id: 74585366724304929650
+    label: 
+      label: Options de configuration
+
+    icon: 
+      image/icon-css-classes: fa-sliders
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10010:&SESSION.::&DEBUG.:10010:::'
+        page: 10010 # Options de configuration
+        clear-cache: 10010
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Activer ou désactiver des fonctionnalités de l'application
+
+    configuration: 
+      build-option: 'Fonctionnalité: Options de configuration' # 74585098032741929213
+
+- # ====== List: Interface utilisateur =========================
+  id: 74585367011095929651
+  identification: 
+    name: Interface utilisateur
+
+  subscription: 
+    version-number: 1
+
+  source: 
+    type: Static Values
+
+  configuration: 
+    build-option: 'Fonctionnalité: Sélection du style de thème' # 74585098453930929213
+
+  entries: 
+  - # ====== Entry: Sélection du style de thème ==================
+    id: 74585367423819929651
+    label: 
+      label: Sélection du style de thème
+
+    icon: 
+      image/icon-css-classes: fa-paint-brush
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10020:&SESSION.::&DEBUG.:10020:::'
+        page: 10020 # Apparence de l'application
+        clear-cache: 10020
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Définir la présentation par défaut de l'application
+
+    configuration: 
+      build-option: 'Fonctionnalité: Sélection du style de thème' # 74585098453930929213
+
+- # ====== List: Etats d'activité ==============================
+  id: 74585367749179929651
+  identification: 
+    name: Etats d'activité
+
+  subscription: 
+    version-number: 1
+
+  source: 
+    type: Static Values
+
+  configuration: 
+    build-option: "Fonctionnalité: Génération d'états d'activité" # 74585097796904929213
+
+  entries: 
+  - # ====== Entry: Tableau de bord ==============================
+    id: 74585368110113929651
+    label: 
+      label: Tableau de bord
+
+    icon: 
+      image/icon-css-classes: fa-area-chart
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10030:&SESSION.::&DEBUG.:10030:::'
+        page: 10030 # Tableau de bord des activités
+        clear-cache: 10030
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Consulter les mesures d'activité d'application
+
+  - # ====== Entry: Principaux utilisateurs ======================
+    id: 74585368574910929651
+    label: 
+      label: Principaux utilisateurs
+
+    icon: 
+      image/icon-css-classes: fa-user-chart
+
+    layout: 
+      sequence: 20
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10031:&SESSION.::&DEBUG.:10031:::'
+        page: 10031 # Principaux utilisateurs
+        clear-cache: 10031
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Etat des vues de page consolidées par utilisateur
+
+  - # ====== Entry: Journal des erreurs de l'application =========
+    id: 74585368984813929652
+    label: 
+      label: Journal des erreurs de l'application
+
+    icon: 
+      image/icon-css-classes: fa-exclamation
+
+    layout: 
+      sequence: 30
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10032:&SESSION.::&DEBUG.:10032:::'
+        page: 10032 # Journal des erreurs de l'application
+        clear-cache: 10032
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Etat des erreurs consignées par cette application
+
+  - # ====== Entry: Performances de page =========================
+    id: 74585369317508929652
+    label: 
+      label: Performances de page
+
+    icon: 
+      image/icon-css-classes: fa-file-chart
+
+    layout: 
+      sequence: 40
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10033:&SESSION.::&DEBUG.:10033:::'
+        page: 10033 # Performances de page
+        clear-cache: 10033
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Etat de l'activité et des performances par page d'application
+
+  - # ====== Entry: Vues de page =================================
+    id: 74585369798949929652
+    label: 
+      label: Vues de page
+
+    icon: 
+      image/icon-css-classes: fa-file-search
+
+    layout: 
+      sequence: 50
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10034:&SESSION.::&DEBUG.:RR,10034:::'
+        page: 10034 # Vues de page
+        clear-cache: RR,10034
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Etat de chaque vue de page par utilisateur comportant la date d'accès et le temps écoulé
+
+  - # ====== Entry: Journal des automatisations ==================
+    id: 74585370184226929652
+    label: 
+      label: Journal des automatisations
+
+    icon: 
+      image/icon-css-classes: fa-gears
+
+    layout: 
+      sequence: 60
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10035:&SESSION.::&DEBUG.:RR,10035:::'
+        page: 10035 # Journal des automatisations
+        clear-cache: RR,10035
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Etat des messages et des exécutions d'automatisation consignés par cette application
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1
+        from apex_appl_automations a, apex_automation_log l
+        where a.automation_id = l.automation_id
+        and l.application_id = :APP_ID
+
+- # ====== List: Contrôle d'accès ==============================
+  id: 74585370457082929652
+  identification: 
+    name: Contrôle d'accès
+
+  subscription: 
+    version-number: 1
+
+  source: 
+    type: Static Values
+
+  configuration: 
+    build-option: "Fonctionnalité: Contrôle d'accès" # 74585097602441929213
+
+  entries: 
+  - # ====== Entry: Utilisateurs =================================
+    id: 74585370801331929653
+    label: 
+      label: Utilisateurs
+
+    icon: 
+      image/icon-css-classes: fa-users
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10041:&SESSION.::&DEBUG.:RP:::'
+        page: 10041 # Gérer l'accès utilisateur
+        clear-cache: RP
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Définir le niveau d'accès des utilisateurs authentifiés de cette application
+
+  - # ====== Entry: Contrôle d'accès =============================
+    id: 74585371253048929653
+    label: 
+      label: Contrôle d'accès
+
+    icon: 
+      image/icon-css-classes: fa-key
+
+    layout: 
+      sequence: 20
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10040:&SESSION.::&DEBUG.::::'
+        page: 10040 # Configurer le contrôle d'accès
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Modifier les paramètres de contrôle d'accès et désactiver le contrôle d'accès
+
+- # ====== List: Informations en retour ========================
+  id: 74585371517842929653
+  identification: 
+    name: Informations en retour
+
+  subscription: 
+    version-number: 1
+
+  source: 
+    type: Static Values
+
+  configuration: 
+    build-option: 'Fonctionnalité: Informations en retour' # 74585097881391929213
+
+  entries: 
+  - # ====== Entry: Informations en retour des utilisateurs ======
+    id: 74585371932580929653
+    label: 
+      label: Informations en retour des utilisateurs
+
+    icon: 
+      image/icon-css-classes: fa-comment-o
+
+    layout: 
+      sequence: 10
+
+    is-current: 
+      type: Target Page
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10053:&SESSION.::&DEBUG.:10053:::'
+        page: 10053 # Gérer les informations en retour
+        clear-cache: 10053
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+      1.: Etat de l'ensemble des informations en retour envoyées par les utilisateurs de l'application
+

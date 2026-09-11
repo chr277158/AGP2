@@ -1,0 +1,146 @@
+---
+# ====== Page: Informations en retour soumises ===============
+id: 10051
+identification: 
+  name: Informations en retour soumises
+  alias: INFORMATIONS-EN-RETOUR-SOUMISES
+  title: Informations en retour soumises
+  page-group: Administration # 74585101979246929220
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: false
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+configuration: 
+  build-option: 'Fonctionnalité: Informations en retour' # 74585097881391929213
+
+regions: 
+- # ====== Region: Informations en retour soumises =============
+  id: 74585326077476929619
+  identification: 
+    name: Informations en retour soumises
+    type: Contenu statique
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Alert
+    template-options: 
+    - '#DEFAULT#'
+    - t-Alert--wizard
+    - t-Alert--customIcons
+    - t-Alert--success
+    icon: fa-check-circle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+buttons: 
+- # ====== Button: CLOSE =======================================
+  id: 74585325913225929619
+  identification: 
+    button-name: CLOSE
+    label: Fermer
+
+  layout: 
+    sequence: 20
+    region: Informations en retour soumises # 74585326077476929619
+    slot: EDIT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - w40p
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: Annuler la boîte de dialogue ========
+  id: 74585326133900929619
+  identification: 
+    name: Annuler la boîte de dialogue
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CLOSE # 74585325913225929619
+
+  actions: 
+  - # ====== Action: Annuler la boîte de dialogue ================
+    id: 74585335942645929625
+    identification: 
+      action: Annuler la boîte de dialogue
+
+    execution: 
+      sequence: 10
+      event: Annuler la boîte de dialogue # 74585326133900929619
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

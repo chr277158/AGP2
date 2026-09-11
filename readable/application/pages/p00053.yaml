@@ -1,0 +1,486 @@
+---
+# ====== Page: classement ====================================
+id: 53
+identification: 
+  name: classement
+  alias: CLASSEMENT
+  title: classement
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Nouveau =====================================
+  id: 19772265640593138
+  identification: 
+    name: Nouveau
+    type: Contenu statique
+
+  source: 
+    html-code: |
+      <!DOCTYPE html>
+      <html lang="ar" dir="ltr">
+      <head>
+          <meta charset="UTF-8">
+          <title>وثيقتان - طباعة منفصلة</title>
+          <style>
+              * {
+                  margin: 0;
+                  padding: 0;
+                  box-sizing: border-box;
+                    
+              }
+      
+              body {
+                  font-family: 'Times New Roman', serif;
+                  background: #e9e9e9;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  padding: 20px;
+              }
+      
+              /* صفحة A4 قياسية */
+              .page {
+                  width: 200mm;
+                  min-height: 287mm;
+                  background: white;
+                  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                  margin-bottom: 20px;
+                  padding: 15mm;
+                  position: relative;
+              }
+      
+              /* عند الطباعة: كل صفحة تبدأ على ورقة جديدة */
+              @media print {
+                  body {
+                      background: white;
+                      padding: 0;
+                      margin: 0;
+                  }
+                  .page {
+                      box-shadow: none;
+                      margin: 0;
+                      padding: 15mm;
+                      page-break-after: always; /* كل صفحة تبدأ في ورقة جديدة */
+                  }
+                  .page:last-child {
+                      page-break-after: auto;
+                  }
+                  .print-btn {
+                      display: none;
+                  }
+              }
+      
+              /* --- النمط الخاص بالجدول الأول (الغلاف) --- */
+              .first-table {
+                  width: 11cm;          /* العرض  11 سم */
+                  height: 21cm;         /* الارتفاع الإجمالي 21 سم */
+                  border-collapse: collapse;
+                  border: 1.5pt double black;
+                  margin: 0 auto;       /* توسيط الجدول في الصفحة */
+                  table-layout: fixed;  /* لضبط الارتفاع بدقة */
+              }
+      
+              .first-table td {
+                  border: 1.5pt double black;
+                  padding: 6px 8px;
+                  vertical-align: middle;
+              }
+      
+              /* الصف الأول (عنوان ACHATS GROUPES) */
+              .first-table tr:first-child td {
+                  text-align: center;
+                  font-size: 13pt;
+                  font-weight: bold;
+              }
+      
+              /* الصف الثاني (الأطول) - نعطيه ارتفاعًا أكبر */
+              .first-table tr:nth-child(2) td {
+                  height: 15cm;        /* الصف الأطول (الباقي من الـ 17 سم بعد الصفين الآخرين) */
+                  text-align: center;
+              }
+      
+              /* الصف الثالث (التاريخ) */
+              .first-table tr:last-child td {
+                  text-align: left;
+                  font-size: 14pt;
+                  font-weight: bold;
+                  height: 2.5cm;
+              }
+      
+              /* محتوى الصف الثاني */
+              .ref-number {
+                  font-size: 22pt;
+                  font-weight: bold;
+                  color: #262626;
+                  margin-bottom: 10px;
+              }
+              .arabic-desc {
+                  font-size: 16pt;
+                  font-weight: bold;
+                  font-family: 'Traditional Arabic', serif;
+                  line-height: 1.6;
+              }
+      
+              /* --- الجدول الثاني (برنامج الإطلاق) --- */
+              .second-table {
+                  width: 100%;
+                  border-collapse: collapse;
+                  margin-top: 5mm;
+              }
+      
+              .second-table td {
+                  border: 1pt solid black;
+                  padding: 18px 10px;
+                  text-align: center;
+                  vertical-align: middle;
+                  font-size: 22pt;
+                  font-weight: bold;
+                 
+              }
+      
+              .second-table tr:first-child td {
+                  padding: 25px 10px;
+                   height: 4.5cm;
+              }
+               .titre {
+                  padding: 25px 10px;
+                   height: 4.5cm;
+              }
+              .separ {
+                  padding: 25px 10px;
+                   height: 1.5cm;
+              }
+      
+              /* زر الطباعة */
+              .print-btn {
+                  background: #2c3e70;
+                  color: white;
+                  font-size: 18px;
+                  font-weight: bold;
+                  padding: 10px 24px;
+                  border: none;
+                  border-radius: 8px;
+                  cursor: pointer;
+                  font-family: 'Times New Roman', serif;
+                  margin-bottom: 20px;
+                  transition: 0.2s;
+              }
+              .print-btn:hover {
+                  background: #1e2a4a;
+              }
+          </style>
+      </head>
+      <body>
+      
+      <button class="print-btn" onclick="printBothPages()">🖨️ طباعة الوثيقتين</button>
+      
+      <!-- الصفحة الأولى : الجدول الأول فقط -->
+      <div id="page1" class="page">
+          <table class="first-table" cellspacing="0" cellpadding="0">
+              <tr>
+                  <td>ACHATS GROUPES DE PRESTATIONS</td>
+              </tr>
+              <tr>
+                  <td>
+                      <div class="ref-number"> &P53_REF. </div>
+                      <div> &nbsp;  </div>
+                      <div class="arabic-desc"> &P53_OBJET. </div>
+                  </td>
+              </tr>
+              <tr>
+                  <td style="dir : rtl;">
+                    <div style="dir : rtl;">…………………………:  Date de Décision de la RD </div>
+                  </td>
+              </tr>
+          </table>
+      </div>
+      
+      <!-- الصفحة الثانية : الجدول الثاني فقط -->
+      <div id="page2" class="page">
+          <table class="second-table" cellspacing="0" cellpadding="0">
+              <tr><td>PROGRAMME DE LANCEMENT</td></tr>
+              <tr><td id="separ" style="padding: 10px;  height: 1.5cm;"></td></tr>   <!-- ligne vide  -->
+              <tr><td style="padding: 10px;  height: 4.5cm;">PV</td></tr>
+              <tr><td id="separ" style="padding: 10px;  height: 1.5cm;"></td></tr>
+              <tr><td style="padding: 10px;  height: 4.5cm;">Cahier Des Charges Pour Lancement</td></tr>
+              <tr><td id="separ" style="padding: 10px;  height: 1.5cm;"></td></tr>
+              <tr><td style="padding: 10px;  height: 4.5cm;">Annonces Au Journaux</td></tr>
+          </table>
+      </div>
+      
+      <script>
+          function printBothPages() {
+              // Récupérer le contenu exact des deux pages avec leurs styles
+              const page1Content = document.getElementById('page1').outerHTML;
+              const page2Content = document.getElementById('page2').outerHTML;
+      
+              const printWindow = window.open('', '', 'height=900,width=700');
+      
+              printWindow.document.write(`
+                  <!DOCTYPE html>
+                  <html dir="rtl">
+                  <head>
+                      <meta charset="UTF-8">
+                      <title>طباعة الوثائق</title>
+                      <style>
+                          /* Réappliquer les mêmes styles pour l'impression */
+                          * {
+                              margin: 0;
+                              padding: 0;
+                              box-sizing: border-box;
+                          }
+                          body {
+                              font-family: 'Times New Roman', serif;
+                              background: white;
+                              direction: rtl;
+                          }
+                          .page {
+                              width: 200mm;
+                              min-height: 287mm;
+                              padding: 15mm;
+                              position: relative;
+                              page-break-after: always;
+                          }
+                          .page:last-child {
+                              page-break-after: auto;
+                          }
+                          .first-table {
+                              width: 11cm;
+                              height: 21cm;
+                              border-collapse: collapse;
+                              border: 1.5pt double black;
+                              margin: 0 auto;
+                              table-layout: fixed;
+                          }
+                          .first-table td {
+                              border: 1.5pt double black;
+                              padding: 6px 8px;
+                              vertical-align: middle;
+                          }
+                          .first-table tr:first-child td {
+                              text-align: center;
+                              font-size: 13pt;
+                              font-weight: bold;
+                          }
+                          .first-table tr:nth-child(2) td {
+                              height: 17cm;
+                              text-align: center;
+                          }
+                          .first-table tr:last-child td {
+                              text-align: left;
+                              font-size: 13pt;
+                              font-weight: bold;
+                              height: 2.5cm;
+                              dir: rtl;
+                          }
+                          .ref-number {
+                              font-size: 22pt;
+                              font-weight: bold;
+                              color: #262626;
+                              margin-bottom: 10px;
+                          }
+                          .arabic-desc {
+                              font-size: 16pt;
+                              font-weight: bold;
+                              font-family: 'Traditional Arabic', serif;
+                              line-height: 1.6;
+                          }
+                          .second-table {
+                              width: 90%;
+                              border-collapse: collapse;
+                              margin-top: 5mm;
+                          }
+                          .second-table td {
+                              border: 1pt solid black;
+                              padding: 6px 8px;
+                              text-align: center;
+                              vertical-align: middle;
+                              font-size: 22pt;
+                              font-weight: bold;
+                          }
+                          .second-table tr:first-child td {
+                              padding: 25px 10px;
+                              height: 4.5cm;
+                          }
+                      </style>
+                  </head>
+                  <body>
+                      ${page1Content}
+                      ${page2Content}
+                  </body>
+                  </html>
+              `);
+      
+              printWindow.document.close();
+              printWindow.print();
+          }
+      </script>
+      </body>
+      </html>
+
+  layout: 
+    sequence: 43
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: Chemin de navigation ========================
+  id: 19797718581516779
+  identification: 
+    name: Chemin de navigation
+    type: Chemin de navigation
+
+  source: 
+    breadcrumb: Chemin de navigation # 74584700736997929123
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+page-items: 
+- # ====== Page Item: P53_REF ==================================
+  id: 19772336416593139
+  identification: 
+    name: P53_REF
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 23
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P53_OBJET ================================
+  id: 19772468438593140
+  identification: 
+    name: P53_OBJET
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 33
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+

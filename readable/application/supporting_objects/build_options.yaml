@@ -1,0 +1,46 @@
+---
+- # ====== Build Option: Feature: Push Notifications ===========
+  id: 10057466830169798
+  configuration: 
+    build-option: 'Feature: Push Notifications' # 14426480611193103
+
+- # ====== Build Option: Feature: User Settings1 ===============
+  id: 10057573017169798
+  configuration: 
+    build-option: 'Feature: User Settings1' # 14426774596193106
+
+- # ====== Build Option: Mis en commentaire ====================
+  id: 10057846779169798
+  configuration: 
+    build-option: Mis en commentaire # 74584700189138929123
+
+- # ====== Build Option: Fonctionnalité: Contrôle d'accès ======
+  id: 10058028172169798
+  configuration: 
+    build-option: "Fonctionnalité: Contrôle d'accès" # 74585097602441929213
+
+- # ====== Build Option: Fonctionnalité: Génération d'états d'ac
+  id: 10058244356169798
+  configuration: 
+    build-option: "Fonctionnalité: Génération d'états d'activité" # 74585097796904929213
+
+- # ====== Build Option: Fonctionnalité: Informations en retour 
+  id: 10058383814169798
+  configuration: 
+    build-option: 'Fonctionnalité: Informations en retour' # 74585097881391929213
+
+- # ====== Build Option: Fonctionnalité: Options de configuratio
+  id: 10058597426169798
+  configuration: 
+    build-option: 'Fonctionnalité: Options de configuration' # 74585098032741929213
+
+- # ====== Build Option: Fonctionnalité: A propos de la page ===
+  id: 10058869593169798
+  configuration: 
+    build-option: 'Fonctionnalité: A propos de la page' # 74585098333216929213
+
+- # ====== Build Option: Fonctionnalité: Sélection du style de t
+  id: 10059055294169798
+  configuration: 
+    build-option: 'Fonctionnalité: Sélection du style de thème' # 74585098453930929213
+

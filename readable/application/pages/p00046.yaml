@@ -1,0 +1,2347 @@
+---
+# ====== Page: Suivi des Contrats  ===========================
+id: 46
+identification: 
+  name: 'Suivi des Contrats '
+  alias: CONTRAT-EN-FONCTION-D-ETAT
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+  - ui-dialog--stretch
+  - t-Dialog--noPadding
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  execute-when-page-loads: |
+    // On attend un court instant que le widget IG Single Row View soit rendu
+    setTimeout(function() {
+        $(".a-RV-body .a-Collapsible.is-expanded button").each(function() {
+            $(this).click();
+        });
+    }, 50);
+
+css: 
+  inline: |
+    /* 1) Donne une hauteur plus grande à la zone header (optionnel) */
+    .myClass .a-GV-header{
+      height: 60px;         /* Ajuste selon ton besoin */
+      line-height: 50px;     /* Optionnel: vertical align/centrage */
+      padding: 5px;
+      white-space: normal;   /* Autorise le retour à la ligne */
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+    
+    /* 2) Force le texte du libellé à se wrapper */
+    .myClass .a-GV-header .a-GV-headerLabel{
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      height: auto;
+      line-height: 1.1;      /* Plus naturel pour du multi-ligne */
+      padding: 5px;
+    }
+    
+    
+    
+    
+    /* 2 colonnes pour la Single Row View */
+    .u-Form {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr  ;
+        gap: 10px;
+    }
+    
+    .a-RV .u-Form-inputContainer {
+        align-items: baseline;
+        background-color: #dddde6;
+    }
+    
+    /* Style général */
+    .a-IG-recordView {
+        background-color: #f0f4ff;
+    }
+    
+    .u-Form-label {
+        font-size: 13px !important;
+        font-weight: bold;
+    
+    }
+    
+    .apex-item-text,
+    .apex-item-select,
+    .apex-item-textarea {
+        font-size: 13px !important;
+        font-weight: bold;
+        border-radius: 10px !important;
+    }
+    
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: suivi des contrats &P46_NEW. ================
+  id: 15978277959232262
+  identification: 
+    name: suivi des contrats &P46_NEW.
+    title: suivi des contrats &P46_NEW.
+    type: Grille interactive
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CONTRATS
+    include-rowid-column: false
+    where-clause: 'ETAT = :P46_NEW'
+
+  layout: 
+    sequence: 23
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    row-css-classes: 
+    - myClass
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: mregion
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 16165977200156072
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+    edit-authorization: 
+      update: Droits de contribution # 74585100534688929216
+      delete: Droits de contribution # 74585100534688929216
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: false
+      fixed-row-height: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Field
+      - Actions Menu
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Etat principal ========================
+      id: 16216882956166829
+      identification: 
+        name: Etat principal
+        alias: 329899
+
+  column-groups: 
+  - # ====== Column Group: Données Du Contrat ====================
+    id: 16213196626164362
+    heading: 
+      heading: Données Du Contrat
+
+  - # ====== Column Group: Service Demandeur  ====================
+    id: 16213271322164363
+    heading: 
+      heading: 'Service Demandeur '
+
+  - # ====== Column Group: Etapes De réalisation =================
+    id: 16213396945164364
+    heading: 
+      heading: Etapes De réalisation
+
+  - # ====== Column Group: Archivage =============================
+    id: 16213489948164365
+    heading: 
+      heading: Archivage
+
+  columns: 
+  - # ====== Column: ID ==========================================
+    id: 16166148351156073
+    identification: 
+      column-name: ID
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 30
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ID
+      data-type: NUMBER
+      query-only: true
+      primary-key: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: ID_CC =======================================
+    id: 16166225949156074
+    identification: 
+      column-name: ID_CC
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 40
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ID_CC
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: N_CONTRAT_BC ================================
+    id: 16166352734156075
+    identification: 
+      column-name: N_CONTRAT_BC
+      type: Champ de texte
+
+    heading: 
+      heading: N Contrat Bc
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 60
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: N_CONTRAT_BC
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: TITULAIRE_DU_MARCHÉ =========================
+    id: 16166422906156076
+    identification: 
+      column-name: TITULAIRE_DU_MARCHÉ
+      type: Champ de texte
+
+    heading: 
+      heading: Titulaire Du Marché
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 255
+
+    source: 
+      type: Database Column
+      database-column: TITULAIRE_DU_MARCHÉ
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: REF_AO ======================================
+    id: 16166564894156077
+    identification: 
+      column-name: REF_AO
+      type: Champ de texte
+
+    heading: 
+      heading: Ref Ao
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 50
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: REF_AO
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: OBJET =======================================
+    id: 16166583317156078
+    identification: 
+      column-name: OBJET
+      type: Zone de texte
+
+    heading: 
+      heading: Objet
+      alignment: center
+
+    settings: 
+      redimensionnable: true
+      hauteur-automatique: false
+      compteur-de-caractères: false
+      supprimer-les-espaces: Début et fin
+
+    layout: 
+      sequence: 90
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 1000
+
+    source: 
+      type: Database Column
+      database-column: OBJET
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: CADRE__PONCTUEL =============================
+    id: 16166762743156079
+    identification: 
+      column-name: CADRE__PONCTUEL
+      type: Champ de texte
+
+    heading: 
+      heading: Cadre Ponctuel
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 100
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: CADRE__PONCTUEL
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: MONTANT =====================================
+    id: 16166783319156080
+    identification: 
+      column-name: MONTANT
+      type: Champ de texte
+
+    heading: 
+      heading: Montant
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 110
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: MONTANT
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: DEVISE ======================================
+    id: 16166939048156081
+    identification: 
+      column-name: DEVISE
+      type: Champ de texte
+
+    heading: 
+      heading: Devise
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 120
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: DEVISE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: DATE_DE_MISE_VIGUEUR ========================
+    id: 16167049131156082
+    identification: 
+      column-name: DATE_DE_MISE_VIGUEUR
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date De Mise Vigueur
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 130
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_MISE_VIGUEUR
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_FIN_DU_MARCHÉ ==========================
+    id: 16167151864156083
+    identification: 
+      column-name: DATE_FIN_DU_MARCHÉ
+      type: Champ de texte
+
+    heading: 
+      heading: Date Fin Du Marché
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 140
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: DATE_FIN_DU_MARCHÉ
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: MONTANT_DE_LA_CAUTION =======================
+    id: 16167246894156084
+    identification: 
+      column-name: MONTANT_DE_LA_CAUTION
+      type: Zone de texte
+
+    heading: 
+      heading: Montant De La Caution
+      alignment: center
+
+    settings: 
+      redimensionnable: true
+      hauteur-automatique: false
+      compteur-de-caractères: false
+      supprimer-les-espaces: Début et fin
+
+    layout: 
+      sequence: 150
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: MONTANT_DE_LA_CAUTION
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: DATE_DE_MAIN_LEVÉE ==========================
+    id: 16167288651156085
+    identification: 
+      column-name: DATE_DE_MAIN_LEVÉE
+      type: Champ de texte
+
+    heading: 
+      heading: Date De Main Levée
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 160
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 255
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_MAIN_LEVÉE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: N__COMMISSION ===============================
+    id: 16167408808156086
+    identification: 
+      column-name: N__COMMISSION
+      type: Champ de texte
+
+    heading: 
+      heading: N Commission
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 170
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: N__COMMISSION
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: ETAT ========================================
+    id: 16210734294164337
+    identification: 
+      column-name: ETAT
+      type: Champ de texte
+
+    heading: 
+      heading: Etat
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 180
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: ETAT
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: OBSERVATION_ ================================
+    id: 16210837501164338
+    identification: 
+      column-name: OBSERVATION_
+      type: Champ de texte
+
+    heading: 
+      heading: Observation
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 190
+      column-alignment: start
+      group: Données Du Contrat # 16213196626164362
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: OBSERVATION_
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: COL016 ======================================
+    id: 16210965794164339
+    identification: 
+      column-name: COL016
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 200
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: COL016
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DEMANDEUR ===================================
+    id: 16211049168164340
+    identification: 
+      column-name: DEMANDEUR
+      type: Champ de texte
+
+    heading: 
+      heading: Demandeur
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 210
+      column-alignment: start
+      group: 'Service Demandeur ' # 16213271322164363
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: DEMANDEUR
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: RESPONSABLE =================================
+    id: 16211152781164341
+    identification: 
+      column-name: RESPONSABLE
+      type: Champ de texte
+
+    heading: 
+      heading: Responsable
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 220
+      column-alignment: start
+      group: 'Service Demandeur ' # 16213271322164363
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: RESPONSABLE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_DE_LA_PREMIÈRE_PIÈCE_LÉGALE ============
+    id: 16211268552164342
+    identification: 
+      column-name: DATE_DE_LA_PREMIÈRE_PIÈCE_LÉGALE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date De La Première Pièce Légale
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 320
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_LA_PREMIÈRE_PIÈCE_LÉGALE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: DATE_DE_LA_DERNIÈRE_PIÈCE_LÉGALE ============
+    id: 16211288425164343
+    identification: 
+      column-name: DATE_DE_LA_DERNIÈRE_PIÈCE_LÉGALE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date De La Dernière Pièce Légale
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 330
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_LA_DERNIÈRE_PIÈCE_LÉGALE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: N__ARCHIVAGE ================================
+    id: 16211408747164344
+    identification: 
+      column-name: N__ARCHIVAGE
+      type: Champ de texte
+
+    heading: 
+      heading: N Archivage
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 340
+      column-alignment: start
+      group: Archivage # 16213489948164365
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: N__ARCHIVAGE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: DATE_DE_L_ARCHIVAGE =========================
+    id: 16211556619164345
+    identification: 
+      column-name: DATE_DE_L_ARCHIVAGE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date De L Archivage
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 350
+      column-alignment: start
+      group: Archivage # 16213489948164365
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_L_ARCHIVAGE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: N__RANG_ARCHIVAGE ===========================
+    id: 16211611963164346
+    identification: 
+      column-name: N__RANG_ARCHIVAGE
+      type: Champ de texte
+
+    heading: 
+      heading: N Rang Archivage
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 360
+      column-alignment: start
+      group: Archivage # 16213489948164365
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: N__RANG_ARCHIVAGE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: OBSERVATION =================================
+    id: 16211760824164347
+    identification: 
+      column-name: OBSERVATION
+      type: Zone de texte
+
+    heading: 
+      heading: Observation
+      alignment: center
+
+    settings: 
+      redimensionnable: true
+      hauteur-automatique: false
+      compteur-de-caractères: false
+      supprimer-les-espaces: Début et fin
+
+    layout: 
+      sequence: 370
+      column-alignment: start
+      group: Archivage # 16213489948164365
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: OBSERVATION
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: DATE_LIVRAISON_JURIDIQUE ====================
+    id: 16211847208164348
+    identification: 
+      column-name: DATE_LIVRAISON_JURIDIQUE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Livraison Juridique
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 230
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_LIVRAISON_JURIDIQUE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_AVIS_JURIDIQUE =========================
+    id: 16211962919164349
+    identification: 
+      column-name: DATE_AVIS_JURIDIQUE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Avis Juridique
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 240
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_AVIS_JURIDIQUE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_ENVOI_CLIENT_SIGNATURE =================
+    id: 16212051043164350
+    identification: 
+      column-name: DATE_ENVOI_CLIENT_SIGNATURE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Envoi Client Signature
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 250
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_ENVOI_CLIENT_SIGNATURE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_RETOUR_CLIENT_SIGNE ====================
+    id: 16212152642164351
+    identification: 
+      column-name: DATE_RETOUR_CLIENT_SIGNE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Retour Client Signe
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 260
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_RETOUR_CLIENT_SIGNE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_ENVOI_ADMIN_SIGNATURE ==================
+    id: 16212197117164352
+    identification: 
+      column-name: DATE_ENVOI_ADMIN_SIGNATURE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Envoi Admin Signature
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 270
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_ENVOI_ADMIN_SIGNATURE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_RETOUR_ADMIN_SIGNE =====================
+    id: 16212328148164353
+    identification: 
+      column-name: DATE_RETOUR_ADMIN_SIGNE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Retour Admin Signe
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 280
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_RETOUR_ADMIN_SIGNE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_ENVOI_CLIENT_ENREGISTREMENT ============
+    id: 16212440416164354
+    identification: 
+      column-name: DATE_ENVOI_CLIENT_ENREGISTREMENT
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Envoi Client Enregistrement
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 290
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_ENVOI_CLIENT_ENREGISTREMENT
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_RETOUR_ENREGISTRE ======================
+    id: 16212532645164355
+    identification: 
+      column-name: DATE_RETOUR_ENREGISTRE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Retour Enregistre
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 300
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_RETOUR_ENREGISTRE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_GARANTIE_FINALE ========================
+    id: 16212620436164356
+    identification: 
+      column-name: DATE_GARANTIE_FINALE
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Garantie Finale
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 310
+      column-alignment: start
+      group: Etapes De réalisation # 16213396945164364
+      use-group-for: Both
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_GARANTIE_FINALE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: RESPONSABLE_DOS =============================
+    id: 16212688930164357
+    identification: 
+      column-name: RESPONSABLE_DOS
+      type: Champ de texte
+
+    heading: 
+      heading: Responsable Dos
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 380
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 255
+
+    source: 
+      type: Database Column
+      database-column: RESPONSABLE_DOS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_RESILIATION ============================
+    id: 16212798680164358
+    identification: 
+      column-name: DATE_RESILIATION
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date Resiliation
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 390
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_RESILIATION
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: APEX$ROW_ACTION =============================
+    id: 16212878373164359
+    identification: 
+      column-name: APEX$ROW_ACTION
+      type: Menu Actions
+
+    layout: 
+      sequence: 20
+
+  - # ====== Column: APEX$ROW_SELECTOR ===========================
+    id: 16213057486164360
+    identification: 
+      column-name: APEX$ROW_SELECTOR
+      type: Sélecteur de ligne
+
+    settings: 
+      activer-la-sélection-multiple: true
+      afficher-tout-sélectionner: true
+      masquer-le-contrôle: false
+
+    layout: 
+      sequence: 10
+
+  printing: 
+    page: 
+      size: A4
+      orientation: Landscape
+      units: Millimeters
+      width: 297
+      height: 210
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+      page-header-text: suivi des contrats &P46_NEW.
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+- # ====== Region: Nouveau =====================================
+  id: 16213596231164366
+  identification: 
+    name: Nouveau
+    title: Contrats &P46_NEW.
+    type: Contenu statique
+
+  layout: 
+    sequence: 13
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: 5
+    new-column: true
+    column-span: 4
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--accent2
+    - t-Region--stacked
+    - js-headingLevel-1
+    - t-Region--hiddenOverflow
+    - t-Form--large
+    - t-Form--leftLabels
+    - t-Region-orderBy--center
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+page-items: 
+- # ====== Page Item: P46_NEW ==================================
+  id: 14713168406439070
+  identification: 
+    name: P46_NEW
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 33
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+processes: 
+- # ====== Process: contrat en fonction d'etat - Enregistrer les
+  id: 16213099934164361
+  identification: 
+    name: contrat en fonction d'etat - Enregistrer les données de grille interactive
+    type: Grille interactive - Traitement de ligne automatique (DML)
+    execution-chain: None
+    editable-region: suivi des contrats &P46_NEW. # 15978277959232262
+
+  settings: 
+    type-de-cible: Source de région
+    empêcher-les-pertes-de-mise-à-jour: true
+    verrouiller-la-ligne: Oui
+    renvoyer-des-clés-primaires-après-l'insertion: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    execution-scope: For Created and Modified Rows
+

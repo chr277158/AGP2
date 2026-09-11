@@ -1,0 +1,399 @@
+---
+# ====== Page: Contrats 2 ====================================
+id: 43
+identification: 
+  name: Contrats 2
+  alias: CONTRATS-2
+  title: Contrats 2
+
+appearance: 
+  page-mode: Normal
+  page-template: Standard
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    <style>
+        /* ... ( bloc de style CSS inchangé) ... */
+        .div-1 {
+            background-color:  #6f6f85;
+        }
+        .div-2 {
+           background-color:  rgb(206, 206, 206); 
+        }
+        .div-3 {
+            background-color: rgb(209, 227, 228);
+            font-family: verdana;
+            font-size: 150%;
+        }
+        .div-4 {
+            background-color:  #FFBE53;
+        }
+    
+    
+    </style>
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Rechercher ==================================
+  id: 45376963152689973
+  identification: 
+    name: Rechercher
+    type: Filtres intelligents
+
+  source: 
+    filtered-region: Résultats de la recherche # 70578171190971727455
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      plus-de-filtres-de-bouton-de-suggestion: false
+      seuil-de-nombres-compacts: 10000
+      afficher-le-nombre-total-de-lignes: Non
+
+  facets: 
+  - # ====== Facet: P43_SEARCH ===================================
+    id: 45388786678689993
+    identification: 
+      name: P43_SEARCH
+      type: Rechercher
+
+    label: 
+      label: Rechercher
+
+    settings: 
+      type-de-recherche: Recherche de lignes
+      champ-d'entrée: Partie supérieure de la région Recherche à facets
+
+    layout: 
+      sequence: 10
+
+    source: 
+      database-column(s): N_CONTRAT_BC,TITULAIRE_DU_MARCHÉ,REF_AO,OBJET,CADRE__PONCTUEL,MONTANT,DEVISE
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+  filters: 
+  - # ====== Filter: P43_SEARCH ==================================
+    id: 45388786678689993
+    identification: 
+      name: P43_SEARCH
+      type: Rechercher
+
+    label: 
+      label: Rechercher
+
+    settings: 
+      type-de-recherche: Recherche de lignes
+      champ-de-recherche-réduit: false
+
+    layout: 
+      sequence: 10
+
+    source: 
+      database-column(s): N_CONTRAT_BC,TITULAIRE_DU_MARCHÉ,REF_AO,OBJET,CADRE__PONCTUEL,MONTANT,DEVISE
+
+    security: 
+      store-value-encrypted-in-session-state: true
+
+- # ====== Region: Résultats de la recherche ===================
+  id: 70578171190971727455
+  identification: 
+    name: Résultats de la recherche
+    title: '&ID_CC.'
+    type: Cartes
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select CONTRATS.ID as ID,
+          CONTRATS.ID_CC as ID_CC,
+          CONTRATS.N_CONTRAT_BC as N_CONTRAT_BC,
+          CONTRATS."TITULAIRE_DU_MARCHÉ" as "TITULAIRE_DU_MARCHÉ",
+          CONTRATS.REF_AO as REF_AO,
+          CONTRATS.OBJET as OBJET,
+          CONTRATS.CADRE__PONCTUEL as CADRE__PONCTUEL,
+          CONTRATS.MONTANT as MONTANT,
+          CONTRATS.DEVISE as DEVISE,
+          CONTRATS.DATE_DE_MISE_VIGUEUR as DATE_DE_MISE_VIGUEUR,
+          CONTRATS."DATE_FIN_DU_MARCHÉ" as "DATE_FIN_DU_MARCHÉ",
+          CONTRATS.MONTANT_DE_LA_CAUTION as MONTANT_DE_LA_CAUTION,
+          CONTRATS."DATE_DE_MAIN_LEVÉE" as "DATE_DE_MAIN_LEVÉE",
+          CONTRATS.N__COMMISSION as N__COMMISSION,
+          CONTRATS.ETAT as ETAT,
+          CONTRATS.OBSERVATION_ as OBSERVATION_,
+          CONTRATS.COL016 as COL016,
+          CONTRATS.DEMANDEUR as DEMANDEUR,
+          CONTRATS.RESPONSABLE as RESPONSABLE,
+          CONTRATS."DATE_DE_LA_PREMIÈRE_PIÈCE_LÉGALE" as "DATE_DE_LA_PREMIÈRE_PIÈCE_LÉGALE",
+          CONTRATS."DATE_DE_LA_DERNIÈRE_PIÈCE_LÉGALE" as "DATE_DE_LA_DERNIÈRE_PIÈCE_LÉGALE",
+          CONTRATS.N__ARCHIVAGE as N__ARCHIVAGE,
+          CONTRATS.DATE_DE_L_ARCHIVAGE as DATE_DE_L_ARCHIVAGE,
+          CONTRATS.N__RANG_ARCHIVAGE as N__RANG_ARCHIVAGE,
+          CONTRATS.OBSERVATION as OBSERVATION,
+          CONTRATS.DATE_LIVRAISON_JURIDIQUE as DATE_LIVRAISON_JURIDIQUE,
+          CONTRATS.DATE_AVIS_JURIDIQUE as DATE_AVIS_JURIDIQUE,
+          CONTRATS.DATE_ENVOI_CLIENT_SIGNATURE as DATE_ENVOI_CLIENT_SIGNATURE,
+          CONTRATS.DATE_RETOUR_CLIENT_SIGNE as DATE_RETOUR_CLIENT_SIGNE,
+          CONTRATS.DATE_ENVOI_ADMIN_SIGNATURE as DATE_ENVOI_ADMIN_SIGNATURE,
+          CONTRATS.DATE_RETOUR_ADMIN_SIGNE as DATE_RETOUR_ADMIN_SIGNE,
+          CONTRATS.DATE_ENVOI_CLIENT_ENREGISTREMENT as DATE_ENVOI_CLIENT_ENREGISTREMENT,
+          CONTRATS.DATE_RETOUR_ENREGISTRE as DATE_RETOUR_ENREGISTRE,
+          CONTRATS.DATE_GARANTIE_FINALE as DATE_GARANTIE_FINALE,
+          CASE
+            WHEN DATE_FIN_DU_MARCHÉ IS NOT NULL 
+               AND DATE_FIN_DU_MARCHÉ < SYSDATE
+          THEN 'Clôturé'   
+           WHEN DATE_DE_MISE_VIGUEUR <=  SYSDATE
+               AND (DATE_FIN_DU_MARCHÉ IS NULL 
+                    OR DATE_FIN_DU_MARCHÉ <= SYSDATE)
+                     THEN 'En exécution'
+          WHEN DATE_GARANTIE_FINALE IS NOT NULL THEN 'Cautionnement Définitif reçue'
+          WHEN DATE_RETOUR_ENREGISTRE IS NOT NULL THEN 'Contrat enregistré'
+          WHEN DATE_ENVOI_CLIENT_ENREGISTREMENT IS NOT NULL THEN 'Enregistrement en cours'
+          WHEN DATE_RETOUR_ADMIN_SIGNE IS NOT NULL THEN 'Signé par administration'
+          WHEN DATE_ENVOI_ADMIN_SIGNATURE IS NOT NULL THEN 'En attente signature administration'
+          WHEN DATE_RETOUR_CLIENT_SIGNE IS NOT NULL THEN 'Signé par titulaire'
+          WHEN DATE_ENVOI_CLIENT_SIGNATURE IS NOT NULL THEN 'En attente signature titulaire'
+          WHEN DATE_AVIS_JURIDIQUE IS NOT NULL THEN 'Avis juridique reçu'
+          WHEN DATE_LIVRAISON_JURIDIQUE IS NOT NULL THEN 'En cours avis juridique'
+      
+         
+          
+          ELSE 'Nouveau / Non traité'
+      END AS etat_contrat,
+        CASE
+            WHEN "DATE_FIN_DU_MARCHÉ" IS NOT NULL 
+               AND "DATE_FIN_DU_MARCHÉ" < SYSDATE
+          THEN  '11'   
+           WHEN CONTRATS.DATE_DE_MISE_VIGUEUR <=  SYSDATE
+               AND (CONTRATS."DATE_FIN_DU_MARCHÉ" IS NULL 
+                    OR CONTRATS."DATE_FIN_DU_MARCHÉ" <= SYSDATE) THEN '10'
+      
+          WHEN DATE_GARANTIE_FINALE IS NOT NULL THEN '9'
+          WHEN DATE_RETOUR_ENREGISTRE IS NOT NULL THEN '8'
+          WHEN DATE_ENVOI_CLIENT_ENREGISTREMENT IS NOT NULL THEN '7'
+          WHEN DATE_RETOUR_ADMIN_SIGNE IS NOT NULL THEN '6'
+          WHEN DATE_ENVOI_ADMIN_SIGNATURE IS NOT NULL THEN '5'
+          WHEN DATE_RETOUR_CLIENT_SIGNE IS NOT NULL THEN '4'
+          WHEN DATE_ENVOI_CLIENT_SIGNATURE IS NOT NULL THEN '3'
+          WHEN DATE_AVIS_JURIDIQUE IS NOT NULL THEN '2'
+          WHEN DATE_LIVRAISON_JURIDIQUE IS NOT NULL THEN '1'
+      
+         
+          
+          ELSE '0'
+      END AS etat_cont,
+       CASE
+        WHEN DATE_DE_MISE_VIGUEUR <=  SYSDATE
+               AND (DATE_FIN_DU_MARCHÉ IS NULL 
+                    OR DATE_FIN_DU_MARCHÉ <= SYSDATE)
+                     THEN ' '
+       ELSE ' Contrat non Signé '
+      END AS etat_signature,
+          CONTRATS.RESPONSABLE_DOS as RESPONSABLE_DOS 
+       from CONTRATS CONTRATS
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: Contrats en Cours # 70578172059454727464
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    - t-CardsRegion--styleA
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 14382070245218729
+    appearance: 
+      layout: Grid
+      grid-columns: Auto
+
+    title: 
+      advanced-formatting: false
+      column: N_CONTRAT_BC
+
+    subtitle: 
+      advanced-formatting: true
+      html-expression: ' &REF_AO.'
+
+    body: 
+      advanced-formatting: true
+      html-expression: |
+        <table>
+            <tr class="div-3" style="height:40px"><td> Présentation du contrat : </td></tr>
+             
+            
+            <tr class="div-2"><td> &"TITULAIRE_DU_MARCHÉ". </td></tr>
+            <tr class="div-2"><td>MISE EN VIGUEUR : &DATE_DE_MISE_VIGUEUR.  &ETAT_SIGNATURE.</td></tr>
+            <tr class="div-2"><td> &"DATE_FIN_DU_MARCHÉ".  </td></tr>
+         <tr class="div-2"><td> &ETAT_CONTRAT.  </td></tr>
+         
+         
+             
+        </table>
+        
+        
+        
+        
+        
+
+    secondary-body: 
+      advanced-formatting: false
+      column: ETAT_CONTRAT
+
+    icon-and-badge: 
+      icon-source: Icon Class
+      icon-css-classes: fa-lg fa-indent
+      icon-position: Start
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    actions: 
+    - # ====== Action: Modifier ====================================
+      id: 14383154515218731
+      identification: 
+        type: Button
+        label: Modifier
+
+      layout: 
+        position: Primary
+        sequence: 20
+
+      link: 
+        type: Redirect to Page in this Application
+        target: 
+          url: 'f?p=&APP_ID.:36:&SESSION.::&DEBUG.::P36_ID,P36_ID_CC:&ID.,&ID_CC.'
+          page: 36 # edit_contrat
+          values: 
+            p36_id: '&ID.'
+            p36_id_cc: '&ID_CC.'
+
+      appearance: 
+        display-type: Icon
+        icon: fa-edit
+        hot: true
+
+- # ====== Region: Contrats en Cours ===========================
+  id: 70578172059454727464
+  identification: 
+    name: Contrats en Cours
+    type: Contenu statique
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+

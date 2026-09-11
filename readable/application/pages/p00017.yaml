@@ -1,0 +1,520 @@
+---
+# ====== Page: Edit_Avis =====================================
+id: 17
+identification: 
+  name: Edit_Avis
+  alias: EDIT-AVIS
+  title: Edit_Avis
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: false
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Edit_Avis ===================================
+  id: 44682878366919059660
+  identification: 
+    name: Edit_Avis
+    type: Panneau
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: REMARQUE
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Buttons =====================================
+  id: 44682882871520059664
+  identification: 
+    name: Buttons
+    type: Contenu statique
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: Texte (caractères spéciaux d'échappement)
+      afficher-les-sauts-de-ligne: true
+
+page-items: 
+- # ====== Page Item: P17_ID_REM ===============================
+  id: 3554156818760474
+  identification: 
+    name: P17_ID_REM
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: Edit_Avis # 44682878366919059660
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Edit_Avis # 44682878366919059660
+    column: ID_REM
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P17_ID_CC ================================
+  id: 3554239126760475
+  identification: 
+    name: P17_ID_CC
+    type: Champ nombre
+
+  label: 
+    label: Id Cc
+    alignment: Left
+
+  settings: 
+    alignement-des-nombres: Début
+    clavier-virtuel: Décimal
+
+  layout: 
+    sequence: 20
+    region: Edit_Avis # 44682878366919059660
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Edit_Avis # 44682878366919059660
+    column: ID_CC
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P17_REF_DOS ==============================
+  id: 3554364725760476
+  identification: 
+    name: P17_REF_DOS
+    type: Champ de texte
+
+  label: 
+    label: Ref Dos
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 30
+    region: Edit_Avis # 44682878366919059660
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+    maximum-length: 50
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Edit_Avis # 44682878366919059660
+    column: REF_DOS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P17_REMARQUE =============================
+  id: 3554434954760477
+  identification: 
+    name: P17_REMARQUE
+    type: Zone de texte
+
+  label: 
+    label: Remarque
+    alignment: Left
+
+  settings: 
+    redimensionnable: true
+    hauteur-automatique: false
+    compteur-de-caractères: false
+    supprimer-les-espaces: Début et fin
+
+  layout: 
+    sequence: 40
+    region: Edit_Avis # 44682878366919059660
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+    maximum-length: 500
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Edit_Avis # 44682878366919059660
+    column: REMARQUE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 44682883256179059664
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: Buttons # 44682882871520059664
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: SAVE ========================================
+  id: 44682885041754059666
+  identification: 
+    button-name: SAVE
+    label: Apply Changes
+
+  layout: 
+    sequence: 30
+    region: Buttons # 44682882871520059664
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P17_ID_REM
+
+- # ====== Button: CREATE ======================================
+  id: 44682885402295059666
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 40
+    region: Buttons # 44682882871520059664
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P17_ID_REM
+
+dynamic-actions: 
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 44682883304624059664
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 44682883256179059664
+
+  actions: 
+  - # ====== Action: Annuler la boîte de dialogue ================
+    id: 44682884134793059665
+    identification: 
+      action: Annuler la boîte de dialogue
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 44682883304624059664
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Initialize form Edit_Avis ==================
+  id: 44682885875119059666
+  identification: 
+    name: Initialize form Edit_Avis
+    type: Panneau - Initialisation
+    execution-chain: None
+    form-region: Edit_Avis # 44682878366919059660
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form Edit_Avis =====================
+  id: 44682886284136059667
+  identification: 
+    name: Process form Edit_Avis
+    type: Panneau - Traitement de ligne automatique (DML)
+    execution-chain: None
+    form-region: Edit_Avis # 44682878366919059660
+
+  settings: 
+    type-de-cible: Source de région
+    empêcher-les-pertes-de-mise-à-jour: true
+    verrouiller-la-ligne: Oui
+    renvoyer-des-clés-primaires-après-l'insertion: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 44682886621820059667
+  identification: 
+    name: Close Dialog
+    type: Fermer la boîte de dialogue
+    execution-chain: None
+
+  settings: 
+    afficher-les-messages-de-succès: true
+
+  execution: 
+    sequence: 50
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: CREATE,SAVE,DELETE
+

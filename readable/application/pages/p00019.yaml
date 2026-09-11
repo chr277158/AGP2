@@ -1,0 +1,1509 @@
+---
+# ====== Page: متابعة تقدم جميع الملفات ======================
+id: 19
+identification: 
+  name: متابعة تقدم جميع الملفات
+  alias: متابعة-تقدم-جميع-الملفات
+  title: متابعة تقدم جميع الملفات
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: |
+    /* 1) Donne une hauteur plus grande à la zone header (optionnel) */
+    .myClass .a-GV-header{
+      height: 60px;         /* Ajuste selon ton besoin */
+      line-height: 50px;     /* Optionnel: vertical align/centrage */
+      padding: 5px;
+      white-space: normal;   /* Autorise le retour à la ligne */
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+    
+    /* 2) Force le texte du libellé à se wrapper */
+    .myClass .a-GV-header .a-GV-headerLabel{
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      height: auto;
+      line-height: 1.2;      /* Plus naturel pour du multi-ligne */
+      padding: 5px;
+    }
+    .a-GV-header{ 
+        pointer-events: none;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: مراحل التقدم ================================
+  id: 33311032719816003
+  identification: 
+    name: مراحل التقدم
+    type: Grille interactive
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select SP.ID,
+             SP."عدد",
+             SP."طريقة_ابرام_الصفقة",
+             SP."نوعية_الطلب",
+             SP."اللجنة_المختصة",
+             SP."تاريخ_ورود_CPT_ممضاة",
+             SP."تاريخ_ارسال_مقترح_تركيبة_لجنة_التقييم",
+             SP."تاريخ_ورود_تعيين_تركيبة_لجنة_التقييم",
+             SP."تاريخ_تقديم_كراسات_الشروط_للمصادقة",
+             SP."تاريخ_مصادقة_اللجنة_على_كراسات_الشروط",
+             SP."تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط",
+             SP."تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر",
+             SP."تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط2",
+             SP."التاريخ__للإعلان_عن_المنافسة",
+             SP."تاريخ_ارسال_التقرير_للتقييم_الفني",
+             SP."تاريخ_امضاء_تقرير_تقييم_العروض",
+             SP."تاريخ_تقديم_الملف_للجنة_الشراءات",
+             SP."تاريخ__لجنة_الصفقات",
+             SP."تاريخ_قرار__لجنة_الصفقات",
+             SP."تاريخ_نشر_نتائج_المنافسة",
+             SP."تاريخ_تبليغ_الصفقة",
+             SP."تاريخ_ارجاع_الضمانات_الوقتية",
+             fl.ID as ID_FL,
+        fl.ID_CC,
+             case when SP."اللجنة_المختصة" = 'CRA' then 40 else 4 end as P,
+          case when SP."اللجنة_المختصة" = 'CRA' then 'P40_ID_1' else 'P4_ID_1' end as VID1,
+          case when SP."اللجنة_المختصة" = 'CRA' then 'P40_ID_2' else 'P4_ID_2' end as VID2,
+          case when SP."اللجنة_المختصة" = 'CRA' then 'P40_ID' else 'P4_ID' end as VID,
+             "المكلف_بالملف"
+        from SP
+        JOIN FICHIER_LNCEMENT fl ON fl.ID_CC = SP.ID
+
+  layout: 
+    sequence: 50
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    column-css-classes: 
+    - myClass
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 23246411051551268
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+    edit-authorization: 
+      update: Droits de lecteur # 74585100429726929216
+      delete: Droits de contribution # 74585100534688929216
+
+    performance: 
+      lazy-loading: true
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    messages: 
+      when-no-data-found: لا توجد معطيات حاليا
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: true
+      define-chart-view: true
+      download: true
+
+    download: 
+      authorization: Droits de lecteur # 74585100429726929216
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Etat principal ========================
+      id: 23337199379207998
+      identification: 
+        name: Etat principal
+        alias: 200206
+
+  columns: 
+  - # ====== Column: ملخص ========================================
+    id: 3243523228174255
+    identification: 
+      column-name: ملخص
+      type: Lien
+
+    heading: 
+      heading: ملخص
+      alignment: center
+
+    layout: 
+      sequence: 40
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10:&SESSION.::&DEBUG.::P10_ID,P10_REF:&ID.,&"عدد".#ID#,#REF_AE#'
+        page: 10 # cc
+        values: 
+          p10_id: '&ID.'
+          p10_ref: '&"عدد".#ID#'
+
+      link-text: ملخص
+
+    source: 
+      type: None
+
+    enable-users-to: 
+      hide: true
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_ارسال_مقترح_تركيبة_لجنة_التقييم =======
+    id: 3551558872760448
+    identification: 
+      column-name: تاريخ_ارسال_مقترح_تركيبة_لجنة_التقييم
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 170
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_ارسال_مقترح_تركيبة_لجنة_التقييم
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: تاريخ_ورود_تعيين_تركيبة_لجنة_التقييم ========
+    id: 3551577404760449
+    identification: 
+      column-name: تاريخ_ورود_تعيين_تركيبة_لجنة_التقييم
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 180
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_ورود_تعيين_تركيبة_لجنة_التقييم
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشر
+    id: 3551735134760450
+    identification: 
+      column-name: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 190
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر ========
+    id: 3551838442760451
+    identification: 
+      column-name: تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 200
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشر
+    id: 3551906086760452
+    identification: 
+      column-name: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط2
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 210
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط2
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: تاريخ_ارسال_التقرير_للتقييم_الفني ===========
+    id: 3552040184760453
+    identification: 
+      column-name: تاريخ_ارسال_التقرير_للتقييم_الفني
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 220
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_ارسال_التقرير_للتقييم_الفني
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: تاريخ_امضاء_تقرير_تقييم_العروض ==============
+    id: 3552118413760454
+    identification: 
+      column-name: تاريخ_امضاء_تقرير_تقييم_العروض
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 230
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_امضاء_تقرير_تقييم_العروض
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: تاريخ__لجنة_الصفقات =========================
+    id: 3552187330760455
+    identification: 
+      column-name: تاريخ__لجنة_الصفقات
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 240
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ__لجنة_الصفقات
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: تاريخ_نشر_نتائج_المنافسة ====================
+    id: 3552305578760456
+    identification: 
+      column-name: تاريخ_نشر_نتائج_المنافسة
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 250
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_نشر_نتائج_المنافسة
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: تاريخ_تبليغ_الصفقة ==========================
+    id: 3552405772760457
+    identification: 
+      column-name: تاريخ_تبليغ_الصفقة
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 260
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_تبليغ_الصفقة
+      data-type: DATE
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: P ===========================================
+    id: 3552563884760458
+    identification: 
+      column-name: P
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 270
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: P
+      data-type: NUMBER
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: VID1 ========================================
+    id: 3552664251760459
+    identification: 
+      column-name: VID1
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 280
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: VID1
+      data-type: VARCHAR2
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: VID2 ========================================
+    id: 3552673234760460
+    identification: 
+      column-name: VID2
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 290
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: VID2
+      data-type: VARCHAR2
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: VID =========================================
+    id: 3552789923760461
+    identification: 
+      column-name: VID
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 300
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: VID
+      data-type: VARCHAR2
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: ID_FL =======================================
+    id: 3552932531760462
+    identification: 
+      column-name: ID_FL
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 310
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ID_FL
+      data-type: NUMBER
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: ID_CC =======================================
+    id: 3553063837760463
+    identification: 
+      column-name: ID_CC
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 320
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ID_CC
+      data-type: NUMBER
+      query-only: true
+      primary-key: false
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: ID ==========================================
+    id: 23246541686551269
+    identification: 
+      column-name: ID
+      type: Lien
+
+    heading: 
+      alignment: center
+
+    layout: 
+      sequence: 30
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:&P.:&SESSION.::&DEBUG.::&VID.,&VID1.,&VID2.:&ID.,&ID.,&ID_FL.'
+        page: '&P.'
+        values: 
+          &vid.: '&ID.'
+          &vid1.: '&ID.'
+          &vid2.: '&ID_FL.'
+
+      link-text: <img src="#APEX_FILES#app_ui/img/icons/apex-edit-pencil.png" class="apex-edit-pencil" alt="">
+
+    source: 
+      type: Database Column
+      database-column: ID
+      data-type: NUMBER
+      query-only: true
+      primary-key: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: عدد =========================================
+    id: 23246693810551270
+    identification: 
+      column-name: عدد
+      type: Afficher uniquement
+
+    heading: 
+      heading: عدد
+      alignment: center
+
+    settings: 
+      format: Texte brut
+      basé-sur: Valeur d'élément
+
+    layout: 
+      sequence: 50
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: عدد
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: طريقة_ابرام_الصفقة ==========================
+    id: 23246724998551271
+    identification: 
+      column-name: طريقة_ابرام_الصفقة
+      type: Champ de texte
+
+    heading: 
+      heading: طريقة ابرام الصفقة
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 60
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 255
+
+    source: 
+      type: Database Column
+      database-column: طريقة_ابرام_الصفقة
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: نوعية_الطلب =================================
+    id: 23246869761551272
+    identification: 
+      column-name: نوعية_الطلب
+      type: Champ de texte
+
+    heading: 
+      heading: نوعية الطلب
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 70
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: نوعية_الطلب
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: اللجنة_المختصة ==============================
+    id: 23247001996551273
+    identification: 
+      column-name: اللجنة_المختصة
+      type: Champ de texte
+
+    heading: 
+      heading: اللجنة المختصة
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 80
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: اللجنة_المختصة
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: تاريخ_ورود_CPT_ممضاة ========================
+    id: 23247086558551274
+    identification: 
+      column-name: تاريخ_ورود_CPT_ممضاة
+      type: Sélecteur de date
+
+    heading: 
+      heading: تاريخ ورود Cpt ممضاة
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 90
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_ورود_CPT_ممضاة
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: تاريخ_تقديم_كراسات_الشروط_للمصادقة ==========
+    id: 23247329328551277
+    identification: 
+      column-name: تاريخ_تقديم_كراسات_الشروط_للمصادقة
+      type: Sélecteur de date
+
+    heading: 
+      heading: تاريخ تقديم كراسات الشروط للمصادقة
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 100
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_تقديم_كراسات_الشروط_للمصادقة
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: تاريخ_مصادقة_اللجنة_على_كراسات_الشروط =======
+    id: 23247496611551278
+    identification: 
+      column-name: تاريخ_مصادقة_اللجنة_على_كراسات_الشروط
+      type: Sélecteur de date
+
+    heading: 
+      heading: تاريخ مصادقة اللجنة على كراسات الشروط
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 110
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_مصادقة_اللجنة_على_كراسات_الشروط
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: التاريخ__للإعلان_عن_المنافسة ================
+    id: 23247816421551282
+    identification: 
+      column-name: التاريخ__للإعلان_عن_المنافسة
+      type: Sélecteur de date
+
+    heading: 
+      heading: التاريخ للإعلان عن المنافسة
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 120
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: التاريخ__للإعلان_عن_المنافسة
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: تاريخ_تقديم_الملف_للجنة_الشراءات ============
+    id: 23248122869551285
+    identification: 
+      column-name: تاريخ_تقديم_الملف_للجنة_الشراءات
+      type: Sélecteur de date
+
+    heading: 
+      heading: تاريخ تقديم الملف للجنة الشراءات
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 130
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_تقديم_الملف_للجنة_الشراءات
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: تاريخ_قرار__لجنة_الصفقات ====================
+    id: 23331265932207637
+    identification: 
+      column-name: تاريخ_قرار__لجنة_الصفقات
+      type: Sélecteur de date
+
+    heading: 
+      heading: تاريخ قرار لجنة الصفقات
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 140
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_قرار__لجنة_الصفقات
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: تاريخ_ارجاع_الضمانات_الوقتية ================
+    id: 23331597079207640
+    identification: 
+      column-name: تاريخ_ارجاع_الضمانات_الوقتية
+      type: Sélecteur de date
+
+    heading: 
+      heading: تاريخ ارجاع الضمانات الوقتية
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 150
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+
+    source: 
+      type: Database Column
+      database-column: تاريخ_ارجاع_الضمانات_الوقتية
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: المكلف_بالملف ===============================
+    id: 23331629862207641
+    identification: 
+      column-name: المكلف_بالملف
+      type: Afficher uniquement
+
+    heading: 
+      heading: المكلف بالملف
+      alignment: center
+
+    settings: 
+      format: Texte brut
+      basé-sur: Valeur d'élément
+
+    layout: 
+      sequence: 160
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: المكلف_بالملف
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Distinct Column
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: APEX$ROW_ACTION =============================
+    id: 23331767482207642
+    identification: 
+      column-name: APEX$ROW_ACTION
+      type: Menu Actions
+
+    layout: 
+      sequence: 20
+
+  - # ====== Column: APEX$ROW_SELECTOR ===========================
+    id: 23331838008207643
+    identification: 
+      column-name: APEX$ROW_SELECTOR
+      type: Sélecteur de ligne
+
+    settings: 
+      activer-la-sélection-multiple: false
+      masquer-le-contrôle: false
+
+    layout: 
+      sequence: 10
+
+  printing: 
+    page: 
+      size: A4
+      orientation: Landscape
+      units: Millimeters
+      width: 297
+      height: 210
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+processes: 
+- # ====== Process: New ========================================
+  id: 3553245769760465
+  identification: 
+    name: New
+    type: Grille interactive - Traitement de ligne automatique (DML)
+    execution-chain: None
+    editable-region: مراحل التقدم # 33311032719816003
+
+  settings: 
+    type-de-cible: Source de région
+    empêcher-les-pertes-de-mise-à-jour: true
+    verrouiller-la-ligne: Oui
+    renvoyer-des-clés-primaires-après-l'insertion: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    execution-scope: For Created and Modified Rows
+

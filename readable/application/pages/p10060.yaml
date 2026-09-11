@@ -1,0 +1,90 @@
+---
+# ====== Page: A propos de ===================================
+id: 10060
+identification: 
+  name: A propos de
+  alias: HELP
+  title: A propos de
+  page-group: Administration # 74585101979246929220
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: First item on page
+  warn-on-unsaved-changes: false
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+help: 
+  help-text: L'ensemble du texte d'aide de l'application est accessible à partir de cette page. Les liens figurant dans la région "Documentation" fournissent une explication bien plus approfondie des fonctions et fonctionnalités de l'application.
+
+configuration: 
+  build-option: 'Fonctionnalité: A propos de la page' # 74585098333216929213
+
+regions: 
+- # ====== Region: A propos de la page =========================
+  id: 74585359771259929645
+  identification: 
+    name: A propos de la page
+    type: Contenu statique
+
+  source: 
+    html-code: ' Cette application à été crée pour des fins professionnels et NON COMMERCIALE par Mr Chiraz Ghodhben'
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Content Block
+    template-options: 
+    - '#DEFAULT#'
+    - t-ContentBlock--padded
+    - t-ContentBlock--h1
+    - t-ContentBlock--lightBG
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+

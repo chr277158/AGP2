@@ -1,0 +1,1253 @@
+---
+# ====== Page: nouveau Dossier ===============================
+id: 42
+identification: 
+  name: nouveau Dossier
+  alias: NOUVEAU_DOSSIER
+  title: nouveau Dossier
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: false
+  resizable: false
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  file-urls: 
+  - '#APP_FILES#jquery.maskedinput.min.js'
+  execute-when-page-loads: |
+    $("#P42_DR").mask("A*.##.#.####");
+    //$("#P6_BUDGET").mask("## ### ###,###")
+    // Dans "Execute when Page Loads"
+    /*new AutoNumeric('#P6_BUDGET', {
+        digitGroupSeparator: ' ',
+        decimalCharacter: ',',
+        decimalPlaces: 3
+    });*/
+
+security: 
+  authorization-scheme: Droits de lecteur # 74585100429726929216
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: New =========================================
+  id: 4124238730740345
+  identification: 
+    name: New
+    title: Nouveau Dossier
+    type: Panneau
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select ID,
+             "الكلفة_التقديرية",
+             "نوعية_الطلب",
+             "اللجنة_المختصة",
+             "الاجراءات",
+             "طريقة_ابرام_الصفقة",
+             "آجال_الانجاز",
+             "المكلف_بالملف",
+             "رقم_الاستشارة",
+             "تاريخ_بداية_معالجة_الملف_الجديد",
+             "التاريخ_نهاية_العقد_الجاري",
+             "موضوع_الصفقة"
+        from SUIVI
+      WHERE ID = :P42_T
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Boutons =====================================
+  id: 128417180797560468451
+  identification: 
+    name: Boutons
+    type: Contenu statique
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: Texte (caractères spéciaux d'échappement)
+      afficher-les-sauts-de-ligne: true
+
+page-items: 
+- # ====== Page Item: P42_T ====================================
+  id: 4125512105740358
+  identification: 
+    name: P42_T
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_ID_3 =================================
+  id: 4125746905740360
+  identification: 
+    name: P42_ID_3
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: New # 4124238730740345
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  default: 
+    type: Item
+    item: P42_T
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_الكلفة_التقديرية =====================
+  id: 4125846744740361
+  identification: 
+    name: P42_الكلفة_التقديرية
+    type: Champ nombre
+
+  label: 
+    label: الكلفة التقديرية
+    alignment: Left
+
+  settings: 
+    alignement-des-nombres: Début
+    clavier-virtuel: Décimal
+
+  layout: 
+    sequence: 40
+    region: New # 4124238730740345
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: 999G999G999G999D999
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: الكلفة_التقديرية
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_نوعية_الطلب_1 ========================
+  id: 4125966204740362
+  identification: 
+    name: P42_نوعية_الطلب_1
+    type: Liste SELECT
+
+  label: 
+    label: نوعية الطلب
+    alignment: Left
+
+  settings: 
+    action-de-page-lors-de-la-sélection: Aucun
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: New # 4124238730740345
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Service;Service,Etude;Etude'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: نوعية_الطلب
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_اللجنة_المختصة_1 =====================
+  id: 4126017643740363
+  identification: 
+    name: P42_اللجنة_المختصة_1
+    type: Liste SELECT
+
+  label: 
+    label: اللجنة المختصة
+    alignment: Left
+
+  settings: 
+    action-de-page-lors-de-la-sélection: Aucun
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 80
+    region: New # 4124238730740345
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:CRA;CRA,CME;CME,CAE;CAE'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: اللجنة_المختصة
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_الاجراءات ============================
+  id: 4126096121740364
+  identification: 
+    name: P42_الاجراءات
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 90
+    region: New # 4124238730740345
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: الاجراءات
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_طريقة_ابرام_الصفقة_1 =================
+  id: 4126177535740365
+  identification: 
+    name: P42_طريقة_ابرام_الصفقة_1
+    type: Sélectionner un élément
+
+  label: 
+    label: طريقة ابرام الصفقة
+    alignment: Left
+
+  rechercher: 
+    type-de-correspondance: Contient
+    respect-des-minuscules/majuscules: false
+    nombre-minimal-de-caractères: 0
+
+  settings: 
+    extraire-lors-de-la-recherche: false
+
+  layout: 
+    sequence: 100
+    region: New # 4124238730740345
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+    maximum-length: 50
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:استشارة مفتوحة;استشارة مفتوحة,استشارة مضيقة;استشارة مضيقة,طلب عروض مفتوح;طلب عروض مفتوح,استشارة بالتفاوض المباشر;استشارة بالتفاوض المباشر,التفاوض المباشر;التفاوض المباشر'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: طريقة_ابرام_الصفقة
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_آجال_الانجاز =========================
+  id: 4126367906740366
+  identification: 
+    name: P42_آجال_الانجاز
+    type: Champ nombre
+
+  label: 
+    label: آجال الانجاز
+    alignment: Left
+
+  settings: 
+    alignement-des-nombres: Début
+    clavier-virtuel: Décimal
+
+  layout: 
+    sequence: 50
+    region: New # 4124238730740345
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: آجال_الانجاز
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_المكلف_بالملف ========================
+  id: 4126412885740367
+  identification: 
+    name: P42_المكلف_بالملف
+    type: Sélectionner un élément
+
+  label: 
+    label: المكلف بالملف
+    alignment: Left
+
+  rechercher: 
+    type-de-correspondance: Contient
+    respect-des-minuscules/majuscules: false
+    nombre-minimal-de-caractères: 0
+
+  settings: 
+    extraire-lors-de-la-recherche: false
+
+  layout: 
+    sequence: 130
+    region: New # 4124238730740345
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select T_USER.NOM as NOM,
+      T_USER.NOM as N
+       from T_USER 
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: المكلف_بالملف
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select ID,
+            
+             "المكلف_بالملف"
+         
+        from SUIVI
+      WHERE ID = :P42_T
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_DR ===================================
+  id: 4126541802740368
+  identification: 
+    name: P42_DR
+    type: Champ de texte
+
+  label: 
+    label: رقم الملف
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 20
+    region: New # 4124238730740345
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+    maximum-length: 50
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: رقم_الاستشارة
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_تاريخ_بداية_معالجة_الملف_الجديد ======
+  id: 4126607195740369
+  identification: 
+    name: P42_تاريخ_بداية_معالجة_الملف_الجديد
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 110
+    region: New # 4124238730740345
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: تاريخ_بداية_معالجة_الملف_الجديد
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_التاريخ_نهاية_العقد_الجاري ===========
+  id: 4126755314740370
+  identification: 
+    name: P42_التاريخ_نهاية_العقد_الجاري
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 120
+    region: New # 4124238730740345
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: التاريخ_نهاية_العقد_الجاري
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_موضوع_الصفقة =========================
+  id: 4126855587740371
+  identification: 
+    name: P42_موضوع_الصفقة
+    type: Zone de texte
+
+  label: 
+    label: موضوع الصفقة
+    alignment: Left
+
+  settings: 
+    redimensionnable: true
+    hauteur-automatique: false
+    compteur-de-caractères: false
+    supprimer-les-espaces: Début et fin
+
+  layout: 
+    sequence: 60
+    region: New # 4124238730740345
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: true
+    maximum-length: 4000
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: New # 4124238730740345
+    column: موضوع_الصفقة
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_CREER_PAR ============================
+  id: 4128262474740385
+  identification: 
+    name: P42_CREER_PAR
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 140
+    region: New # 4124238730740345
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Item
+    item: P0_USER
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_ETAT =================================
+  id: 4361194552992738
+  identification: 
+    name: P42_ETAT
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P42_MESSAGE ==============================
+  id: 4361597193992742
+  identification: 
+    name: P42_MESSAGE
+    type: Afficher uniquement
+
+  label: 
+    alignment: Left
+
+  settings: 
+    format: HTML
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 30
+    region: No Parent
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form-fieldContainer--stretchInputs
+    - t-Form-fieldContainer--xlarge
+    - margin-top-lg
+    - margin-left-sm
+    - margin-right-sm
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  default: 
+    type: Static
+    static-value: |
+      <span style="color:blue;font-weight:bold"> هذا الملف موجود في قائمة الملفات الجارية
+       </span>
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 4258877789146496
+  identification: 
+    button-name: CANCEL
+    label: Annuler
+
+  layout: 
+    sequence: 10
+    region: Boutons # 128417180797560468451
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: CREATE ======================================
+  id: 4259358448146496
+  identification: 
+    button-name: CREATE
+    label: Créer
+
+  layout: 
+    sequence: 40
+    region: Boutons # 128417180797560468451
+    slot: CREATE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+dynamic-actions: 
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 4261159659146506
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 4258877789146496
+
+  actions: 
+  - # ====== Action: Annuler la boîte de dialogue ================
+    id: 4261613687146507
+    identification: 
+      action: Annuler la boîte de dialogue
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 4261159659146506
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New =================================
+  id: 4361287916992739
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  client-side-condition: 
+    type: Item = Value
+    item: P42_ETAT
+    value: OK
+
+  actions: 
+  - # ====== Action: Désactiver ==================================
+    id: 4361469416992740
+    identification: 
+      action: Désactiver
+
+    affected-elements: 
+      selection-type: Button
+      button: CREATE # 4259358448146496
+
+    execution: 
+      sequence: 10
+      event: New # 4361287916992739
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Masquer =====================================
+    id: 4361770570992743
+    identification: 
+      action: Masquer
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P42_MESSAGE
+
+    execution: 
+      sequence: 10
+      event: New # 4361287916992739
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+processes: 
+- # ====== Process: Initialize form nouveau cc =================
+  id: 4125648412740359
+  identification: 
+    name: Initialize form nouveau cc
+    type: Panneau - Initialisation
+    execution-chain: None
+    form-region: New # 4124238730740345
+
+  execution: 
+    sequence: 30
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: New ========================================
+  id: 4126952773740372
+  identification: 
+    name: New
+    type: Panneau - Initialisation
+    execution-chain: None
+    form-region: New # 4124238730740345
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Insert_Into_3_Tables =======================
+  id: 4128023549740383
+  identification: 
+    name: Insert_Into_3_Tables
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          v_cc_id NUMBER;
+      BEGIN
+          -- 1. Insertion dans CC (ID généré automatiquement)
+          INSERT INTO CC (
+              REF_AO,
+             OBJET_CCT,
+          
+             BUDGET,
+             DÉTAIL_DE_RÉPONSE,
+             NATURE_DE_DEPENSE,
+              DATE_CRÉATION,
+              CREER_PAR,
+              PV_CCT,
+              STATUS
+              
+          ) VALUES (
+              v('P42_DR'),
+              v('P42_موضوع_الصفقة'),
+      
+              v('P42_الكلفة_التقديرية'),
+              v('P42_آجال_الانجاز'),
+              'Exploitation',
+              SYSDATE,
+              :P42_CREER_PAR,
+              'Y',
+              '1'
+          ) RETURNING ID INTO v_cc_id;  -- Récupère l'ID généré
+          
+          -- 2. Insertion dans SP avec le même ID que CC
+          INSERT INTO SP (
+              ID,
+                عدد,
+          طريقة_ابرام_الصفقة,
+          نوعية_الطلب,
+          اللجنة_المختصة,
+          تاريخ_ورود_CPT_ممضاة,
+          المكلف_بالملف
+          ) VALUES (
+              v_cc_id,  -- Utilise l'ID récupéré de CC
+               v('P42_DR'),
+          v('P42_طريقة_ابرام_الصفقة_1'),
+           v('P42_نوعية_الطلب_1'),
+          v('P42_اللجنة_المختصة_1'),
+          v('P42_تاريخ_بداية_معالجة_الملف_الجديد'),
+             v('P42_المكلف_بالملف_1')
+          );
+          
+      
+      
+        
+          -- 3. Insertion dans FICHIER_DE_LANCEMENT avec IDCC
+          INSERT INTO FICHIER_LNCEMENT (
+                     ID_CC,
+             PROPOSITION_COMMISSION,
+             CC_POUR_LANCEMENT,
+             CRITERES_EVALUATION,
+             AVIS_DE_PRESSE,
+            DESIGNATION_DE_LA_COMMISSION,
+               MAIL_PRESTATAIRE,
+            PROGRAMME_OUVERTURE_DE_PLIS,
+            NOTE_OUVERTURE_PLIS,
+            CAUTION_P
+           )
+      VALUES (
+           v_cc_id,  -- Utilise l'ID récupéré de CC
+          'N',
+          'N',
+          'N',
+          'N',
+          'N',
+          'N',
+          'N',
+          'N',
+          'N'
+           
+          );
+          
+          -- Commit de la transaction
+          COMMIT;
+          
+          -- Message de succès avec l'ID généré
+          apex_application.g_print_success_message := 
+              'Enregistrement réussi. ID généré : ' || v_cc_id;
+          
+      EXCEPTION
+          WHEN OTHERS THEN
+              -- Annulation de toutes les insertions en cas d'erreur
+              ROLLBACK;
+              
+              -- Affichage de l'erreur
+              apex_error.add_error(
+                  p_message => 'Erreur lors de l''insertion : ' || SQLERRM,
+                  p_display_location => apex_error.c_inline_in_notification
+              );
+              
+              -- Relance l'exception pour arrêter le traitement
+              RAISE;
+      END;
+
+  execution: 
+    sequence: 50
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    when-button-pressed: CREATE # 4259358448146496
+
+- # ====== Process: Fermer la boîte de dialogue ================
+  id: 4260730747146506
+  identification: 
+    name: Fermer la boîte de dialogue
+    type: Fermer la boîte de dialogue
+    execution-chain: None
+
+  settings: 
+    afficher-les-messages-de-succès: false
+
+  execution: 
+    sequence: 60
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: CREATE,SAVE,DELETE
+

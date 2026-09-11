@@ -1,0 +1,1914 @@
+---
+# ====== Page: AJOUT CONTRAT =================================
+id: 45
+identification: 
+  name: AJOUT CONTRAT
+  alias: AJOUT-CONTRAT
+  title: AJOUT CONTRAT
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+  - ui-dialog--stretch
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+css: 
+  inline: '  $("N_CONTRAT_BC").mask("A*.##.#.####");'
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: تذكير =======================================
+  id: 6709573075625568
+  identification: 
+    name: تذكير
+    type: Contenu statique
+
+  source: 
+    html-code: |
+      <style>
+      h1 {color:orange;}
+      p {color:blue;}
+      </style>
+      
+      <body>
+      
+      <h1 style="text-align:center">الرجاء التثبت من جميع المعلومات قبل  التسجيل النهائي</h1>
+      <p style="text-align:center">خاصة العدد الكامل للعقود </p>
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--scrollBody
+    - t-Form--leftLabels
+    - t-Form--labelsAbove
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: AJOUT CONTRAT ===============================
+  id: 6839070851072486
+  identification: 
+    name: AJOUT CONTRAT
+    type: Grille interactive
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CONTRATS
+    include-rowid-column: false
+    where-clause: 'ID_cc = :P45_ID_CC'
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--hideHeader js-addHiddenHeadingRoleDesc
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: contrats_ig
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 6839543128072490
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+      add-row-if-empty: true
+
+    edit-authorization: 
+      add: Droits de contribution # 74585100534688929216
+      update: Droits de contribution # 74585100534688929216
+      delete: Droits de contribution # 74585100534688929216
+
+    performance: 
+      lazy-loading: false
+
+    appearance: 
+      select-first-row: true
+      fixed-row-height: true
+
+    pagination: 
+      type: Scroll
+      show-total-count: true
+
+    toolbar: 
+      show: true
+      controls: 
+      - Search Column Selection
+      - Search Field
+      - Actions Menu
+      - Reset Button
+      - Save Button
+      add-button-label: إضافة عقد جديد
+
+    enable-users-to: 
+      save-public-report: false
+      flashback: false
+      define-chart-view: false
+      download: true
+
+    download: 
+      authorization: Droits de contribution # 74585100534688929216
+      formats: 
+      - CSV
+      - HTML
+      - PDF
+      - Excel
+      send-as-email: true
+
+    heading: 
+      fixed-to: Region
+      fixed-report-height: 300
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Etat principal ========================
+      id: 6839947822072492
+      identification: 
+        name: Etat principal
+        alias: 236129
+
+  columns: 
+  - # ====== Column: ID ==========================================
+    id: 6707866444625550
+    identification: 
+      column-name: ID
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 140
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ID
+      data-type: NUMBER
+      query-only: true
+      primary-key: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: N_CONTRAT_BC ================================
+    id: 6707962774625551
+    identification: 
+      column-name: N_CONTRAT_BC
+      type: Champ de texte
+
+    heading: 
+      heading: Réf Contrat /  Bc
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 60
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      format-mask: A*.##.#.####
+
+    validation: 
+      value-required: true
+      maximum-length: 50
+
+    source: 
+      type: Database Column
+      database-column: N_CONTRAT_BC
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: false
+
+    column-filter: 
+      enabled: false
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+      hide: false
+
+  - # ====== Column: DATE_FIN_DU_MARCHÉ ==========================
+    id: 6708031026625552
+    identification: 
+      column-name: DATE_FIN_DU_MARCHÉ
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 150
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_FIN_DU_MARCHÉ
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: MONTANT_DE_LA_CAUTION =======================
+    id: 6708170013625553
+    identification: 
+      column-name: MONTANT_DE_LA_CAUTION
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 160
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: MONTANT_DE_LA_CAUTION
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_DE_MAIN_LEVÉE ==========================
+    id: 6708174436625554
+    identification: 
+      column-name: DATE_DE_MAIN_LEVÉE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 170
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_MAIN_LEVÉE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: N__COMMISSION ===============================
+    id: 6708291300625555
+    identification: 
+      column-name: N__COMMISSION
+      type: Champ de texte
+
+    heading: 
+      heading: N Commission
+      alignment: start
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 70
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: N__COMMISSION
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: None
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: ETAT ========================================
+    id: 6708439176625556
+    identification: 
+      column-name: ETAT
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 190
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ETAT
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Static
+      static-value: 1
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: OBSERVATION_ ================================
+    id: 6708517352625557
+    identification: 
+      column-name: OBSERVATION_
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 200
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: OBSERVATION_
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: COL016 ======================================
+    id: 6708624345625558
+    identification: 
+      column-name: COL016
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 210
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: COL016
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DEMANDEUR ===================================
+    id: 6708743703625559
+    identification: 
+      column-name: DEMANDEUR
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 220
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DEMANDEUR
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: RESPONSABLE =================================
+    id: 6708825768625560
+    identification: 
+      column-name: RESPONSABLE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 230
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: RESPONSABLE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_DE_LA_PREMIÈRE_PIÈCE_LÉGALE ============
+    id: 6708919073625561
+    identification: 
+      column-name: DATE_DE_LA_PREMIÈRE_PIÈCE_LÉGALE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 240
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_LA_PREMIÈRE_PIÈCE_LÉGALE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_DE_LA_DERNIÈRE_PIÈCE_LÉGALE ============
+    id: 6709064612625562
+    identification: 
+      column-name: DATE_DE_LA_DERNIÈRE_PIÈCE_LÉGALE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 250
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_LA_DERNIÈRE_PIÈCE_LÉGALE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: N__ARCHIVAGE ================================
+    id: 6709164357625563
+    identification: 
+      column-name: N__ARCHIVAGE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 260
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: N__ARCHIVAGE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_DE_L_ARCHIVAGE =========================
+    id: 6709234213625564
+    identification: 
+      column-name: DATE_DE_L_ARCHIVAGE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 270
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_L_ARCHIVAGE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: N__RANG_ARCHIVAGE ===========================
+    id: 6709295769625565
+    identification: 
+      column-name: N__RANG_ARCHIVAGE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 280
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: N__RANG_ARCHIVAGE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: OBSERVATION =================================
+    id: 6709383174625566
+    identification: 
+      column-name: OBSERVATION
+      type: Masqué
+
+    settings: 
+      valeur-protégée: false
+
+    layout: 
+      sequence: 290
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: OBSERVATION
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: APEX$ROW_SELECTOR ===========================
+    id: 6840318029072493
+    identification: 
+      column-name: APEX$ROW_SELECTOR
+      type: Sélecteur de ligne
+
+    settings: 
+      activer-la-sélection-multiple: true
+      afficher-tout-sélectionner: true
+      masquer-le-contrôle: false
+
+    layout: 
+      sequence: 10
+
+  - # ====== Column: APEX$ROW_ACTION =============================
+    id: 6840838048072493
+    identification: 
+      column-name: APEX$ROW_ACTION
+      type: Menu Actions
+
+    layout: 
+      sequence: 20
+
+  - # ====== Column: ID_CC =======================================
+    id: 6842813955072507
+    identification: 
+      column-name: ID_CC
+      type: Afficher uniquement
+
+    heading: 
+      alignment: center
+
+    settings: 
+      format: Texte brut
+      basé-sur: Valeur d'élément
+
+    layout: 
+      sequence: 40
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: ID_CC
+      data-type: NUMBER
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Item
+      item: P45_ID_CC
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+      hide: true
+
+  - # ====== Column: REF_AO ======================================
+    id: 6843810544072507
+    identification: 
+      column-name: REF_AO
+      type: Afficher uniquement
+
+    heading: 
+      heading: Ref Ao
+      alignment: center
+
+    settings: 
+      format: Texte brut
+      basé-sur: Valeur d'élément
+
+    layout: 
+      sequence: 50
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: REF_AO
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: Item
+      item: P45_REF_AO
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    column-filter: 
+      enabled: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: false
+      hide: false
+
+  - # ====== Column: TITULAIRE_DU_MARCHÉ =========================
+    id: 6845838508072509
+    identification: 
+      column-name: TITULAIRE_DU_MARCHÉ
+      type: Champ de texte
+
+    heading: 
+      heading: Titulaire Du Marché
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 80
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 455
+
+    source: 
+      type: Database Column
+      database-column: TITULAIRE_DU_MARCHÉ
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: false
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+      hide: false
+
+  - # ====== Column: CADRE__PONCTUEL =============================
+    id: 6847804648072509
+    identification: 
+      column-name: CADRE__PONCTUEL
+      type: Liste SELECT
+
+    heading: 
+      heading: Cadre  Ponctuel
+      alignment: center
+
+    layout: 
+      sequence: 90
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: Static Values
+      static-values: 'STATIC:CADRE;Cadre,PONCTUEL;Ponctuel'
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: CADRE__PONCTUEL
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: MONTANT =====================================
+    id: 6848853552072509
+    identification: 
+      column-name: MONTANT
+      type: Champ de texte
+
+    heading: 
+      heading: Montant
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 100
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 4000
+
+    source: 
+      type: Database Column
+      database-column: MONTANT
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: false
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+      hide: false
+
+  - # ====== Column: DEVISE ======================================
+    id: 6849856377072511
+    identification: 
+      column-name: DEVISE
+      type: Liste de valeurs (LOV) instantanée
+
+    heading: 
+      heading: Devise
+      alignment: center
+
+    settings: 
+      afficher-en-tant-que: Boîte de dialogue modale
+      extraction-initiale: Automatique
+      entrée-manuelle: false
+      extraire-lors-de-la-recherche: false
+
+    rechercher: 
+      type-de-correspondance: Contient
+      respect-des-minuscules/majuscules: false
+      nombre-minimal-de-caractères: 0
+
+    multiple-values: 
+      type: No
+
+    layout: 
+      sequence: 110
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    appearance: 
+      icon: fa-money
+
+    validation: 
+      value-required: true
+
+    list-of-values: 
+      type: SQL Query
+      sql-query: |
+        SELECT 
+            CASE code
+                WHEN 'USD' THEN '💵 Dollar (USD)'
+                WHEN 'EUR' THEN '💶 Euro (EUR)'
+                WHEN 'TND' THEN '🇹🇳 Dinar (TND)'
+                ELSE '💰 Autre'
+            END as display_value,
+            code as return_value
+        FROM (
+            SELECT 'USD' as code FROM dual UNION ALL
+            SELECT 'EUR' FROM dual UNION ALL
+            SELECT 'TND' FROM dual UNION ALL
+            SELECT 'OTHER' FROM dual
+        )
+      display-extra-values: false
+      display-null-value: false
+
+    source: 
+      type: Database Column
+      database-column: DEVISE
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: false
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+      hide: false
+
+  - # ====== Column: OBJET =======================================
+    id: 6850843810072511
+    identification: 
+      column-name: OBJET
+      type: Champ de texte
+
+    heading: 
+      heading: Objet
+      alignment: center
+
+    settings: 
+      supprimer-les-espaces: Début et fin
+      casse-du-texte: AUCUNE MODIFICATION
+
+    layout: 
+      sequence: 120
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+      maximum-length: 455
+
+    source: 
+      type: Database Column
+      database-column: OBJET
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: SQL Query (return single value)
+      sql-query-(return-single-value): |
+        select CC.OBJET_CCT as OBJET_CCT 
+         from CC CC 
+         where CC.REF_AO=:P45_REF_AO
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: false
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+      hide: false
+
+  - # ====== Column: DATE_DE_MISE_VIGUEUR ========================
+    id: 6852833985072511
+    identification: 
+      column-name: DATE_DE_MISE_VIGUEUR
+      type: Sélecteur de date
+
+    heading: 
+      heading: Date De Mise Vigueur
+      alignment: center
+
+    settings: 
+      afficher-l'heure: false
+      afficher-en-tant-que: Fenêtre instantanée
+      date-minimale: Aucun
+      date-maximale: Aucun
+      plusieurs-mois: Non
+      utiliser-les-valeurs-par-défaut: true
+
+    layout: 
+      sequence: 130
+      column-alignment: center
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: true
+
+    source: 
+      type: Database Column
+      database-column: DATE_DE_MISE_VIGUEUR
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      lov-type: Distinct Column
+      date-ranges: All
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  - # ====== Column: DATE_LIVRAISON_JURIDIQUE ====================
+    id: 14711990999439059
+    identification: 
+      column-name: DATE_LIVRAISON_JURIDIQUE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 300
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_LIVRAISON_JURIDIQUE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_AVIS_JURIDIQUE =========================
+    id: 14712164797439060
+    identification: 
+      column-name: DATE_AVIS_JURIDIQUE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 310
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_AVIS_JURIDIQUE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_ENVOI_CLIENT_SIGNATURE =================
+    id: 14712258200439061
+    identification: 
+      column-name: DATE_ENVOI_CLIENT_SIGNATURE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 320
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_ENVOI_CLIENT_SIGNATURE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_RETOUR_CLIENT_SIGNE ====================
+    id: 14712295302439062
+    identification: 
+      column-name: DATE_RETOUR_CLIENT_SIGNE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 330
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_RETOUR_CLIENT_SIGNE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_ENVOI_ADMIN_SIGNATURE ==================
+    id: 14712397770439063
+    identification: 
+      column-name: DATE_ENVOI_ADMIN_SIGNATURE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 340
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_ENVOI_ADMIN_SIGNATURE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_RETOUR_ADMIN_SIGNE =====================
+    id: 14712527487439064
+    identification: 
+      column-name: DATE_RETOUR_ADMIN_SIGNE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 350
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_RETOUR_ADMIN_SIGNE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_ENVOI_CLIENT_ENREGISTREMENT ============
+    id: 14712598696439065
+    identification: 
+      column-name: DATE_ENVOI_CLIENT_ENREGISTREMENT
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 360
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_ENVOI_CLIENT_ENREGISTREMENT
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_RETOUR_ENREGISTRE ======================
+    id: 14712770832439066
+    identification: 
+      column-name: DATE_RETOUR_ENREGISTRE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 370
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_RETOUR_ENREGISTRE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: DATE_GARANTIE_FINALE ========================
+    id: 14712863257439067
+    identification: 
+      column-name: DATE_GARANTIE_FINALE
+      type: Masqué
+
+    settings: 
+      valeur-protégée: true
+
+    layout: 
+      sequence: 380
+
+    accessibility: 
+      value-identifies-row: false
+
+    source: 
+      type: Database Column
+      database-column: DATE_GARANTIE_FINALE
+      data-type: DATE
+      query-only: false
+      primary-key: false
+
+    default: 
+      duplicate-copies-existing-value: true
+
+    session-state: 
+      data-type: VARCHAR2
+
+    export-/-printing: 
+      include-in-export-/-print: false
+
+    enable-users-to: 
+      sort: false
+
+  - # ====== Column: RESPONSABLE_DOS =============================
+    id: 14712956075439068
+    identification: 
+      column-name: RESPONSABLE_DOS
+      type: Liste de valeurs (LOV) instantanée
+
+    heading: 
+      heading: Responsable Dos
+      alignment: start
+
+    settings: 
+      afficher-en-tant-que: Fenêtre instantanée incorporée
+      extraction-initiale: Automatique
+      entrée-manuelle: false
+      extraire-lors-de-la-recherche: false
+
+    rechercher: 
+      type-de-correspondance: Contient
+      respect-des-minuscules/majuscules: false
+      nombre-minimal-de-caractères: 0
+
+    multiple-values: 
+      type: No
+
+    layout: 
+      sequence: 390
+      column-alignment: start
+      stretch: Use Report Setting
+
+    accessibility: 
+      value-identifies-row: false
+
+    validation: 
+      value-required: false
+      maximum-length: 255
+
+    list-of-values: 
+      type: SQL Query
+      sql-query: |
+        select  distinct T_USER.NOM as display_value,
+        T_USER.NOM as return_value
+         from T_USER 
+        order by 1;
+      display-extra-values: true
+      display-null-value: true
+
+    source: 
+      type: Database Column
+      database-column: RESPONSABLE_DOS
+      data-type: VARCHAR2
+      query-only: false
+      primary-key: false
+
+    default: 
+      type: SQL Query (return single value)
+      sql-query-(return-single-value): |
+        select SP."المكلف_بالملف" as "المكلف_بالملف"
+         
+         from SP SP
+          where SP."عدد" = :P45_REF_AO
+      duplicate-copies-existing-value: true
+
+    column-filter: 
+      enabled: true
+      performance-impacting-operators: 
+      - Contains
+      - Starts With
+      - Case Insensitive
+      - Regular Expression
+      text-case: Mixed
+      lov-type: Use List of Values
+      exact-match: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    enable-users-to: 
+      sort: true
+      control-break/aggregate: true
+      hide: true
+
+  printing: 
+    page: 
+      size: Letter
+      orientation: Landscape
+      units: Inches
+      width: 11
+      height: 8.5
+      border-width: 0.5
+      border-color: '#666666'
+
+    page-header: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+      page-header-text: AJOUT CONTRAT
+
+    column-headings: 
+      font: Helvetica
+      font-weight: Bold
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#EEEEEE'
+
+    columns: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 10
+      font-color: '#000000'
+      background-color: '#FFFFFF'
+
+    page-footer: 
+      font: Helvetica
+      font-weight: Normal
+      font-size: 12
+      font-color: '#000000'
+      alignment: center
+
+page-items: 
+- # ====== Page Item: P45_ID_CC ================================
+  id: 6707571658625548
+  identification: 
+    name: P45_ID_CC
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: تذكير # 6709573075625568
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P45_REF_AO ===============================
+  id: 6707760078625549
+  identification: 
+    name: P45_REF_AO
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: تذكير # 6709573075625568
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: exit ========================================
+  id: 6711300521625585
+  identification: 
+    button-name: exit
+    label: ' خروج'
+
+  layout: 
+    sequence: 60
+    region: AJOUT CONTRAT # 6839070851072486
+    slot: BOTTOM
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    horizontal-alignment: Right
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    - t-Button--gapTop
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  confirmation: 
+    message: هل تأكدت من صحة جميع المعلومات
+    style: Warning
+
+dynamic-actions: 
+- # ====== Dynamic Action: Nouveau =============================
+  id: 6709749725625569
+  identification: 
+    name: Nouveau
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P45_NB_CONTRAT
+
+  actions: 
+  - # ====== Action: Exécuter le code JavaScript =================
+    id: 6709857090625570
+    identification: 
+      action: Exécuter le code JavaScript
+
+    settings: 
+      code: |
+        var nb = $v("P45_NB_CONTRAT"); 
+        var igRegion = apex.region("contrats_ig"); // ID statique de ta région IG 
+        var igWidget = igRegion.widget(); var igActions = igWidget.interactiveGrid("getActions");
+        
+        
+        for (var i = 0; i < nb; i++) {
+           igActions.invoke("row-add-row");  // ✅ action correcte
+        }
+        
+
+    execution: 
+      sequence: 10
+      event: Nouveau # 6709749725625569
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Nouveau_1 ===========================
+  id: 7667401034147149
+  identification: 
+    name: Nouveau_1
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: AJOUT CONTRAT # 6839070851072486
+
+  actions: 
+  - # ====== Action: Régénérer ===================================
+    id: 7667522478147150
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: AJOUT CONTRAT # 6839070851072486
+
+    execution: 
+      sequence: 10
+      event: Nouveau_1 # 7667401034147149
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: AJOUT CONTRAT - Enregistrer les données de g
+  id: 6853804001072514
+  identification: 
+    name: AJOUT CONTRAT - Enregistrer les données de grille interactive
+    type: Grille interactive - Traitement de ligne automatique (DML)
+    execution-chain: None
+    editable-region: AJOUT CONTRAT # 6839070851072486
+
+  settings: 
+    type-de-cible: Source de région
+    empêcher-les-pertes-de-mise-à-jour: true
+    verrouiller-la-ligne: Oui
+    renvoyer-des-clés-primaires-après-l'insertion: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    execution-scope: For Created and Modified Rows
+
+- # ====== Process: Close ======================================
+  id: 7667306360147148
+  identification: 
+    name: Close
+    type: Fermer la boîte de dialogue
+    execution-chain: None
+
+  settings: 
+    afficher-les-messages-de-succès: true
+
+  execution: 
+    sequence: 20
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

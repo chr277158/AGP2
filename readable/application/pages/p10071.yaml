@@ -1,0 +1,359 @@
+---
+# ====== Page: Modifier Mot de passe =========================
+id: 10071
+identification: 
+  name: Modifier Mot de passe
+  alias: MODIFIER
+  title: Modification du mot de passe
+
+appearance: 
+  page-mode: Normal
+  page-template: Login
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: First item on page
+  warn-on-unsaved-changes: false
+
+security: 
+  authentication: Page Is Public
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-meta-tags: false
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Cc - Connexion ==============================
+  id: 75163131678939297473
+  identification: 
+    name: Cc - Connexion
+    type: Contenu statique
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Login
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  image: 
+    file-url: '#APP_FILES#icons/app-icon-512.png'
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: Texte (caractères spéciaux d'échappement)
+      afficher-les-sauts-de-ligne: true
+
+page-items: 
+- # ====== Page Item: P10071_USERNAME ==========================
+  id: 75163132128000297474
+  identification: 
+    name: P10071_USERNAME
+    type: Champ de texte
+
+  label: 
+    label: Nom utilisateur
+    alignment: Right
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Aucun
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 10
+    region: Cc - Connexion # 75163131678939297473
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-user
+    width: 40
+    value-placeholder: Nom utilisateur
+
+  validation: 
+    value-required: false
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10071_PASSWORD ==========================
+  id: 75163132555369297474
+  identification: 
+    name: P10071_PASSWORD
+    type: Mot de passe
+
+  label: 
+    label: Mot de passe
+    alignment: Right
+
+  settings: 
+    soumettre-lorsque-la-touche-entrée-est-activée: true
+
+  layout: 
+    sequence: 20
+    region: Cc - Connexion # 75163131678939297473
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    icon: fa-key
+    width: 40
+    value-placeholder: Mot de passe
+
+  validation: 
+    value-required: false
+    maximum-length: 100
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10071_REMEMBER ==========================
+  id: 75163132980340297474
+  identification: 
+    name: P10071_REMEMBER
+    type: Case à cocher
+
+  label: 
+    label: Mémoriser le nom utilisateur
+    alignment: Right
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 30
+    region: Cc - Connexion # 75163131678939297473
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  server-side-condition: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: apex_authentication.persistent_cookies_enabled
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: LOGIN =======================================
+  id: 75163133340584297475
+  identification: 
+    button-name: LOGIN
+    label: Ouvrir une session
+
+  layout: 
+    sequence: 40
+    region: Cc - Connexion # 75163131678939297473
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+
+processes: 
+- # ====== Process: Login ======================================
+  id: 75163333711475297475
+  identification: 
+    name: Login
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      apex_authentication.login(
+          p_username => :P10071_USERNAME,
+          p_password => :P10071_PASSWORD );
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Définir le cookie de nom utilisateur =======
+  id: 75163334111005297475
+  identification: 
+    name: Définir le cookie de nom utilisateur
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      apex_authentication.send_login_username_cookie (
+          p_username => lower(:P10071_USERNAME),
+          p_consent  => :P10071_REMEMBER = 'Y' );
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Obtenir le cookie de nom utilisateur =======
+  id: 75163334573872297475
+  identification: 
+    name: Obtenir le cookie de nom utilisateur
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      :P10071_USERNAME := apex_authentication.get_login_username_cookie;
+      :P10071_REMEMBER := case when :P10071_USERNAME is not null then 'Y' end;
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Effacer le cache des pages =================
+  id: 75163334992938297476
+  identification: 
+    name: Effacer le cache des pages
+    type: Effacer l'état de session
+    execution-chain: None
+
+  settings: 
+    type: Effacer tous les éléments sur la page en cours
+
+  execution: 
+    sequence: 30
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

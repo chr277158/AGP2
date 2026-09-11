@@ -1,0 +1,268 @@
+---
+# ====== Page: redirect ======================================
+id: 37
+identification: 
+  name: redirect
+  alias: REDIRECT
+  title: redirect
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: New =========================================
+  id: 2500481259123942
+  identification: 
+    name: New
+    type: Contenu statique
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+page-items: 
+- # ====== Page Item: P37_ID_CC ================================
+  id: 2500590832123943
+  identification: 
+    name: P37_ID_CC
+    type: Champ de texte
+
+  label: 
+    label: Id Cc
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 10
+    region: New # 2500481259123942
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P37_ID ===================================
+  id: 2500745253123944
+  identification: 
+    name: P37_ID
+    type: Champ de texte
+
+  label: 
+    label: New
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 20
+    region: New # 2500481259123942
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P37_NEW ==================================
+  id: 2500997963123947
+  identification: 
+    name: P37_NEW
+    type: Champ de texte
+
+  label: 
+    label: New
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 30
+    region: New # 2500481259123942
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+branches: 
+- # ====== Branch: Aller à la page 40 ==========================
+  id: 2500965786123946
+  identification: 
+    name: Aller à la page 40
+
+  execution: 
+    sequence: 10
+    point: After Submit
+
+  behavior: 
+    type: Page or URL (Redirect)
+    target: 
+      url: 'f?p=&APP_ID.:40:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+      page: 40 # Cc
+
+  server-side-condition: 
+    type: Item = Value
+    item: P37_NEW
+    value: CRA
+

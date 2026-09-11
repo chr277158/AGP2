@@ -1,0 +1,690 @@
+---
+# ====== Page: ETAT AFFICHAGE PUBLIC =========================
+id: 18
+identification: 
+  name: ETAT AFFICHAGE PUBLIC
+  alias: ETAT-AFFICHAGE-PUBLIC1
+  title: ETAT AFFICHAGE PUBLIC
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: false
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: ETAT AFFICHAGE PUBLIC =======================
+  id: 44702357883521256645
+  identification: 
+    name: ETAT AFFICHAGE PUBLIC
+    type: Panneau
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: DEMANDE_CLARIFICATION
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Buttons =====================================
+  id: 44702362382600256649
+  identification: 
+    name: Buttons
+    type: Contenu statique
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: Texte (caractères spéciaux d'échappement)
+      afficher-les-sauts-de-ligne: true
+
+page-items: 
+- # ====== Page Item: P18_ID_AVIS ==============================
+  id: 3554532159760478
+  identification: 
+    name: P18_ID_AVIS
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    column: ID_AVIS
+    data-type: NUMBER
+    query-only: false
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P18_REMARQUES ============================
+  id: 3554590975760479
+  identification: 
+    name: P18_REMARQUES
+    type: Zone de texte
+
+  label: 
+    label: Remarques
+    alignment: Left
+
+  settings: 
+    redimensionnable: true
+    hauteur-automatique: false
+    compteur-de-caractères: false
+    supprimer-les-espaces: Début et fin
+
+  layout: 
+    sequence: 80
+    region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+    height: 5
+
+  validation: 
+    value-required: false
+    maximum-length: 500
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    column: REMARQUES
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P18_REF_AE ===============================
+  id: 44702358496359256646
+  identification: 
+    name: P18_REF_AE
+    type: Champ de texte
+
+  label: 
+    label: Ref Ae
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: true
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 20
+    region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    column: REF_AE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P18_EFFECTUER ============================
+  id: 44702358936411256647
+  identification: 
+    name: P18_EFFECTUER
+    type: Case à cocher
+
+  label: 
+    label: Effectuer
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 30
+    region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    column: EFFECTUER
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P18_EFFECTUÉ_LE ==========================
+  id: 44702359346492256647
+  identification: 
+    name: P18_EFFECTUÉ_LE
+    type: Sélecteur de date
+
+  label: 
+    label: Effectué Le
+    alignment: Right
+
+  settings: 
+    afficher-l'heure: false
+    afficher-en-tant-que: Fenêtre instantanée
+    date-minimale: Aucun
+    date-maximale: Aucun
+    plusieurs-mois: Non
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 40
+    region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    column: EFFECTUÉ_LE
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P18_ENVOYER ==============================
+  id: 44702359742014256648
+  identification: 
+    name: P18_ENVOYER
+    type: Case à cocher
+
+  label: 
+    label: Envoyer
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 50
+    region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    column: ENVOYER
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P18_ENVOYÉ_LE ============================
+  id: 44702360122853256648
+  identification: 
+    name: P18_ENVOYÉ_LE
+    type: Sélecteur de date
+
+  label: 
+    label: Envoyé Le
+    alignment: Right
+
+  settings: 
+    afficher-l'heure: false
+    afficher-en-tant-que: Fenêtre instantanée
+    date-minimale: Aucun
+    date-maximale: Aucun
+    plusieurs-mois: Non
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 60
+    region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+    column: ENVOYÉ_LE
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 44702362762963256650
+  identification: 
+    button-name: CANCEL
+    label: Cancel
+
+  layout: 
+    sequence: 10
+    region: Buttons # 44702362382600256649
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+- # ====== Button: SAVE ========================================
+  id: 44702364577759256651
+  identification: 
+    button-name: SAVE
+    label: Apply Changes
+
+  layout: 
+    sequence: 30
+    region: Buttons # 44702362382600256649
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-thumbs-o-up
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P18_ID_AVIS
+
+- # ====== Button: CREATE ======================================
+  id: 44702364901432256651
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 40
+    region: Buttons # 44702362382600256649
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P18_ID_AVIS
+
+dynamic-actions: 
+- # ====== Dynamic Action: Cancel Dialog =======================
+  id: 44702362848830256650
+  identification: 
+    name: Cancel Dialog
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 44702362762963256650
+
+  actions: 
+  - # ====== Action: Annuler la boîte de dialogue ================
+    id: 44702363619550256650
+    identification: 
+      action: Annuler la boîte de dialogue
+
+    execution: 
+      sequence: 10
+      event: Cancel Dialog # 44702362848830256650
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: Initialize form ETAT AFFICHAGE PUBLIC ======
+  id: 44702365336925256651
+  identification: 
+    name: Initialize form ETAT AFFICHAGE PUBLIC
+    type: Panneau - Initialisation
+    execution-chain: None
+    form-region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form ETAT AFFICHAGE PUBLIC =========
+  id: 44702365715178256652
+  identification: 
+    name: Process form ETAT AFFICHAGE PUBLIC
+    type: Panneau - Traitement de ligne automatique (DML)
+    execution-chain: None
+    form-region: ETAT AFFICHAGE PUBLIC # 44702357883521256645
+
+  settings: 
+    type-de-cible: Source de région
+    empêcher-les-pertes-de-mise-à-jour: true
+    verrouiller-la-ligne: Oui
+    renvoyer-des-clés-primaires-après-l'insertion: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Close Dialog ===============================
+  id: 44702366170676256652
+  identification: 
+    name: Close Dialog
+    type: Fermer la boîte de dialogue
+    execution-chain: None
+
+  settings: 
+    afficher-les-messages-de-succès: true
+
+  execution: 
+    sequence: 50
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: CREATE,SAVE,DELETE
+

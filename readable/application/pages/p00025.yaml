@@ -1,0 +1,2798 @@
+---
+# ====== Page: etat avancement ===============================
+id: 25
+identification: 
+  name: etat avancement
+  alias: ETAT-AVANCEMENT
+  title: 'etat avancement '
+
+appearance: 
+  page-mode: Normal
+  page-template: Left Side Column
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: false
+
+css: 
+  inline: |
+    /* Scroll Results Only in Side Column */
+    .t-Body-side {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .search-results {
+        flex: 1;
+        overflow: auto;
+    }
+    /* Format Search Region */
+    .search-region {
+        border-bottom: 1px solid rgba(0,0,0,.1);
+        flex-shrink: 0;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: On
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: No - Prevent page from being re-posted
+  reload-on-submit: Always
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Rechercher ==================================
+  id: 33534677467181407946
+  identification: 
+    name: Rechercher
+    type: Contenu statique
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_02
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form--stretchInputs
+    css-classes: 
+    - search-region
+    - padding-md
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: Enregistrements maître ======================
+  id: 33534678199652407947
+  identification: 
+    name: Enregistrements maître
+    type: Etat classique
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select "ID",
+          null LINK_CLASS,
+          apex_page.get_url(p_items => 'P25_ID', p_values => "ID") LINK,
+          null ICON_CLASS,
+          null LINK_ATTR,
+          null ICON_COLOR_CLASS,
+          case when coalesce(:P25_ID,'0') = "ID"
+            then 'is-active' 
+            else ' '
+          end LIST_CLASS,
+          (substr("REF_AO", 1, 50)||( case when length("REF_AO") > 50 then '...' else '' end )) LIST_TITLE,
+          (substr("STATUS", 1, 50)||( case when length("STATUS") > 50 then '...' else '' end )) LIST_TEXT,
+          null LIST_BADGE
+      from "CC" x
+      where (:P25_SEARCH is null
+              or upper(x."REF_AO") like '%'||upper(:P25_SEARCH)||'%'
+              or upper(x."STATUS") like '%'||upper(:P25_SEARCH)||'%'
+          )
+      order by "REF_AO"
+      
+      
+    page-items-to-submit: 
+    - P25_SEARCH
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_02
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - search-results
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 1000
+
+    appearance: 
+      template-type: Theme
+      template: Media List
+      template-options: 
+      - t-MediaList--showDesc
+      - t-MediaList--stack
+
+    pagination: 
+      type: No Pagination (Show All Rows)
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 500
+
+    messages: 
+      when-no-data-found: <div class="u-tC">Aucune donnée n'a été trouvée.</div>
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: ID ==========================================
+    id: 14605577371182784
+    identification: 
+      column-name: ID
+      type: Plain Text
+
+    heading: 
+      heading: ID
+      alignment: center
+
+    layout: 
+      sequence: 1
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LINK_CLASS ==================================
+    id: 14605984920182784
+    identification: 
+      column-name: LINK_CLASS
+      type: Plain Text
+
+    heading: 
+      heading: LINK_CLASS
+      alignment: center
+
+    layout: 
+      sequence: 2
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LINK ========================================
+    id: 14606391655182784
+    identification: 
+      column-name: LINK
+      type: Plain Text
+
+    heading: 
+      heading: LINK
+      alignment: center
+
+    layout: 
+      sequence: 3
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ICON_CLASS ==================================
+    id: 14606713549182784
+    identification: 
+      column-name: ICON_CLASS
+      type: Plain Text
+
+    heading: 
+      heading: ICON_CLASS
+      alignment: center
+
+    layout: 
+      sequence: 4
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LINK_ATTR ===================================
+    id: 14607120150182784
+    identification: 
+      column-name: LINK_ATTR
+      type: Plain Text
+
+    heading: 
+      heading: LINK_ATTR
+      alignment: center
+
+    layout: 
+      sequence: 5
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ICON_COLOR_CLASS ============================
+    id: 14607577308182784
+    identification: 
+      column-name: ICON_COLOR_CLASS
+      type: Plain Text
+
+    heading: 
+      heading: ICON_COLOR_CLASS
+      alignment: center
+
+    layout: 
+      sequence: 6
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LIST_CLASS ==================================
+    id: 14607913104182784
+    identification: 
+      column-name: LIST_CLASS
+      type: Plain Text
+
+    heading: 
+      heading: LIST_CLASS
+      alignment: center
+
+    layout: 
+      sequence: 7
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LIST_TITLE ==================================
+    id: 14608338067182784
+    identification: 
+      column-name: LIST_TITLE
+      type: Plain Text
+
+    heading: 
+      heading: LIST_TITLE
+      alignment: center
+
+    layout: 
+      sequence: 8
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LIST_TEXT ===================================
+    id: 14608799435182785
+    identification: 
+      column-name: LIST_TEXT
+      type: Plain Text
+
+    heading: 
+      heading: LIST_TEXT
+      alignment: center
+
+    layout: 
+      sequence: 9
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LIST_BADGE ==================================
+    id: 14609191797182785
+    identification: 
+      column-name: LIST_BADGE
+      type: Plain Text
+
+    heading: 
+      heading: LIST_BADGE
+      alignment: center
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Cc ==========================================
+  id: 33535286395159408142
+  identification: 
+    name: Cc
+    type: Etat classique
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: TABLE_TOTAL
+    include-rowid-column: false
+    where-clause: '"ID" = :P25_ID'
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    css-classes: 
+    - js-master-region
+    - js-detail-region
+    render-components: Below Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  header-and-footer: 
+    header-text: '&REF_AO.'
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P25_ID
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Value Attribute Pairs - Column
+      template-options: 
+      - '#DEFAULT#'
+      - t-AVPList--hideNulls
+      - t-AVPList--leftAligned
+
+    pagination: 
+      type: No Pagination (Show All Rows)
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 500
+
+    messages: 
+      when-no-data-found: 'لم يتم تحديد أي ملف لحد الآن الرجاء إختيار ملف لإضهار التفاصيل '
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: true
+      sort-nulls: First
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: عدد =========================================
+    id: 4365163873992777
+    identification: 
+      column-name: عدد
+      type: Plain Text
+
+    heading: 
+      heading: عدد
+      alignment: start
+
+    layout: 
+      sequence: 422
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_ورود_تعيين_تركيبة_لجنة_التقييم ========
+    id: 4365190867992778
+    identification: 
+      column-name: تاريخ_ورود_تعيين_تركيبة_لجنة_التقييم
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ ورود تعيين تركيبة لجنة التقييم
+      alignment: start
+
+    layout: 
+      sequence: 432
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر ========
+    id: 4365356510992779
+    identification: 
+      column-name: تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ ارجاع كراسات الشروط حسب المحضر
+      alignment: start
+
+    layout: 
+      sequence: 442
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشر
+    id: 4365466880992780
+    identification: 
+      column-name: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط2
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ ورود محضر مصادقة اللجنة على كراسات الشروط2
+      alignment: start
+
+    layout: 
+      sequence: 452
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_امضاء_تقرير_تقييم_العروض ==============
+    id: 4365529788992781
+    identification: 
+      column-name: تاريخ_امضاء_تقرير_تقييم_العروض
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ امضاء تقرير تقييم العروض
+      alignment: start
+
+    layout: 
+      sequence: 462
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_تقديم_الملف_للجنة_الشراءات ============
+    id: 4365660488992782
+    identification: 
+      column-name: تاريخ_تقديم_الملف_للجنة_الشراءات
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ تقديم الملف للجنة الشراءات
+      alignment: start
+
+    layout: 
+      sequence: 472
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: طريقة_ابرام_الصفقة ==========================
+    id: 14513778092905330
+    identification: 
+      column-name: طريقة_ابرام_الصفقة
+      type: Plain Text
+
+    heading: 
+      heading: طريقة ابرام الصفقة
+      alignment: end
+
+    layout: 
+      sequence: 212
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: نوعية_الطلب =================================
+    id: 14513852234905331
+    identification: 
+      column-name: نوعية_الطلب
+      type: Plain Text
+
+    heading: 
+      heading: نوعية الطلب
+      alignment: end
+
+    layout: 
+      sequence: 222
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: اللجنة_المختصة ==============================
+    id: 14513984454905332
+    identification: 
+      column-name: اللجنة_المختصة
+      type: Plain Text
+
+    heading: 
+      heading: اللجنة المختصة
+      alignment: end
+
+    layout: 
+      sequence: 232
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_ورود_CPT_ممضاة ========================
+    id: 14514006716905333
+    identification: 
+      column-name: تاريخ_ورود_CPT_ممضاة
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ ورود Cpt ممضاة
+      alignment: end
+
+    layout: 
+      sequence: 242
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_ارسال_مقترح_تركيبة_لجنة_التقييم =======
+    id: 14514126614905334
+    identification: 
+      column-name: تاريخ_ارسال_مقترح_تركيبة_لجنة_التقييم
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ ارسال مقترح تركيبة لجنة التقييم
+      alignment: end
+
+    layout: 
+      sequence: 252
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_تقديم_كراسات_الشروط_للمصادقة ==========
+    id: 14514305995905336
+    identification: 
+      column-name: تاريخ_تقديم_كراسات_الشروط_للمصادقة
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ تقديم كراسات الشروط للمصادقة
+      alignment: end
+
+    layout: 
+      sequence: 272
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_مصادقة_اللجنة_على_كراسات_الشروط =======
+    id: 14514442788905337
+    identification: 
+      column-name: تاريخ_مصادقة_اللجنة_على_كراسات_الشروط
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ مصادقة اللجنة على كراسات الشروط
+      alignment: end
+
+    layout: 
+      sequence: 282
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشر
+    id: 14514551654905338
+    identification: 
+      column-name: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ ورود محضر مصادقة اللجنة على كراسات الشروط
+      alignment: end
+
+    layout: 
+      sequence: 292
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: التاريخ__للإعلان_عن_المنافسة ================
+    id: 14514813684905341
+    identification: 
+      column-name: التاريخ__للإعلان_عن_المنافسة
+      type: Plain Text
+
+    heading: 
+      heading: التاريخ للإعلان عن المنافسة
+      alignment: end
+
+    layout: 
+      sequence: 322
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_ارسال_التقرير_للتقييم_الفني ===========
+    id: 14514969007905342
+    identification: 
+      column-name: تاريخ_ارسال_التقرير_للتقييم_الفني
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ ارسال التقرير للتقييم الفني
+      alignment: end
+
+    layout: 
+      sequence: 332
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ__لجنة_الصفقات =========================
+    id: 14515257188905345
+    identification: 
+      column-name: تاريخ__لجنة_الصفقات
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ لجنة الصفقات
+      alignment: end
+
+    layout: 
+      sequence: 362
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_قرار__لجنة_الصفقات ====================
+    id: 14515319782905346
+    identification: 
+      column-name: تاريخ_قرار__لجنة_الصفقات
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ قرار لجنة الصفقات
+      alignment: end
+
+    layout: 
+      sequence: 372
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_نشر_نتائج_المنافسة ====================
+    id: 14515406048905347
+    identification: 
+      column-name: تاريخ_نشر_نتائج_المنافسة
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ نشر نتائج المنافسة
+      alignment: end
+
+    layout: 
+      sequence: 382
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_تبليغ_الصفقة ==========================
+    id: 14515546894905348
+    identification: 
+      column-name: تاريخ_تبليغ_الصفقة
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ تبليغ الصفقة
+      alignment: end
+
+    layout: 
+      sequence: 392
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: تاريخ_ارجاع_الضمانات_الوقتية ================
+    id: 14515613476905349
+    identification: 
+      column-name: تاريخ_ارجاع_الضمانات_الوقتية
+      type: Plain Text
+
+    heading: 
+      heading: تاريخ ارجاع الضمانات الوقتية
+      alignment: end
+
+    layout: 
+      sequence: 402
+      column-alignment: end
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: المكلف_بالملف ===============================
+    id: 14515772105905350
+    identification: 
+      column-name: المكلف_بالملف
+      type: Plain Text
+
+    heading: 
+      heading: المكلف بالملف
+      alignment: start
+
+    layout: 
+      sequence: 412
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ID ==========================================
+    id: 14609943945182785
+    identification: 
+      column-name: ID
+      type: Hidden
+
+    layout: 
+      sequence: 1
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "CC"
+        where "ID" is not null
+        and "ID" = :P25_ID
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REF_AO ======================================
+    id: 14610377063182785
+    identification: 
+      column-name: REF_AO
+      type: Hidden
+
+    layout: 
+      sequence: 2
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "CC"
+        where "REF_AO" is not null
+        and "ID" = :P25_ID
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: OBJET_CCT ===================================
+    id: 14610782442182785
+    identification: 
+      column-name: OBJET_CCT
+      type: Plain Text
+
+    heading: 
+      heading: Objet Cct
+      alignment: start
+
+    layout: 
+      sequence: 22
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "CC"
+        where "OBJET_CCT" is not null
+        and "ID" = :P25_ID
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: BUDGET ======================================
+    id: 14611594784182785
+    identification: 
+      column-name: BUDGET
+      type: Plain Text
+
+    heading: 
+      heading: Budget
+      alignment: start
+
+    layout: 
+      sequence: 42
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "CC"
+        where "BUDGET" is not null
+        and "ID" = :P25_ID
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DÉTAIL_DE_RÉPONSE ===========================
+    id: 14611919900182785
+    identification: 
+      column-name: DÉTAIL_DE_RÉPONSE
+      type: Plain Text
+
+    heading: 
+      heading: 'آجال '
+      alignment: start
+
+    layout: 
+      sequence: 52
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "CC"
+        where "DÉTAIL_DE_RÉPONSE" is not null
+        and "ID" = :P25_ID
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: NATURE_DE_DEPENSE ===========================
+    id: 14612392084182785
+    identification: 
+      column-name: NATURE_DE_DEPENSE
+      type: Plain Text
+
+    heading: 
+      heading: Nature De Depense
+      alignment: end
+
+    layout: 
+      sequence: 72
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "CC"
+        where "NATURE_DE_DEPENSE" is not null
+        and "ID" = :P25_ID
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DATE_LIMITE_PROPOSÉE ========================
+    id: 14612770320182785
+    identification: 
+      column-name: DATE_LIMITE_PROPOSÉE
+      type: Plain Text
+
+    heading: 
+      heading: Date Limite
+      alignment: end
+
+    layout: 
+      sequence: 82
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "CC"
+        where "DATE_LIMITE_PROPOSÉE" is not null
+        and "ID" = :P25_ID
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DATE_DE_LANC ================================
+    id: 14613146613182787
+    identification: 
+      column-name: DATE_DE_LANC
+      type: Plain Text
+
+    heading: 
+      heading: Date De Lancement
+      alignment: start
+
+    layout: 
+      sequence: 92
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "CC"
+        where "DATE_DE_LANC" is not null
+        and "ID" = :P25_ID
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: PV_CCT ======================================
+    id: 14613539754182787
+    identification: 
+      column-name: PV_CCT
+      type: Hidden
+
+    layout: 
+      sequence: 102
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "CC"
+        where "PV_CCT" is not null
+        and "ID" = :P25_ID
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Sélecteur d'affichage de région =============
+  id: 33535313915905408165
+  identification: 
+    name: Sélecteur d'affichage de région
+    type: Sélecteur d'affichage de région
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    - margin-bottom-md
+    css-classes: 
+    - js-detail-rds
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P25_ID
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      mode: Visualiser une seule région
+      afficher-les-icônes-de-région: false
+      inclure-afficher-tout: true
+      mémoriser-la-sélection: Non
+
+- # ====== Region: Demandes de renseignements ==================
+  id: 33535314374339408166
+  identification: 
+    name: Demandes de renseignements
+    title: Demandes de renseignements
+    type: Etat classique
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: DEMANDE_CLARIFICATION
+    include-rowid-column: true
+    where-clause: '"REF_AE" = :P25_REF'
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - t-Region--scrollBody
+    css-classes: 
+    - js-detail-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P25_ID
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 10
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - t-Report--stretch
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+      - t-Report--inline
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: false
+
+    performance: 
+      maximum-rows-to-process: 5000
+
+    messages: 
+      when-no-data-found: Aucune donnée n'a été trouvée.
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: true
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: REMARQUES ===================================
+    id: 639513452194938
+    identification: 
+      column-name: REMARQUES
+      type: Plain Text
+
+    heading: 
+      heading: Remarques
+      alignment: start
+
+    layout: 
+      sequence: 17
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ROWID =======================================
+    id: 14599768655182781
+    identification: 
+      column-name: ROWID
+      type: Link
+
+    heading: 
+      heading: <span class="u-VisuallyHidden">Modifier</span>
+      alignment: start
+
+    layout: 
+      sequence: 1
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:8:&SESSION.::&DEBUG.:RP,:P8_ID_AVIS,P8_REF_AE:#ID_AVIS#,#REF_AE#'
+        page: 8 # etat avis de presse
+        clear-cache: RP
+        values: 
+          p8_id_avis: '#ID_AVIS#'
+          p8_ref_ae: '#REF_AE#'
+
+      link-text: <img src="#APEX_FILES#app_ui/img/icons/apex-edit-pencil.png" class="apex-edit-pencil" alt="">
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ID_AVIS =====================================
+    id: 14600191629182781
+    identification: 
+      column-name: ID_AVIS
+      type: Hidden
+
+    layout: 
+      sequence: 2
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REF_AE ======================================
+    id: 14600568658182781
+    identification: 
+      column-name: REF_AE
+      type: Plain Text
+
+    heading: 
+      heading: Ref Ae
+      alignment: start
+
+    layout: 
+      sequence: 3
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EFFECTUER ===================================
+    id: 14600930593182782
+    identification: 
+      column-name: EFFECTUER
+      type: Hidden
+
+    layout: 
+      sequence: 4
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EFFECTUÉ_LE =================================
+    id: 14601384462182782
+    identification: 
+      column-name: EFFECTUÉ_LE
+      type: Plain Text
+
+    heading: 
+      heading: Effectué Le
+      alignment: start
+
+    layout: 
+      sequence: 5
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ENVOYER =====================================
+    id: 14601798866182782
+    identification: 
+      column-name: ENVOYER
+      type: Hidden
+
+    layout: 
+      sequence: 6
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ENVOYÉ_LE ===================================
+    id: 14602103799182782
+    identification: 
+      column-name: ENVOYÉ_LE
+      type: Plain Text
+
+    heading: 
+      heading: Envoyé Le
+      alignment: start
+
+    layout: 
+      sequence: 7
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Remarques ===================================
+  id: 33535336643540408370
+  identification: 
+    name: Remarques
+    type: Etat classique
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: REMARQUE
+    include-rowid-column: true
+    where-clause: '"ID_CC" = :P25_ID'
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 40
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - t-Region--scrollBody
+    css-classes: 
+    - js-detail-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P25_ID
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 100
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - t-Report--stretch
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+      - t-Report--inline
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 5000
+
+    messages: 
+      when-no-data-found: Aucune donnée n'a été trouvée.
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: true
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: ID_REM ======================================
+    id: 3553341150760466
+    identification: 
+      column-name: ID_REM
+      type: Hidden
+
+    layout: 
+      sequence: 11
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ID_CC =======================================
+    id: 3553424716760467
+    identification: 
+      column-name: ID_CC
+      type: Hidden
+
+    layout: 
+      sequence: 21
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REF_DOS =====================================
+    id: 3553521519760468
+    identification: 
+      column-name: REF_DOS
+      type: Plain Text
+
+    heading: 
+      heading: Ref Dos
+      alignment: start
+
+    layout: 
+      sequence: 31
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: REMARQUE ====================================
+    id: 3553616072760469
+    identification: 
+      column-name: REMARQUE
+      type: Plain Text
+
+    heading: 
+      heading: Remarque
+      alignment: start
+
+    layout: 
+      sequence: 41
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: true
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ROWID =======================================
+    id: 14596199161182779
+    identification: 
+      column-name: ROWID
+      type: Link
+
+    heading: 
+      heading: <span class="u-VisuallyHidden">Modifier</span>
+      alignment: center
+
+    layout: 
+      sequence: 1
+      column-alignment: center
+
+    accessibility: 
+      value-identifies-row: false
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:31:&SESSION.::&DEBUG.:RP,:P31_ID_REM:#ID_REM##ID_AFFICHAGE#,#REF_AE#'
+        page: 31 # edit rem
+        clear-cache: RP
+        values: 
+          p31_id_rem: '#ID_REM##ID_AFFICHAGE#'
+
+      link-text: <img src="#APEX_FILES#app_ui/img/icons/apex-edit-pencil.png" class="apex-edit-pencil" alt="">
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Aucun enregistrement sélectionné ============
+  id: 33535358038777408536
+  identification: 
+    name: Aucun enregistrement sélectionné
+    type: Contenu statique
+
+  source: 
+    html-code: Aucun enregistrement sélectionné
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P25_ID
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+page-items: 
+- # ====== Page Item: P25_SEARCH ===============================
+  id: 33534678825555407952
+  identification: 
+    name: P25_SEARCH
+    type: Champ de texte
+
+  label: 
+    label: Rechercher
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 10
+    region: Rechercher # 33534677467181407946
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form-fieldContainer--large
+    - t-Form-fieldContainer--postTextBlock
+    icon: fa-search
+    width: 30
+    value-placeholder: Rechercher...
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P25_ID ===================================
+  id: 33535322326626408175
+  identification: 
+    name: P25_ID
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: Demandes de renseignements # 33535314374339408166
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P25_REF ==================================
+  id: 81395980798951526285
+  identification: 
+    name: P25_REF
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: Demandes de renseignements # 33535314374339408166
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      select "REF_AO" as REF from "CC"
+      where  "ID" = :P25_ID
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: POP_Remarque ================================
+  id: 14598919967182781
+  identification: 
+    button-name: POP_Remarque
+    label: Ajouter Remarque
+
+  layout: 
+    sequence: 10
+    region: Remarques # 33535336643540408370
+    slot: EDIT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    icon: fa-plus
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:27:&SESSION.::&DEBUG.:RP,15:P27_ID_CC,P27_REF_DOS:&P25_ID.,&P25_REF.'
+      page: 27 # crée remarque
+      clear-cache: RP,15
+      values: 
+        p27_id_cc: '&P25_ID.'
+        p27_ref_dos: '&P25_REF.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: POP_ETAT_AVIS ===============================
+  id: 14602552439182782
+  identification: 
+    button-name: POP_ETAT_AVIS
+    label: Ajout Demandes de renseignements
+
+  layout: 
+    sequence: 10
+    region: Demandes de renseignements # 33535314374339408166
+    slot: EDIT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    icon: fa-plus
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:8:&SESSION.::&DEBUG.:RP,14:P8_REF_AE:&P25_REF.'
+      page: 8 # etat avis de presse
+      clear-cache: RP,14
+      values: 
+        p8_ref_ae: '&P25_REF.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: RESET =======================================
+  id: 14603985447182782
+  identification: 
+    button-name: RESET
+    label: Réinitialiser
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    - t-Button--iconLeft
+    - t-Button--gapRight
+    icon: fa-undo-alt
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:25:&APP_SESSION.:RESET:&DEBUG.:RP,9::'
+      page: 25 # etat avancement
+      request: RESET
+      clear-cache: RP,9
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: CREATE ======================================
+  id: 14604343653182784
+  identification: 
+    button-name: CREATE
+    label: Créer
+
+  layout: 
+    sequence: 20
+    region: No Parent
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-plus
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:10:&APP_SESSION.::&DEBUG.:RP,10::'
+      page: 10 # cc
+      clear-cache: RP,10
+
+    warn-on-unsaved-changes: Do Not Check
+
+  security: 
+    authorization-scheme: Droits d'administration # 74585100381861929216
+
+- # ====== Button: EDIT ========================================
+  id: 14620370636182789
+  identification: 
+    button-name: EDIT
+    label: طباعة  تلخيص معلومات الصفقة
+
+  layout: 
+    sequence: 20
+    region: Cc # 33535286395159408142
+    slot: EDIT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    - t-Button--iconLeft
+    icon: fa-pencil-square-o
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:10:&SESSION.::&DEBUG.:RP,10:P10_ID,P10_REF:&P25_ID.,&P25_REF.'
+      page: 10 # cc
+      clear-cache: RP,10
+      values: 
+        p10_id: '&P25_ID.'
+        p10_ref: '&P25_REF.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+  advanced: 
+    static-id: edit_master_btn
+
+  security: 
+    authorization-scheme: Droits de lecteur # 74585100429726929216
+
+dynamic-actions: 
+- # ====== Dynamic Action: Boîte de dialogue fermée ============
+  id: 14621824409182796
+  identification: 
+    name: Boîte de dialogue fermée
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Cc # 33535286395159408142
+
+  actions: 
+  - # ====== Action: Régénérer ===================================
+    id: 14622268479182796
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Cc # 33535286395159408142
+
+    execution: 
+      sequence: 20
+      event: Boîte de dialogue fermée # 14621824409182796
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Exécuter le code JavaScript =================
+    id: 14622718625182798
+    identification: 
+      action: Exécuter le code JavaScript
+
+    settings: 
+      code: apex.message.showPageSuccess('Information (s) mise(s) \u00E0 jour.');
+
+    execution: 
+      sequence: 30
+      event: Boîte de dialogue fermée # 14621824409182796
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Boîte de dialogue demande fermée ====
+  id: 14623107377182798
+  identification: 
+    name: Boîte de dialogue demande fermée
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed or Canceled
+    selection-type: Region
+    region: Demandes de renseignements # 33535314374339408166
+
+  actions: 
+  - # ====== Action: Exécuter le code JavaScript =================
+    id: 3553727510760470
+    identification: 
+      action: Exécuter le code JavaScript
+
+    settings: 
+      code: apex.message.showPageSuccess('ٌDemande de Clarification mise(s) \u00E0 jour.');
+
+    execution: 
+      sequence: 30
+      event: Boîte de dialogue demande fermée # 14623107377182798
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Régénérer ===================================
+    id: 14623620209182798
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Demandes de renseignements # 33535314374339408166
+
+    execution: 
+      sequence: 10
+      event: Boîte de dialogue demande fermée # 14623107377182798
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Boîte de dialogue affichage fermée ==
+  id: 14624512795182798
+  identification: 
+    name: Boîte de dialogue affichage fermée
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed or Canceled
+    selection-type: Region
+    region: Remarques # 33535336643540408370
+
+  actions: 
+  - # ====== Action: Régénérer ===================================
+    id: 14625037235182798
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Remarques # 33535336643540408370
+
+    execution: 
+      sequence: 10
+      event: Boîte de dialogue affichage fermée # 14624512795182798
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Exécuter le code JavaScript =================
+    id: 14625531505182798
+    identification: 
+      action: Exécuter le code JavaScript
+
+    settings: 
+      code: apex.message.showPageSuccess('ٌRemarque mise(s) \u00E0 jour.');
+
+    execution: 
+      sequence: 20
+      event: Boîte de dialogue affichage fermée # 14624512795182798
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Effectuez la recherche ==============
+  id: 14625946725182798
+  identification: 
+    name: Effectuez la recherche
+
+  execution: 
+    sequence: 150
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Key Press
+    selection-type: Item(s)
+    item(s): 
+    - P25_SEARCH
+
+  client-side-condition: 
+    type: JavaScript expression
+    javascript-expression: this.browserEvent.which === apex.jQuery.ui.keyCode.ENTER
+
+  actions: 
+  - # ====== Action: Régénérer ===================================
+    id: 14626436333182798
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Enregistrements maître # 33534678199652407947
+
+    execution: 
+      sequence: 10
+      event: Effectuez la recherche # 14625946725182798
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Evénement d'annulation ======================
+    id: 14626982785182798
+    identification: 
+      action: Evénement d'annulation
+
+    execution: 
+      sequence: 30
+      event: Effectuez la recherche # 14625946725182798
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+processes: 
+- # ====== Process: close dialog ===============================
+  id: 639867978194941
+  identification: 
+    name: close dialog
+    type: Fermer la boîte de dialogue
+    execution-chain: None
+
+  settings: 
+    afficher-les-messages-de-succès: false
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

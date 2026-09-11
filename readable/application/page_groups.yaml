@@ -1,0 +1,16 @@
+---
+- # ====== Page Group: User Settings ===========================
+  id: 14426322142193101
+  identification: 
+    name: User Settings
+
+- # ====== Page Group: affecte =================================
+  id: 35415882930955524260
+  identification: 
+    name: affecte
+
+- # ====== Page Group: Administration ==========================
+  id: 74585101979246929220
+  identification: 
+    name: Administration
+

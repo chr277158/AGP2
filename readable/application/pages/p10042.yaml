@@ -1,0 +1,640 @@
+---
+# ====== Page: Gérer l'accès utilisateur =====================
+id: 10042
+identification: 
+  name: Gérer l'accès utilisateur
+  alias: USER_ACCESS
+  title: Gérer l'accès utilisateur
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: false
+  resizable: false
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: First item on page
+  warn-on-unsaved-changes: true
+
+security: 
+  authorization-scheme: Droits de lecteur # 74585100429726929216
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+help: 
+  help-text: |
+    <p>Utilisez ce formulaire pour entrer des utilisateurs et leur adresse électronique, et définir leur niveau d'accès. 
+    Les paramètres définis dans <em>Configurer le contrôle d'accès</em> détermineront si le nom utilisateur doit être leur adresse électronique ou s'il peut s'agir de n'importe quelle entrée alphanumérique.</p>
+    <p>Cette application prend en charge les 3 niveaux d'accès suivants : Lecteur, Contributeur et Administrateur.</p>
+    <ul>
+      <li>Les <strong>lecteurs</strong> disposent d'un accès en lecture seule à toutes les informations et peuvent également consulter les états.</li>
+      <li>Les <strong>contributeurs</strong> peuvent créer, modifier et supprimer des informations, et consulter les états.</li>
+      <li>Les <strong>administrateurs</strong>, outre les capacités des contributeurs, peuvent également exécuter la configuration de l'application en accédant à sa section Administration.</li>
+    </ul>
+    <p>Lorsque vous modifiez un utilisateur existant, vous pouvez verrouiller son compte, ce qui l'empêchera d'accéder à l'application.</p>
+    <p><em><strong>Remarque :</strong> si vous utilisez des comptes Oracle APEX, les utilisateurs entrés ici doivent également être définis en tant qu'utilisateurs finals par un administrateur d'espace de travail, qui peut aussi définir leur mot de passe.</em></p>
+
+configuration: 
+  build-option: "Fonctionnalité: Contrôle d'accès" # 74585097602441929213
+
+regions: 
+- # ====== Region: Panneau sur Gérer l'accès utilisateur =======
+  id: 74585301495499929594
+  identification: 
+    name: Panneau sur Gérer l'accès utilisateur
+    type: Panneau
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: APEX_APPL_ACL_USERS
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form--stretchInputs
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Boutons =====================================
+  id: 74585301567676929594
+  identification: 
+    name: Boutons
+    type: Contenu statique
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+page-items: 
+- # ====== Page Item: P10042_ID ================================
+  id: 74585305018158929596
+  identification: 
+    name: P10042_ID
+    type: Afficher uniquement
+
+  label: 
+    label: New
+    alignment: Left
+
+  settings: 
+    format: Texte brut
+    basé-sur: Valeur d'élément
+    afficher-les-sauts-de-ligne: true
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 10
+    region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+    column: ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10042_APPLICATION_ID ====================
+  id: 74585305404411929596
+  identification: 
+    name: P10042_APPLICATION_ID
+    type: Afficher uniquement
+
+  label: 
+    label: New
+    alignment: Left
+
+  settings: 
+    format: Texte brut
+    basé-sur: Valeur d'élément
+    afficher-les-sauts-de-ligne: true
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 20
+    region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+    column: APPLICATION_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: '&APP_ID.'
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10042_USER_NAME =========================
+  id: 74585305823577929597
+  identification: 
+    name: P10042_USER_NAME
+    type: Champ de texte
+
+  label: 
+    label: Nom utilisateur
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 30
+    region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+
+  validation: 
+    value-required: true
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+    column: USER_NAME
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  read-only: 
+    type: Item is NOT NULL
+    item: P10042_ID
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P10042_ROLE_IDS ==========================
+  id: 74585306230203929597
+  identification: 
+    name: P10042_ROLE_IDS
+    type: Groupe de cases à cocher
+
+  label: 
+    label: Rôles
+    alignment: Left
+
+  settings: 
+    nombre-de-colonnes: 1
+
+  multiple-values: 
+    type: Delimited List
+    separator: ':'
+
+  layout: 
+    sequence: 40
+    region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Required - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: true
+
+  list-of-values: 
+    type: Shared Component
+    list-of-values: ACCESS_ROLES # 74585306362265929597
+    display-extra-values: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+    column: ROLE_IDS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    escape-special-characters: true
+    restricted-characters: All characters can be saved.
+
+  help: 
+    help-text: |
+      <p>Lorsque le contrôle d'accès est activé, les administrateurs ont la possibilité de restreindre l'accès à certaines fonctionnalités d'application pour les utilisateurs authentifiés. Cette application prend en charge les 3 rôles suivants : Lecteur, Contributeur et Administrateur.<p>
+      <ul>
+        <li>Les <strong>lecteurs</strong> disposent d'un accès en lecture seule à toutes les informations et peuvent également consulter les états.</li>
+        <li>Les <strong>contributeurs</strong> peuvent créer, modifier et supprimer des informations et consulter les états.</li>
+        <li>Les <strong>administrateurs</strong>, outre les capacités des contributeurs, peuvent également exécuter la configuration de l'application.</li>
+      </ul>
+
+buttons: 
+- # ====== Button: CANCEL ======================================
+  id: 74585302511939929595
+  identification: 
+    button-name: CANCEL
+    label: Annuler
+
+  layout: 
+    sequence: 10
+    region: Boutons # 74585301567676929594
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: false
+
+- # ====== Button: DELETE ======================================
+  id: 74585303974361929596
+  identification: 
+    button-name: DELETE
+    label: Supprimer
+
+  layout: 
+    sequence: 20
+    region: Boutons # 74585301567676929594
+    slot: PREVIOUS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--danger
+    - t-Button--simple
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL DELETE action
+
+  confirmation: 
+    message: '&APP_TEXT$DELETE_MSG!RAW.'
+    style: Danger
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P10042_ID
+
+- # ====== Button: SAVE ========================================
+  id: 74585304323440929596
+  identification: 
+    button-name: SAVE
+    label: Appliquer les modifications
+
+  layout: 
+    sequence: 30
+    region: Boutons # 74585301567676929594
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P10042_ID
+
+- # ====== Button: CREATE ======================================
+  id: 74585304730434929596
+  identification: 
+    button-name: CREATE
+    label: Ajouter un utilisateur
+
+  layout: 
+    sequence: 40
+    region: Boutons # 74585301567676929594
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: true
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL INSERT action
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P10042_ID
+
+dynamic-actions: 
+- # ====== Dynamic Action: Annuler la boîte de dialogue ========
+  id: 74585302602564929595
+  identification: 
+    name: Annuler la boîte de dialogue
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 74585302511939929595
+
+  actions: 
+  - # ====== Action: Annuler la boîte de dialogue ================
+    id: 74585303343879929595
+    identification: 
+      action: Annuler la boîte de dialogue
+
+    execution: 
+      sequence: 10
+      event: Annuler la boîte de dialogue # 74585302602564929595
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+validations: 
+- # ====== Validation: Impossible de vous enlever vous-même en t
+  id: 74585307578172929603
+  identification: 
+    name: Impossible de vous enlever vous-même en tant qu'administrateur
+
+  execution: 
+    sequence: 10
+
+  validation: 
+    type: Function Body (returning Boolean)
+    language: PL/SQL
+    pl/sql-function-body: |
+      if :P10042_USER_NAME = :APP_USER and
+          apex_acl.is_role_removed_from_user (
+              p_application_id => :APP_ID,
+              p_user_name      => :APP_USER,
+              p_role_static_id => 'ADMINISTRATOR',
+              p_role_ids       => apex_string.split_numbers(
+                                      p_str => case when :REQUEST = 'DELETE' then
+                                                   null
+                                               else
+                                                   :P10042_ROLE_IDS
+                                               end,
+                                      p_sep => ':') ) then
+          return false;
+      else
+          return true;
+      end if;
+    always-execute: false
+
+  error: 
+    error-message: Vous ne pouvez pas enlever votre propre rôle d'administrateur.
+    display-location: Inline in Notification
+
+processes: 
+- # ====== Process: Initialiser le panneau Gérer l'accès utilisa
+  id: 74585307856196929603
+  identification: 
+    name: Initialiser le panneau Gérer l'accès utilisateur
+    type: Panneau - Initialisation
+    execution-chain: None
+    form-region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+
+  execution: 
+    sequence: 10
+    point: After Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Traiter le panneau Gérer l'accès utilisateur
+  id: 74585308259334929603
+  identification: 
+    name: Traiter le panneau Gérer l'accès utilisateur
+    type: Panneau - Traitement de ligne automatique (DML)
+    execution-chain: None
+    form-region: Panneau sur Gérer l'accès utilisateur # 74585301495499929594
+
+  settings: 
+    type-de-cible: Source de région
+    empêcher-les-pertes-de-mise-à-jour: true
+    verrouiller-la-ligne: Non
+    renvoyer-des-clés-primaires-après-l'insertion: false
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Fermer la boîte de dialogue ================
+  id: 74585308690173929603
+  identification: 
+    name: Fermer la boîte de dialogue
+    type: Fermer la boîte de dialogue
+    execution-chain: None
+
+  settings: 
+    afficher-les-messages-de-succès: false
+
+  execution: 
+    sequence: 40
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

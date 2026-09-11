@@ -1,0 +1,811 @@
+---
+# ====== Page: Gérer les informations en retour ==============
+id: 10053
+identification: 
+  name: Gérer les informations en retour
+  alias: GÉRER-LES-INFORMATIONS-EN-RETOUR
+  title: Gérer les informations en retour
+  page-group: Administration # 74585101979246929220
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+  - ui-dialog--stretch
+  - t-Dialog--noPadding
+
+dialog: 
+  chained: true
+  resizable: false
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: false
+
+css: 
+  inline: |
+    /* Color feedback rating icons */
+    .feedback-positive { color: var(--ut-feedback-positive-text-color, var(--ut-palette-success)); }
+    .feedback-neutral { color: var(--ut-feedback-neutral-text-color, var(--ut-palette-warning)); }
+    .feedback-negative { color: var(--ut-feedback-negative-text-color, var(--ut-palette-danger)); }
+
+security: 
+  authorization-scheme: Droits d'administration # 74585100381861929216
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+help: 
+  help-text: |
+    <p>Les informations en retour peuvent être saisies par les utilisateurs finals à partir de n'importe quelle page normale dans l'application.</p>
+    <p>Cet état affiche les informations en retour saisies, les réponses transmises par les administrateurs et le statut des informations en retour.</p>
+    <p>Cliquez sur l'icône de modification (crayon jaune) pour saisir une réponse ou mettre à jour le statut des informations en retour.</p>
+    <p><em><strong>Remarque :</strong> si des destinataires ont été définis pour les informations en retour, ces derniers seront également envoyés par courriel aux adresses électroniques figurant dans la liste des destinataires des informations en retour.</em></p>
+
+configuration: 
+  build-option: 'Fonctionnalité: Informations en retour' # 74585097881391929213
+
+regions: 
+- # ====== Region: Gérer les informations en retour ============
+  id: 74585327321125929619
+  identification: 
+    name: Gérer les informations en retour
+    type: Etat interactif
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select feedback_id id,
+          page_id||'. '||page_name page_name,
+          created_on created,
+          lower(created_by) created_by,
+          feedback,
+          feedback_rating rating,
+          case feedback_rating
+            when 1 then 'fa-frown-o feedback-negative' 
+            when 2 then 'fa-emoji-neutral feedback-neutral'  
+            when 3 then 'fa-smile-o feedback-positive'
+          end rating_icon,
+          feedback_status status,
+          public_response response,
+          http_user_agent user_agent,
+          updated_on updated,
+          lower(updated_by) updated_by,
+          page_id
+      from apex_team_feedback f
+      where application_id = :APP_ID
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Interactive Report
+    template-options: 
+    - '#DEFAULT#'
+    - t-IRR-region--noBorders
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 74585346804807929632
+    link: 
+      link-column: Link to Custom Target
+      target: 
+        url: 'f?p=&APP_ID.:10054:&SESSION.::&DEBUG.:RP:P10054_ID:\#ID#\'
+        page: 10054 # Informations en retour
+        clear-cache: RP
+        values: 
+          p10054_id: '#ID#'
+
+      link-icon: <span aria-label="Modifier"><span class="fa fa-edit" aria-hidden="true" title="Modifier"></span></span>
+
+    pagination: 
+      type: Row Ranges X to Y
+      display-position: Bottom - Right
+
+    performance: 
+      lazy-loading: false
+
+    messages: 
+      when-no-data-found: Aucune donnée n'a été trouvée.
+      when-more-data-found: "Le nombre maximal de lignes pour cet état est de #MAX_ROW_COUNT# lignes. Appliquez un filtre pour réduire le nombre d'enregistrements dans votre requête."
+
+    search-bar: 
+      include-search-bar: true
+      search-field: true
+      finder-drop-down: true
+      reports-select-list: true
+      rows-per-page-selector: false
+
+    actions-menu: 
+      include-actions-menu: true
+      filter: true
+      select-columns: true
+      rows-per-page: true
+      sort: true
+      control-break: true
+      highlight: true
+      compute: true
+      aggregate: true
+      chart: true
+      group-by: true
+      pivot: true
+      flashback: true
+      save-report: true
+      save-public-report: false
+      reset: true
+      help: true
+      download: true
+      subscription: false
+
+    download: 
+      formats: 
+      - CSV
+      - HTML
+      - Excel
+      - PDF
+      send-as-email: true
+
+    heading: 
+      fixed-to: Page
+
+    icon-view: 
+      show: false
+
+    detail-view: 
+      show: false
+
+    saved-reports: 
+    - # ====== Saved Report: Etat principal ========================
+      id: 74585357264828929641
+      identification: 
+        name: Etat principal
+        alias: 482020721
+
+    columns: 
+    - # ====== Column: ID ==========================================
+      id: 74585347235175929635
+      identification: 
+        column-name: ID
+        type: Masqué
+
+      heading: 
+        heading: ID
+
+      layout: 
+        sequence: 0
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PAGE_NAME ===================================
+      id: 74585347648782929635
+      identification: 
+        column-name: PAGE_NAME
+        type: Texte brut
+
+      heading: 
+        heading: Page
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 2
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED =====================================
+      id: 74585348083464929636
+      identification: 
+        column-name: CREATED
+        type: Texte brut
+
+      heading: 
+        heading: Enregistré
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 3
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: SINCE
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: CREATED_BY ==================================
+      id: 74585348478822929636
+      identification: 
+        column-name: CREATED_BY
+        type: Texte brut
+
+      heading: 
+        heading: Enregistré par
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 4
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: FEEDBACK ====================================
+      id: 74585348968749929636
+      identification: 
+        column-name: FEEDBACK
+        type: Texte brut
+
+      heading: 
+        heading: Informations en retour
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 5
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: RATING ======================================
+      id: 74585349312908929636
+      identification: 
+        column-name: RATING
+        type: Texte brut (en fonction d'une liste de valeurs)
+
+      list-of-values: 
+        list-of-values: FEEDBACK_RATING # 74585331207022929622
+
+      heading: 
+        heading: Evaluation
+        alignment: center
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 6
+        column-alignment: center
+
+      accessibility: 
+        value-identifies-row: false
+
+      column-formatting: 
+        html-expression: '<span class="fa #RATING_ICON#" aria-hidden="true" title="#RATING#"></span>'
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: RATING_ICON =================================
+      id: 74585349946632929637
+      identification: 
+        column-name: RATING_ICON
+        type: Masqué
+
+      heading: 
+        heading: RATING ICON
+
+      layout: 
+        sequence: 7
+
+      source: 
+        primary-key: false
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: STATUS ======================================
+      id: 74585350421038929637
+      identification: 
+        column-name: STATUS
+        type: Texte brut (en fonction d'une liste de valeurs)
+
+      list-of-values: 
+        list-of-values: FEEDBACK_STATUS # 74585341676288929629
+
+      heading: 
+        heading: Statut
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 8
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+    - # ====== Column: RESPONSE ====================================
+      id: 74585350829853929637
+      identification: 
+        column-name: RESPONSE
+        type: Texte brut
+
+      heading: 
+        heading: Réponse
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 9
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: USER_AGENT ==================================
+      id: 74585351410591929637
+      identification: 
+        column-name: USER_AGENT
+        type: Texte brut
+
+      heading: 
+        heading: Agent utilisateur
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 10
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: UPDATED =====================================
+      id: 74585351835863929638
+      identification: 
+        column-name: UPDATED
+        type: Texte brut
+
+      heading: 
+        heading: Mis à jour
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 11
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      appearance: 
+        format-mask: SINCE
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+        date-ranges: All
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: UPDATED_BY ==================================
+      id: 74585352243214929638
+      identification: 
+        column-name: UPDATED_BY
+        type: Texte brut
+
+      heading: 
+        heading: Mis à jour par
+        alignment: start
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 12
+        column-alignment: start
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    - # ====== Column: PAGE_ID =====================================
+      id: 74585352621502929638
+      identification: 
+        column-name: PAGE_ID
+        type: Texte brut
+
+      heading: 
+        heading: Page
+        alignment: end
+
+      single-row-view: 
+        use-column-heading: true
+
+      layout: 
+        sequence: 13
+        column-alignment: end
+
+      accessibility: 
+        value-identifies-row: false
+
+      source: 
+        primary-key: false
+
+      column-filter: 
+        type: Default Based on Column Type
+
+      enable-users-to: 
+        hide: true
+        sort: true
+        filter: true
+        highlight: true
+        control-break: true
+        aggregate: true
+        compute: true
+        chart: true
+        group-by: true
+        pivot: true
+
+      security: 
+        escape-special-characters: true
+
+    printing: 
+      output: 
+        layout: Default Report Layout
+        view-file-as: Attachment
+
+      page: 
+        size: Letter
+        orientation: Landscape
+        units: Inches
+        width: 11
+        height: 8.5
+        border-width: 0.5
+        border-color: '#666666'
+
+      page-header: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+        page-header-text: Gérer les informations en retour
+
+      column-headings: 
+        font: Helvetica
+        font-weight: Bold
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#EEEEEE'
+
+      columns: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 10
+        font-color: '#000000'
+        background-color: '#FFFFFF'
+
+      page-footer: 
+        font: Helvetica
+        font-weight: Normal
+        font-size: 12
+        font-color: '#000000'
+        alignment: center
+
+buttons: 
+- # ====== Button: RESET_REPORT ================================
+  id: 74585358198498929642
+  identification: 
+    button-name: RESET_REPORT
+    label: Réinitialiser
+
+  layout: 
+    sequence: 20
+    region: Gérer les informations en retour # 74585327321125929619
+    slot: RIGHT_OF_IR_SEARCH_BAR
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - t-Button--iconLeft
+    icon: fa-undo-alt
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:&APP_PAGE_ID.:&SESSION.::&DEBUG.:&APP_PAGE_ID.,RR::'
+      page: '&APP_PAGE_ID.'
+      clear-cache: '&APP_PAGE_ID.,RR'
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: Régénérer l'état ====================
+  id: 74585327230177929619
+  identification: 
+    name: Régénérer l'état
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Gérer les informations en retour # 74585327321125929619
+
+  actions: 
+  - # ====== Action: Régénérer ===================================
+    id: 74585358857722929642
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Gérer les informations en retour # 74585327321125929619
+
+    execution: 
+      sequence: 10
+      event: Régénérer l'état # 74585327230177929619
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

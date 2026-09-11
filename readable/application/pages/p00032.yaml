@@ -1,0 +1,1391 @@
+---
+# ====== Page: Gestion des Rappels ===========================
+id: 32
+identification: 
+  name: Gestion des Rappels
+  alias: GESTION-DES-RAPPELS
+  title: Gestion des Rappels
+
+appearance: 
+  page-mode: Normal
+  page-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: |
+    // 1. طلب الإذن لتنبيهات الـ Windows
+    function requestNotificationPermission() {
+        if ('Notification' in window &&
+            Notification.permission !== 'granted' &&
+            Notification.permission !== 'denied') {
+            Notification.requestPermission();
+        }
+    }
+    
+    // 2. تنبيهات مستمرة حتى انتهاء الموعد (تعمل عند النداء)
+    function checkAndDisplayReminders() {
+        apex.server.process('GET_PENDING_REMINDERS', {
+            x01: 'Check'
+        }, {
+            dataType: "json",
+            success: function (pData) {
+                if (pData && pData.items && pData.items.length > 0) {
+                    pData.items.forEach(function (item) {
+                        var title = item.NOTE_TITLE;
+                        var details = item.NOTE_DETAILS;
+                        var importance = item.IMPORTANCE_LEVEL;
+    
+                        if (importance == 3) {
+                            // 🔴 مهم جداً: Native Notification
+                            if (Notification.permission === "granted") {
+                                new Notification("🚨 تذكير مستمر: " + title, {
+                                    body: details + "\n(سيستمر حتى الموعد النهائي)",
+                                    icon: "data:image/svg+xml;utf8,",
+                                    badge: "data:image/svg+xml;utf8,"
+                                });
+                            }
+                        } else if (importance == 2) {
+                            // 🟠 مهم: Popup
+                            apex.message.showPageSuccess("🔔 تذكير مستمر: " + title + "<br>" + details);
+                        } else if (importance == 1) {
+                            // 🔵 عادي: إشعار خفيف
+                            apex.message.clearErrors();
+                            apex.message.showPageSuccess("📝 " + title);
+                        }
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("خطأ في جلب التنبيهات:", textStatus);
+            }
+        });
+    }
+    
+    // 3. تطبيق النسبة المئوية على شريط التقدم داخل الـ Badge
+    function applyProgressWidth() {
+        document.querySelectorAll('#reminders_cards .a-CardView-badge').forEach(function (badge) {
+            var text = badge.innerText || badge.textContent;
+            // مثال نص: "15 دقيقة (40%)" أو "🔄 تذكير مستمر (70%)"
+            var match = text.match(/\((\d+)%\)/);
+            if (match && match[1]) {
+                var percent = match[1];
+                badge.style.setProperty('--progress-width', percent + '%');
+            }
+        });
+    }
+    
+    // 4. تحديث كروت التذكير + الشريط
+    function refreshRemindersCards() {
+        try {
+            var reg = apex.region('reminders_cards');
+            if (reg) {
+                reg.refresh();
+                // بعد أن ينتهي الـ refresh نطبّق النسبة على البادجات
+                setTimeout(applyProgressWidth, 500);
+            }
+        } catch (e) {
+            console.error('Refresh error:', e);
+        }
+    }
+    
+    // 5. تشغيل كل شيء عند تحميل الصفحة
+    requestNotificationPermission();
+    checkAndDisplayReminders();   // فحص فوري أول مرة
+    refreshRemindersCards();      // تحديث الكروت أول مرة
+    
+    // تنبيهات + تحديث كروت كل 30 ثانية
+    setInterval(function () {
+        checkAndDisplayReminders();
+        refreshRemindersCards();
+    }, 30000); // 30000 ms = 30 ثانية
+    
+
+css: 
+  inline: |
+    .a-CardView-badge {
+        background: linear-gradient(90deg, #f7fafc, #edf2f7) !important;
+        border-radius: 20px !important;
+        padding: 6px 12px !important;
+        border: 2px solid #e2e8f0 !important;
+        margin-top: 12px !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    .a-CardView-badge::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; bottom: 0;
+        width: calc(var(--progress-width, 0%) - 8px);
+        /* لون أخضر شفاف بدل تدرّج قوي */
+        background: rgba(72, 187, 120, 0.25);  /* 0.25 = شفافية 25% */
+        border-radius: 16px;
+        transition: width 1s ease;
+        z-index: 1;
+    }
+    .u-color-9 .a-CardView-badge::before  { background: rgba(245, 101, 101, 0.25); }  /* أحمر شفاف */
+    .u-color-37 .a-CardView-badge::before { background: rgba(250, 191, 137, 0.25); }  /* برتقالي شفاف */
+    .u-color-1 .a-CardView-badge::before  { background: rgba(99, 179, 237, 0.25); }   /* أزرق شفاف */
+    
+    
+    /* ألوان الأهمية */
+    .u-color-9 .a-CardView-badge::before  { background: linear-gradient(90deg, #f56565, #e53e3e); }
+    .u-color-37 .a-CardView-badge::before { background: linear-gradient(90deg, #fabf89, #dd6b20); }
+    .u-color-1 .a-CardView-badge::before  { background: linear-gradient(90deg, #63b3ed, #3182ce); }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Notes =======================================
+  id: 1111776263858468
+  identification: 
+    name: Notes
+    type: Cartes
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          ID,
+          NOTE_TITLE   AS NOTETITLE,
+          NOTE_DETAILS AS NOTEDETAILS,
+          REMINDER_DATETIME,
+          TO_CHAR(REMINDER_DATETIME, 'DD Mon - HH24:MI') AS REMINDERFMT,
+      
+          -- أيقونة ولون حسب الأهمية
+          CASE IMPORTANCE_LEVEL
+              WHEN 3 THEN 'fa-bell text-danger'
+              WHEN 2 THEN 'fa-exclamation-triangle text-warning'
+              WHEN 1 THEN 'fa-sticky-note text-info'
+              ELSE 'fa-circle text-muted'
+          END AS CARDICON,
+      
+          -- نص الأهمية
+          CASE IMPORTANCE_LEVEL
+              WHEN 3 THEN '🔴 عاجل جداً'
+              WHEN 2 THEN '🟠 مهم'
+              WHEN 1 THEN '🔵 عادي'
+              ELSE '⚪ عادي'
+          END AS IMPORTANCETEXT,
+      
+          -- نص الشريط: الدقائق + النسبة المئوية
+          CASE
+              WHEN REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440) <= SYSDATE
+                   AND REMINDER_DATETIME >= SYSDATE - 0.1/24 THEN
+                   '🔄 تذكير مستمر (' || ROUND(
+                       LEAST(100, GREATEST(0,
+                         (1 - (((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) /
+                               ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - TRUNC(SYSDATE)))) * 100
+                       ))
+                   ) || '%)'
+              WHEN REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440) <= SYSDATE THEN
+                   '✅ انتهى (100%)'
+              ELSE
+                   FLOOR(((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) * 1440)
+                   || ' Minutes ('
+                   || ROUND(
+                       LEAST(100, GREATEST(0,
+                         (1 - (((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) /
+                               ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - TRUNC(SYSDATE)))) * 100
+                       ))
+                   )
+                   || '%) '
+          END AS MINUTES_LEFT,
+      
+          -- نسبة التقدم (0-100) متاحة لو احتجتها لاحقاً
+          LEAST(100, GREATEST(0,
+              (1 - (((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) /
+                    ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - TRUNC(SYSDATE)))) * 100
+          )) AS PROGRESS_PERCENT,
+      
+          -- كلاس إضافي لو أردت تأثير خاص عند الاقتراب (اختياري)
+          CASE
+              WHEN ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) * 1440 <= 30
+                  THEN 'near'
+              ELSE ''
+          END AS BADGE_CLASS,
+      
+          -- لون شريط التقدم حسب الأهمية (لو استخدمته داخل CSS)
+          CASE IMPORTANCE_LEVEL
+              WHEN 3 THEN 'bg-danger'
+              WHEN 2 THEN 'bg-warning'
+              WHEN 1 THEN 'bg-info'
+              ELSE 'bg-secondary'
+          END AS PROGRESS_COLOR
+      
+      FROM USER_NOTES
+      WHERE USER_ID = :P32_ROLE
+         AND NOT (IS_SENT = 'Y'
+                 AND REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440) < SYSDATE -1)
+      ORDER BY IMPORTANCE_LEVEL DESC, REMINDER_DATETIME ASC;
+      
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: Rappel # 7557457115892854
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    - t-CardsRegion--styleB
+    - t-Form--stretchInputs
+    - t-Form--leftLabels
+    css-classes: 
+    - BADGE_CLASS
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: reminders_cards
+    custom-attributes: 
+    - Refresh
+    - 'Interval:'
+    - 600
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 1111910740858469
+    appearance: 
+      layout: Grid
+      grid-columns: 4 Columns
+
+    title: 
+      advanced-formatting: false
+      column: NOTETITLE
+
+    subtitle: 
+      advanced-formatting: false
+      column: IMPORTANCETEXT
+
+    body: 
+      advanced-formatting: false
+      column: NOTEDETAILS
+
+    secondary-body: 
+      advanced-formatting: false
+      column: REMINDERFMT
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: CARDICON
+      icon-css-classes: CARDCOLORCLASS
+      icon-position: Start
+      badge-column: MINUTES_LEFT
+      badge-label: '&MINUTES_LEFT. '
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    actions: 
+    - # ====== Action: تعديل =======================================
+      id: 1113573392858486
+      identification: 
+        type: Button
+        label: تعديل
+
+      layout: 
+        position: Primary
+        sequence: 10
+
+      link: 
+        type: Redirect to Page in this Application
+        target: 
+          url: 'f?p=&APP_ID.:33:&SESSION.::&DEBUG.::P33_ID_1:&ID.'
+          page: 33 # edit note
+          values: 
+            p33_id_1: '&ID.'
+
+      appearance: 
+        display-type: Text with Icon
+        icon: fa-edit
+        hot: false
+
+    - # ====== Action: تعديل =======================================
+      id: 14360976065196269
+      identification: 
+        type: Button
+        label: تعديل
+
+      layout: 
+        position: Primary
+        sequence: 20
+
+      link: 
+        type: Redirect to Page in this Application
+        target: 
+          url: 'f?p=&APP_ID.:33:&SESSION.::&DEBUG.::P33_ID_1:&ID.'
+          page: 33 # edit note
+          values: 
+            p33_id_1: '&ID.'
+
+      appearance: 
+        display-type: Text with Icon
+        icon: fa-edit
+        hot: false
+
+- # ====== Region: Breadcrumb ==================================
+  id: 1239695713610146
+  identification: 
+    name: Breadcrumb
+    type: Chemin de navigation
+
+  source: 
+    breadcrumb: Chemin de navigation # 74584700736997929123
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Title Bar
+    template-options: 
+    - '#DEFAULT#'
+    - t-BreadcrumbRegion--useBreadcrumbTitle
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    appearance: 
+      breadcrumb-template: Breadcrumb
+      template-options: 
+      - '#DEFAULT#'
+
+- # ====== Region:  n ==========================================
+  id: 1308851222129446
+  identification: 
+    name: ' n'
+    type: Contenu statique
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--removeHeader js-removeLandmark
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: false
+
+  advanced: 
+    static-id: reminders_cards
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: Notes_Personnel =============================
+  id: 7556367287892843
+  identification: 
+    name: Notes_Personnel
+    title: Note Personnel
+    type: Cartes
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          ID,
+          NOTE_TITLE   AS NOTETITLE,
+          NOTE_DETAILS AS NOTEDETAILS,
+          REMINDER_DATETIME,
+          TO_CHAR(REMINDER_DATETIME, 'DD Mon - HH24:MI') AS REMINDERFMT,
+      
+          -- أيقونة ولون حسب الأهمية
+          CASE IMPORTANCE_LEVEL
+              WHEN 3 THEN 'fa-bell text-danger'
+              WHEN 2 THEN 'fa-exclamation-triangle text-warning'
+              WHEN 1 THEN 'fa-sticky-note text-info'
+              ELSE 'fa-circle text-muted'
+          END AS CARDICON,
+      
+          -- نص الأهمية
+          CASE IMPORTANCE_LEVEL
+              WHEN 3 THEN '🔴 عاجل جداً'
+              WHEN 2 THEN '🟠 مهم'
+              WHEN 1 THEN '🔵 عادي'
+              ELSE '⚪ عادي'
+          END AS IMPORTANCETEXT,
+      
+          -- نص الشريط: الدقائق + النسبة المئوية
+          CASE
+              WHEN REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440) <= SYSDATE
+                   AND REMINDER_DATETIME >= SYSDATE - 0.1/24 THEN
+                   '🔄 تذكير مستمر (' || ROUND(
+                       LEAST(100, GREATEST(0,
+                         (1 - (((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) /
+                               ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - TRUNC(SYSDATE)))) * 100
+                       ))
+                   ) || '%)'
+              WHEN REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440) <= SYSDATE THEN
+                   '✅ انتهى (100%)'
+              ELSE
+                   FLOOR(((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) * 1440)
+                   || ' Minutes ('
+                   || ROUND(
+                       LEAST(100, GREATEST(0,
+                         (1 - (((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) /
+                               ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - TRUNC(SYSDATE)))) * 100
+                       ))
+                   )
+                   || '%) '
+          END AS MINUTES_LEFT,
+      
+          -- نسبة التقدم (0-100) متاحة لو احتجتها لاحقاً
+          LEAST(100, GREATEST(0,
+              (1 - (((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) /
+                    ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - TRUNC(SYSDATE)))) * 100
+          )) AS PROGRESS_PERCENT,
+      
+          -- كلاس إضافي لو أردت تأثير خاص عند الاقتراب (اختياري)
+          CASE
+              WHEN ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) * 1440 <= 30
+                  THEN 'near'
+              ELSE ''
+          END AS BADGE_CLASS,
+      
+          -- لون شريط التقدم حسب الأهمية (لو استخدمته داخل CSS)
+          CASE IMPORTANCE_LEVEL
+              WHEN 3 THEN 'bg-danger'
+              WHEN 2 THEN 'bg-warning'
+              WHEN 1 THEN 'bg-info'
+              ELSE 'bg-secondary'
+          END AS PROGRESS_COLOR
+      
+      FROM USER_NOTES
+      WHERE USER_ID = :APP_USER
+        AND NOT (IS_SENT = 'Y'
+                 AND REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440) < SYSDATE -1)
+      ORDER BY IMPORTANCE_LEVEL DESC, REMINDER_DATETIME ASC;
+      
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: Rappel # 7557486574892855
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    - t-CardsRegion--styleB
+    - t-Form--stretchInputs
+    - t-Form--leftLabels
+    css-classes: 
+    - BADGE_CLASS
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    custom-attributes: 
+    - Refresh
+    - 'Interval:'
+    - 600
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 7556423123892844
+    appearance: 
+      layout: Grid
+      grid-columns: 4 Columns
+
+    title: 
+      advanced-formatting: false
+      column: NOTETITLE
+
+    subtitle: 
+      advanced-formatting: false
+      column: IMPORTANCETEXT
+
+    body: 
+      advanced-formatting: false
+      column: NOTEDETAILS
+
+    secondary-body: 
+      advanced-formatting: false
+      column: REMINDERFMT
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: CARDICON
+      icon-css-classes: CARDCOLORCLASS
+      icon-position: Start
+      badge-column: MINUTES_LEFT
+      badge-label: '&MINUTES_LEFT. '
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    actions: 
+    - # ====== Action: تعديل =======================================
+      id: 7556523891892845
+      identification: 
+        type: Button
+        label: تعديل
+
+      layout: 
+        position: Primary
+        sequence: 10
+
+      link: 
+        type: Redirect to Page in this Application
+        target: 
+          url: 'f?p=&APP_ID.:33:&SESSION.::&DEBUG.::P33_ID_1:&ID.'
+          page: 33 # edit note
+          values: 
+            p33_id_1: '&ID.'
+
+      appearance: 
+        display-type: Text with Icon
+        icon: fa-edit
+        hot: false
+
+- # ====== Region: Rappel ======================================
+  id: 7557457115892854
+  identification: 
+    name: Rappel
+    title: 'Rappels Générer par le Système '
+    type: Contenu statique
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: Rappel ======================================
+  id: 7557486574892855
+  identification: 
+    name: Rappel
+    title: 'Rappels Personnel '
+    type: Contenu statique
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: Notes2 ======================================
+  id: 63161579716012402
+  identification: 
+    name: Notes2
+    type: Cartes
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      SELECT
+          cc.id,
+          cc.ref_ao,
+          cc.objet_cct,
+          cc.budget,
+          cc."DÉTAIL_DE_RÉPONSE",
+          cc.nature_de_depense,
+          cc."DATE_LIMITE_PROPOSÉE",
+          cc.date_de_lanc,
+          cc.pv_cct,
+          cc.programme_ouverture_de_plis,
+          cc.jours_rest,
+          cc.date_ouverture_des_plis,
+          cc.status,
+          case 
+          WHEN  sysdate - cc.date_ouverture_des_plis > 30 THEN  'لقد مرت ' || FLOOR(sysdate - cc.date_ouverture_des_plis) || '   أيام على فتح العروض و لقد تمت معالجة الملف و إرجاع الضمانات الوقتية الرجاء إدخال المعطيات الخاصة بالعقود و ذلك بالضغط على الرابط أسفل هذا التنبيه   '
+              WHEN  sysdate - cc.date_ouverture_des_plis > 20 and  sysdate - cc.date_ouverture_des_plis < 30 THEN 'لقد مرت ' || FLOOR(sysdate - cc.date_ouverture_des_plis) || '   أيام على فتح العروض و لقد تمت معالجة الملف و إرجاع الضمانات الوقتية الرجاء إدخال المعطيات الخاصة بالعقود ( إن توفرت ) و ذلك بالضغط على الرابط أسفل هذا التنبيه   '
+              WHEN sysdate - cc.date_ouverture_des_plis > 0 and  sysdate - cc.date_ouverture_des_plis < 20 THEN  'لقد مرت ' || FLOOR(sysdate - cc.date_ouverture_des_plis) || '   أيام على فتح العروض و لقد تمت معالجة الملف و إرجاع الضمانات الوقتية الرجاء إدخال المعطيات الخاصة بالعقود ( إن توفرت ) و ذلك بالضغط على الرابط أسفل هذا التنبيه   '
+              ELSE '🔴🔴🔴 🔴🔴🔴🔴وضع الملف غير عادي الرجاء التثبت'
+          
+         
+          end as stat,
+          CASE  
+              WHEN sysdate - cc.date_ouverture_des_plis > 30 THEN 'u-color-39'
+              WHEN  sysdate - cc.date_ouverture_des_plis > 20 and  sysdate - cc.date_ouverture_des_plis < 30  THEN 'u-color-37'
+              WHEN sysdate - cc.date_ouverture_des_plis > 0 and  sysdate - cc.date_ouverture_des_plis < 20  THEN 'u-color-35'
+              ELSE 'u-color-44-contrast'
+          END AS COLOR_CELL,
+         CASE  
+              WHEN sysdate - cc.date_ouverture_des_plis > 30 THEN '🔴 عاجل جداً'
+              WHEN  sysdate - cc.date_ouverture_des_plis > 20 and  sysdate - cc.date_ouverture_des_plis < 30  THEN '🟠 مهم'
+              WHEN sysdate - cc.date_ouverture_des_plis > 10 and  sysdate - cc.date_ouverture_des_plis < 20  THEN '🔵 عادي'
+              ELSE '⚪ عادي'
+          END AS IMPORTANCETEXT,
+          CASE
+              WHEN  sysdate - cc.date_ouverture_des_plis > 30 THEN 'fa-fire fa-1x fa-anim-flash'
+              WHEN  sysdate - cc.date_ouverture_des_plis > 20 and  sysdate - cc.date_ouverture_des_plis < 30 THEN 'fa-alarm-snooze fa-anim-spin-step fam-information fam-is-warning fa-lg'
+              WHEN sysdate - cc.date_ouverture_des_plis > 10 and  sysdate - cc.date_ouverture_des_plis < 20 THEN 'fa-sticky-note text-info'
+              ELSE 'fa-circle text-muted'
+          END AS CARDICON,
+             CASE
+              WHEN sysdate - cc.date_ouverture_des_plis > 30
+                  THEN 'near'
+              ELSE ''
+          END AS BADGE_CLASS,
+          cc.creer_par,
+          cc."DATE_CRÉATION",
+          cc.programme_de_lancement
+      FROM cc
+      WHERE cc.status = 5
+      
+        AND NOT EXISTS (
+              SELECT 1
+              FROM contrats ct
+              WHERE ct.id_cc = cc.id
+        )
+      
+      
+      /*
+      SELECT
+          ID,
+          NOTE_TITLE   AS NOTETITLE,
+          NOTE_DETAILS AS NOTEDETAILS,
+          REMINDER_DATETIME,
+          TO_CHAR(REMINDER_DATETIME, 'DD Mon - HH24:MI') AS REMINDERFMT,
+      
+          -- أيقونة ولون حسب الأهمية
+          CASE IMPORTANCE_LEVEL
+              WHEN 3 THEN 'fa-bell text-danger'
+              WHEN 2 THEN 'fa-exclamation-triangle text-warning'
+              WHEN 1 THEN 'fa-sticky-note text-info'
+              ELSE 'fa-circle text-muted'
+          END AS CARDICON,
+      
+          -- نص الأهمية
+          CASE IMPORTANCE_LEVEL
+              WHEN 3 THEN '🔴 عاجل جداً'
+              WHEN 2 THEN '🟠 مهم'
+              WHEN 1 THEN '🔵 عادي'
+              ELSE '⚪ عادي'
+          END AS IMPORTANCETEXT,
+      
+          -- نص الشريط: الدقائق + النسبة المئوية
+          CASE
+              WHEN REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440) <= SYSDATE
+                   AND REMINDER_DATETIME >= SYSDATE - 0.1/24 THEN
+                   '🔄 تذكير مستمر (' || ROUND(
+                       LEAST(100, GREATEST(0,
+                         (1 - (((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) /
+                               ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - TRUNC(SYSDATE)))) * 100
+                       ))
+                   ) || '%)'
+              WHEN REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440) <= SYSDATE THEN
+                   '✅ انتهى (100%)'
+              ELSE
+                   FLOOR(((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) * 1440)
+                   || ' Minutes ('
+                   || ROUND(
+                       LEAST(100, GREATEST(0,
+                         (1 - (((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) /
+                               ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - TRUNC(SYSDATE)))) * 100
+                       ))
+                   )
+                   || '%) '
+          END AS MINUTES_LEFT,
+      
+          -- نسبة التقدم (0-100) متاحة لو احتجتها لاحقاً
+          LEAST(100, GREATEST(0,
+              (1 - (((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) /
+                    ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - TRUNC(SYSDATE)))) * 100
+          )) AS PROGRESS_PERCENT,
+      
+          -- كلاس إضافي لو أردت تأثير خاص عند الاقتراب (اختياري)
+          CASE
+              WHEN ((REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440)) - SYSDATE) * 1440 <= 30
+                  THEN 'near'
+              ELSE ''
+          END AS BADGE_CLASS,
+      
+          -- لون شريط التقدم حسب الأهمية (لو استخدمته داخل CSS)
+          CASE IMPORTANCE_LEVEL
+              WHEN 3 THEN 'bg-danger'
+              WHEN 2 THEN 'bg-warning'
+              WHEN 1 THEN 'bg-info'
+              ELSE 'bg-secondary'
+          END AS PROGRESS_COLOR
+      
+      FROM USER_NOTES
+      WHERE USER_ID = :P32_ROLE
+         AND NOT (IS_SENT = 'Y'
+                 AND REMINDER_DATETIME - (NVL(PRE_REMINDER_MINS,0)/1440) < SYSDATE -1)
+      ORDER BY IMPORTANCE_LEVEL DESC, REMINDER_DATETIME ASC;
+      */
+      
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 80
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Cards Container
+    template-options: 
+    - '#DEFAULT#'
+    - t-CardsRegion--hideHeader js-addHiddenHeadingRoleDesc
+    - t-CardsRegion--styleC
+    - t-Form--stretchInputs
+    - t-Form--leftLabels
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    custom-attributes: 
+    - Refresh
+    - 'Interval:'
+    - 600
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    id: 14481831421359384
+    appearance: 
+      layout: Grid
+      grid-columns: 4 Columns
+
+    title: 
+      advanced-formatting: false
+      column: REF_AO
+
+    subtitle: 
+      advanced-formatting: false
+      column: STAT
+      css-classes: 
+      - '&COLOR_CELL.'
+
+    body: 
+      advanced-formatting: false
+      column: OBJET_CCT
+
+    secondary-body: 
+      advanced-formatting: false
+
+    icon-and-badge: 
+      icon-source: Icon Class Column
+      icon-column: CARDICON
+      icon-position: Top
+      badge-column: IMPORTANCETEXT
+
+    media: 
+      advanced-formatting: false
+      source: No Media
+
+    performance: 
+      lazy-loading: false
+
+    pagination: 
+      type: Scroll
+      show-total-count: false
+
+    actions: 
+    - # ====== Action: تعديل =======================================
+      id: 14482302829359386
+      identification: 
+        type: Button
+        label: تعديل
+
+      layout: 
+        position: Primary
+        sequence: 20
+
+      link: 
+        type: Redirect to Page in this Application
+        target: 
+          url: 'f?p=&APP_ID.:45:&SESSION.::&DEBUG.::P45_ID_CC,P45_REF_AO:&ID.,&REF_AO.'
+          page: 45 # AJOUT CONTRAT
+          values: 
+            p45_id_cc: '&ID.'
+            p45_ref_ao: '&REF_AO.'
+
+      appearance: 
+        display-type: Text with Icon
+        icon: fa-reply-all
+        hot: true
+
+page-items: 
+- # ====== Page Item: P32_ROLE =================================
+  id: 7557011545892850
+  identification: 
+    name: P32_ROLE
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: No Parent
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: Add_Note ====================================
+  id: 1110018482858450
+  identification: 
+    button-name: Add_Note
+    label: إضافة تذكير
+
+  layout: 
+    sequence: 10
+    region: ' n' # 1308851222129446
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: 11
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:33:&SESSION.::&DEBUG.:::'
+      page: 33 # edit note
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: CLEANUP_EXPIRED =============================
+  id: 1308326384129441
+  identification: 
+    button-name: CLEANUP_EXPIRED
+    label: 🗑️ تنظيف التنبيهات المنتهية
+
+  layout: 
+    sequence: 10
+    region: Breadcrumb # 1239695713610146
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: false
+
+dynamic-actions: 
+- # ====== Dynamic Action: Auto Refresh Cards ==================
+  id: 1112404840858474
+  identification: 
+    name: Auto Refresh Cards
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Exécuter le code JavaScript =================
+    id: 1309515864129453
+    identification: 
+      action: Exécuter le code JavaScript
+
+    settings: 
+      code: |
+        
+        refreshRemindersCards();
+        
+
+    execution: 
+      sequence: 20
+      event: Auto Refresh Cards # 1112404840858474
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: New_4 ===============================
+  id: 1307890894129437
+  identification: 
+    name: New_4
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Notes # 1111776263858468
+
+  actions: 
+  - # ====== Action: Régénérer ===================================
+    id: 1308050358129438
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Notes # 1111776263858468
+
+    execution: 
+      sequence: 10
+      event: New_4 # 1307890894129437
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New =================================
+  id: 1308441315129442
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 70
+    event-scope: Dynamic
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CLEANUP_EXPIRED # 1308326384129441
+
+  actions: 
+  - # ====== Action: Exécuter le code côté serveur ===============
+    id: 1308523053129443
+    identification: 
+      action: Exécuter le code côté serveur
+
+    settings: 
+      langue: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      code-pl/sql: |
+        BEGIN
+          CLEANUP_EXPIRED_REMINDERS;
+        END;
+        
+
+    execution: 
+      sequence: 10
+      event: New # 1308441315129442
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Régénérer ===================================
+    id: 1308613282129444
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Notes # 1111776263858468
+
+    execution: 
+      sequence: 20
+      event: New # 1308441315129442
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: New_1 ===============================
+  id: 1308911272129447
+  identification: 
+    name: New_1
+
+  execution: 
+    sequence: 80
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Button
+    button: Add_Note # 1110018482858450
+
+  actions: 
+  - # ====== Action: Régénérer ===================================
+    id: 1309011334129448
+    identification: 
+      action: Régénérer
+
+    settings: 
+      conserver-la-pagination: false
+
+    affected-elements: 
+      selection-type: Region
+      region: Notes # 1111776263858468
+
+    execution: 
+      sequence: 10
+      event: New_1 # 1308911272129447
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Nouveau =============================
+  id: 7557667767892856
+  identification: 
+    name: Nouveau
+
+  execution: 
+    sequence: 90
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  client-side-condition: 
+    type: Item = Value
+    item: P32_ROLE
+    value: READER
+
+  actions: 
+  - # ====== Action: Masquer =====================================
+    id: 7557707397892857
+    identification: 
+      action: Masquer
+
+    affected-elements: 
+      selection-type: Region
+      region: Rappel # 7557457115892854
+
+    execution: 
+      sequence: 10
+      event: Nouveau # 7557667767892856
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+processes: 
+- # ====== Process: MARK_REMINDER_SENT =========================
+  id: 1308093084129439
+  identification: 
+    name: MARK_REMINDER_SENT
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      DECLARE
+          l_reminder_id NUMBER := APEX_APPLICATION.G_X01;
+      BEGIN
+          UPDATE user_notes 
+          SET is_sent = 'Y',
+              last_updated = SYSDATE
+          WHERE id = l_reminder_id 
+          AND user_id = :APP_USER;
+          
+          IF SQL%ROWCOUNT > 0 THEN
+              apex_json.open_object;
+              apex_json.write('status', 'success');
+              apex_json.write('message', 'تم تحديث حالة التنبيه');
+              apex_json.close_object;
+          ELSE
+              apex_json.open_object;
+              apex_json.write('status', 'error');
+              apex_json.write('message', 'لم يتم العثور على التنبيه');
+              apex_json.close_object;
+          END IF;
+      END;
+      
+
+  execution: 
+    sequence: 20
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: GET_PENDING_REMINDERS ======================
+  id: 1308187886129440
+  identification: 
+    name: GET_PENDING_REMINDERS
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      BEGIN
+          apex_json.open_object;
+          apex_json.open_array('items');
+      
+          FOR r IN (
+              SELECT id, note_title, note_details, importance_level
+              FROM user_notes
+              WHERE user_id = :APP_USER
+              AND reminder_datetime - (NVL(pre_reminder_mins,0)/1440) <= SYSDATE  -- حان وقت التنبيه
+              AND reminder_datetime >= SYSDATE - 1/24  -- الموعد لم ينتهِ تماماً (آخر ساعة)
+              AND rownum <= 10
+          )
+          LOOP
+              apex_json.open_object;
+              apex_json.write('ID', r.id);
+              apex_json.write('NOTE_TITLE', r.note_title);
+              apex_json.write('NOTE_DETAILS', r.note_details);
+              apex_json.write('IMPORTANCE_LEVEL', r.importance_level);
+              apex_json.close_object;
+          END LOOP;
+      
+          apex_json.close_array;
+          apex_json.close_object;
+      END;
+      
+
+  execution: 
+    sequence: 30
+    point: Ajax Callback
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: CLEANUP_EXPIRED_REMINDERS ==================
+  id: 1308672951129445
+  identification: 
+    name: CLEANUP_EXPIRED_REMINDERS
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      BEGIN
+          CLEANUP_EXPIRED_REMINDERS;
+          
+          apex_json.open_object;
+          apex_json.write('status', 'success');
+          apex_json.write('deleted', SQL%ROWCOUNT || ' تنبيه منتهي');
+          apex_json.close_object;
+      END;
+      
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Get_User_Role ==============================
+  id: 7557293784892853
+  identification: 
+    name: Get_User_Role
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      SELECT role_static_id
+        INTO :P32_ROLE
+        FROM apex_appl_acl_user_roles
+       WHERE application_id = :APP_ID
+         AND user_name = :APP_USER
+       FETCH FIRST 1 ROW ONLY; -- Sécurité si l'utilisateur a plusieurs rôles
+
+  execution: 
+    sequence: 20
+    point: Before Regions
+    run-process: Once Per Page Visit (default)
+

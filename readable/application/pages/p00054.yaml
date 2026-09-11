@@ -1,0 +1,1094 @@
+---
+# ====== Page: imprim_Congé ==================================
+id: 54
+identification: 
+  name: imprim_Congé
+  alias: IMPRIM-CONGÉ
+  title: imprim_Congé
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Modal Dialog
+  template-options: 
+  - '#DEFAULT#'
+  - ui-dialog--stretch
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: true
+  list: Do not show Navigation Menu List
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  function-and-global-variable-declaration: |
+    function saveAndPrint() {
+    
+        apex.server.process(
+            "SAVE_CONGE",
+            {
+                pageItems:
+                    "#P47_MATRICULE," +
+                    "#P47_NOM_PRENOM," +
+                    "#P47_SERVICE," +
+                    "#P47_FONCTION," +
+                    "#P47_TYPE_CONGE," +
+                    "#P47_NBR_JOURS," +
+                    "#P47_NBR_FERIES," +
+                    "#P47_DATE_DEBUT," +
+                    "#P47_DATE_FIN," +
+                    "#P47_SOLDE_AVANT," +
+                    "#P47_SOLDE_APRES," +
+                    "#P47_ADRESSE_CONGE," +
+                    "#P47_TELEPHONE"
+            },
+            {
+    
+                dataType: "text",
+    
+                success: function(pData) {
+    
+                    if (pData.trim() === "success") {
+    
+                        printRegion('formulaire-a4');
+    
+                    } else {
+    
+                        alert(pData);
+    
+                    }
+                },
+    
+                error: function(xhr, status, error) {
+    
+                    console.log(xhr.responseText);
+    
+                    alert("Erreur : " + error);
+    
+                }
+            }
+        );
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: TITRE =======================================
+  id: 54575413518515353
+  identification: 
+    name: TITRE
+    type: Contenu statique
+
+  source: 
+    html-code: |
+      <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: "Times New Roman", serif; background: #f0f0f0; }
+        .a4 {
+      
+                  width: 210mm;
+                  min-height: 297mm;
+                  background: white;
+                  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                  margin-bottom: 20px;
+                  padding: 15mm;
+                  position: relative;
+             
+      
+      
+       
+          
+          border: 3px double #000;
+          direction: rtl;
+        }
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 8mm;
+        }
+        .header-date { text-align: right; font-size: 13pt; font-weight: bold; min-width: 120px; }
+        .header-org  { text-align: left; font-size: 13pt; font-weight: bold; line-height: 1.5; }
+        .titre {
+          text-align: center;
+          font-size: 22pt;
+          font-style: italic;
+          text-decoration: underline;
+          font-weight: bold;
+          margin-bottom: 6mm;
+        }
+        .checkboxes {
+          display: flex;
+          justify-content: space-around;
+          direction: rtl;
+          font-size: 12pt;
+          font-weight: bold;
+          /*border: 1px solid #000;*/
+          padding: 4pt 6pt;
+          margin-bottom: 5mm;
+        }
+        .checkboxes span { white-space: nowrap; }
+        .main-table {
+          width: 800px;
+          align:center;
+          border-collapse: collapse;
+          font-size: 13pt;
+          font-weight: bold;
+          direction: rtl;
+        }
+        .main-table td { padding: 12pt 14pt; vertical-align: middle; }
+        .lbl { text-align: right; white-space: nowrap; width: 25%; }
+        .val { text-align: right;  min-width: 120px; }
+         .val2 { text-align: right;  min-width: 120px;  direction: ltr; }
+        .sep { width: 30mm; }
+        .footer-sign {
+          margin-top: 20mm;
+          display: flex;
+          justify-content: space-between;
+          direction: rtl;
+          font-size: 13pt;
+          font-weight: bold;
+        }
+        .print-btn {
+          margin: 15px auto;
+          display: block;
+          padding: 10px 25px;
+          background: #007BFF;
+          color: #fff;
+          border: none;
+          cursor: pointer;
+          font-size: 15px;
+          border-radius: 5px;
+        }
+        @media print {
+          body { background: #fff; }
+          .print-btn { display: none; }
+          .a4 { margin: 0; border: 3px double #000; }
+        }
+      </style>
+      
+      <script>
+      function printRegion(regionId) {
+        var content = document.getElementById(regionId).innerHTML;
+        var printWindow = window.open('', '', 'height=900,width=700');
+        printWindow.document.write(
+          '<html><head><title>طباعة</title>' +
+          '<style>' +
+          '* { box-sizing:border-box; margin:0; padding:0; }' +
+          'body { font-family:"Times New Roman",serif; direction:rtl; }' +
+          '.a4 { width:190mm; min-height:270mm; padding:15mm; border:3px double #000;  margin-bottom: 15px; position: relative; }' +
+          '.header { display:flex; justify-content:space-between; margin-bottom:8mm; }' +
+          '.header-org { text-align:right; font-size:13pt; font-weight:bold; line-height:1.5; }' +
+          '.header-date { text-align:right; font-size:13pt; font-weight:bold; }' +
+          '.titre { text-align:center; font-size:22pt; font-style:italic; text-decoration:underline; font-weight:bold; margin-bottom:6mm; }' +
+          '.checkboxes { display:flex; justify-content:space-around; direction:rtl; font-size:12pt; font-weight:bold;  padding:4pt 6pt; margin-bottom:5mm; }' +
+          '.main-table { width:170mm; align:center; border-collapse:collapse; font-size:13pt; font-weight:bold; direction:rtl; }' +
+          '.main-table td { padding:12pt 14pt; vertical-align:middle; }' +
+          '.lbl { text-align:right; white-space:nowrap; width:20%; }' +
+          '.val { text-align:right;  min-width:120px; }' +
+          '.val2 { text-align:right;  min-width:120px; direction: ltr; }' +
+          '.sep { width:20mm; }' +
+          '.footer-sign { margin-top:20mm; display:flex; justify-content:space-between; direction:rtl; font-size:13pt; font-weight:bold; }' +
+          '</style>' +
+          '</head><body><div class="a4">' + content + '</div></body></html>'
+        );
+        printWindow.document.close();
+        printWindow.print();
+      }
+      
+      </script>
+      
+      <div id="formulaire-a4" class="a4">
+      
+        <!-- EN-TÊT -->
+        <div class="header">
+          <div class="header-org">
+            <div>المجمع الكيميائي التونسي</div>
+            <div>الإدارة الجهوية للمعامل بقابس</div>
+          </div>
+          <div class="header-date">
+            <div style="font-size:13pt; font-weight:bold;">
+              قابس في : <span data-field="date">...</span>
+            </div>
+          </div>
+        </div>
+      
+        <div class="checkboxes"></div>
+        <div class="checkboxes"></div>
+      
+        <!-- TITRE -->
+        <div class="titre">مطلب إجازة</div>
+      
+        <div class="checkboxes"></div>
+        <div class="checkboxes"></div>
+      
+        <!-- CASES À COCHER -->
+        <div class="checkboxes">
+          <span><span data-field="type1">☐</span> &nbsp; خالصة الأجر</span>
+          <span><span data-field="type2">☐</span> &nbsp; غير خالصة الأجر</span>
+          <span><span data-field="type3">☐</span> &nbsp; لأسباب عائلية</span>
+          <span><span data-field="type4">☐</span> &nbsp; مرخص فيها</span>
+          <span><span data-field="type5">☐</span> &nbsp; تعويض</span>
+          </div>
+      
+        <div class="checkboxes"></div>
+        <div class="checkboxes"></div>
+      
+        <!-- TABLEAU PRINCIPAL -->
+        <table class="main-table">
+          <tr>
+            <td class="lbl">الاسم و اللقب :</td>
+            <td class="val"><span data-field="user">...</span></td>
+            <td class="sep"></td>
+            <td class="lbl">الرقم الآلي :</td>
+            <td class="val"><span data-field="mat">...</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">المصلحة :</td>
+            <td class="val" colspan="2"><span data-field="service">...</span></td>
+            <td class="lbl">المهنة :</td>
+            <td class="val"><span data-field="fonction">...</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">عدد الأيام المطلوبة :</td>
+            <td class="val"><span data-field="nbr_jours">...</span></td>
+            <td class="sep"></td>
+            <td class="lbl" colspan="2">من ضمنها : ( <span data-field="nbr_feries">0</span> يوم) أعياد رسمية</td>
+          </tr>
+          <tr>
+            <td class="lbl">تاريخ بداية الإجازة :</td>
+            <td class="val2"><span data-field="date_debut">...</span></td>
+            <td class="sep"></td>
+            <td class="lbl">تاريخ الرجوع :</td>
+            <td class="val2"><span data-field="date_fin">...</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">الرصيد السابق :</td>
+            <td class="val"><span data-field="solde_avant">...</span></td>
+            <td class="sep"></td>
+            <td class="lbl">الرصيد الحالى :</td>
+            <td class="val"><span data-field="solde_apres">...</span></td>
+          </tr>
+          <tr>
+            <td class="lbl"colspan="2">العنوان أثناء الإجازة :<span data-field="adresse">...</span> قابس</td>
+            
+            <td class="sep"></td>
+            <td class="lbl">رقم الهاتف :</td>
+            <td class="val2" ><span data-field="tel">...</span></td>
+          </tr>
+        </table>
+      
+        <!-- SIGNATURES -->
+        <div class="footer-sign">
+          <span>إمضاء المعني بالأمر</span>
+          <span>إمضاء رئيس المصلحة</span>
+        </div>
+      
+      </div>
+      
+      <button type="button"
+              class="print-btn"
+              onclick="printRegion('formulaire-a4');">
+          🖨️ طباعة
+      </button>
+
+  layout: 
+    sequence: 53
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    static-id: formulairea4
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: Nouveau =====================================
+  id: 55747051459501217
+  identification: 
+    name: Nouveau
+    type: Panneau
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: T_CONGE
+    include-rowid-column: false
+
+  layout: 
+    sequence: 43
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: false
+
+page-items: 
+- # ====== Page Item: P54_MATRICULE ============================
+  id: 55748304013501232
+  identification: 
+    name: P54_MATRICULE
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 20
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: MATRICULE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Item
+    item: P0_MAT
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_CONGE_ID =============================
+  id: 55749152572501241
+  identification: 
+    name: P54_CONGE_ID
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 40
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: CONGE_ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_NOM_PRENOM ===========================
+  id: 55749260215501242
+  identification: 
+    name: P54_NOM_PRENOM
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 50
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: NOM_PRENOM
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Item
+    item: P0_USER
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_SERVICE ==============================
+  id: 55749423779501243
+  identification: 
+    name: P54_SERVICE
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 60
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: SERVICE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: الإقتناء المجمع للخدمات
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_FONCTION =============================
+  id: 55749524980501244
+  identification: 
+    name: P54_FONCTION
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 90
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: FONCTION
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select T_USER.FONCTION as FONC 
+       from T_USER T_USER
+       where MATRICULE = :P0_MAT
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_TYPE_CONGE ===========================
+  id: 55749563918501245
+  identification: 
+    name: P54_TYPE_CONGE
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 80
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: TYPE_CONGE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: SOLDE
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_NBR_JOURS ============================
+  id: 55749722720501246
+  identification: 
+    name: P54_NBR_JOURS
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 100
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: NBR_JOURS
+    data-type: NUMBER
+    query-only: true
+    primary-key: false
+
+  default: 
+    type: Expression
+    language: PL/SQL
+    pl/sql-expression: ':P54_DATE_FIN - :P54_DATE_DEBUT'
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_NBR_FERIES ===========================
+  id: 55749784098501247
+  identification: 
+    name: P54_NBR_FERIES
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 110
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: NBR_FERIES
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_DATE_DEBUT ===========================
+  id: 55749907128501248
+  identification: 
+    name: P54_DATE_DEBUT
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 120
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: DATE_DEBUT
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_DATE_FIN =============================
+  id: 55749963911501249
+  identification: 
+    name: P54_DATE_FIN
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 130
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: DATE_FIN
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_SOLDE_AVANT ==========================
+  id: 55750105318501250
+  identification: 
+    name: P54_SOLDE_AVANT
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 140
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: SOLDE_AVANT
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select SOLDE_CONGE.SOLDE as SOLDE 
+       from SOLDE_CONGE SOLDE_CONGE
+       where MATRICULE = :P0_MAT
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_SOLDE_APRES ==========================
+  id: 55750162658501251
+  identification: 
+    name: P54_SOLDE_APRES
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 150
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: SOLDE_APRES
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_ADRESSE_CONGE ========================
+  id: 55750273931501252
+  identification: 
+    name: P54_ADRESSE_CONGE
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 160
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: ADRESSE_CONGE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_TELEPHONE ============================
+  id: 55750434308501253
+  identification: 
+    name: P54_TELEPHONE
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 170
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: TELEPHONE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  default: 
+    type: SQL Query (return single value)
+    sql-query-(return-single-value): |
+      select T_USER.TEL as TEL 
+       from T_USER T_USER
+       where MATRICULE = :P0_MAT
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_DATE_DEMANDE =========================
+  id: 55750476601501254
+  identification: 
+    name: P54_DATE_DEMANDE
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 70
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: DATE_DEMANDE
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_STATUT ===============================
+  id: 55750605510501255
+  identification: 
+    name: P54_STATUT
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 180
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Nouveau # 55747051459501217
+    column: STATUT
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P54_NEW ==================================
+  id: 57732034072803041
+  identification: 
+    name: P54_NEW
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 190
+    region: Nouveau # 55747051459501217
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+dynamic-actions: 
+- # ====== Dynamic Action: Nouveau_3 ===========================
+  id: 20923660008270736
+  identification: 
+    name: Nouveau_3
+
+  execution: 
+    sequence: 21
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Exécuter le code JavaScript =================
+    id: 20924159630270737
+    identification: 
+      action: Exécuter le code JavaScript
+
+    settings: 
+      code: |
+        function majTitre() {
+            var t = $('#formulaire-a4');
+            
+            // Récupération sécurisée des valeurs simples
+            t.find('[data-field="date"]').text(apex.item('P54_DATE_DEMANDE').getValue() || '...');
+            t.find('[data-field="user"]').text(apex.item('P0_USER').getValue() || '...');
+            t.find('[data-field="mat"]').text(apex.item('P0_MAT').getValue() || '...');
+            t.find('[data-field="service"]').text(apex.item('P54_SERVICE').getValue() || '...');
+            t.find('[data-field="fonction"]').text(apex.item('P54_FONCTION').getValue() || '...');
+            t.find('[data-field="nbr_jours"]').text(apex.item('P54_NBR_JOURS').getValue() || '...');
+            t.find('[data-field="nbr_feries"]').text(apex.item('P54_NBR_FERIES').getValue() || '0');
+            t.find('[data-field="date_debut"]').text(apex.item('P54_DATE_DEBUT').getValue() || '...');
+            t.find('[data-field="date_fin"]').text(apex.item('P54_DATE_FIN').getValue() || '...');
+            t.find('[data-field="solde_avant"]').text(apex.item('P54_SOLDE_AVANT').getValue() || '...');
+            t.find('[data-field="solde_apres"]').text(apex.item('P54_SOLDE_APRES').getValue() || '...');
+            t.find('[data-field="adresse"]').text(apex.item('P54_ADRESSE_CONGE').getValue() || '...');
+            t.find('[data-field="tel"]').text(apex.item('P54_TELEPHONE').getValue() || '...');
+        
+            // RÉPARATION DU PROBLÈME DE TYPE_CONGE
+            var rawType = apex.item('P54_TYPE_CONGE').getValue();
+            var values = [];
+        
+            // On s'assure que values soit toujours un tableau, peu importe ce qu'APEX renvoie
+            if (Array.isArray(rawType)) {
+                values = rawType;
+            } else if (typeof rawType === 'string' && rawType !== "") {
+                values = rawType.split(':'); // Séparateur défini dans l'appli
+            }
+        
+            if (t.length > 0) {
+                // Utilisation de .indexOf pour la compatibilité ou .includes
+                t.find('[data-field="type1"]').html(values.indexOf('SOLDE')        !== -1 ? '☑' : '☐');
+                t.find('[data-field="type2"]').html(values.indexOf('NON_SOLDE')    !== -1 ? '☑' : '☐');
+                t.find('[data-field="type3"]').html(values.indexOf('FAMILIAL')     !== -1 ? '☑' : '☐');
+                t.find('[data-field="type4"]').html(values.indexOf('AUTORISE')     !== -1 ? '☑' : '☐');
+                t.find('[data-field="type5"]').html(values.indexOf('COMPENSATION') !== -1 ? '☑' : '☐');
+            }
+        }
+        
+        majTitre();
+
+    execution: 
+      sequence: 10
+      event: Nouveau_3 # 20923660008270736
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+processes: 
+- # ====== Process: Initialiser le panneau heur ================
+  id: 20918718421270721
+  identification: 
+    name: Initialiser le panneau heur
+    type: Panneau - Initialisation
+    execution-chain: None
+    form-region: Nouveau # 55747051459501217
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: close ======================================
+  id: 20921452345270734
+  identification: 
+    name: close
+    type: Fermer la boîte de dialogue
+    execution-chain: None
+
+  settings: 
+    afficher-les-messages-de-succès: true
+
+  execution: 
+    sequence: 10
+    point: After Submit
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

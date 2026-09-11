@@ -1,0 +1,90 @@
+---
+- # ====== Authentication: Copy of Comptes de base de données ==
+  id: 16536706121270218
+  identification: 
+    name: Copy of Comptes de base de données
+
+  subscription: 
+    version-number: 114999381
+
+  settings: 
+    type: Comptes de base de données
+
+  session-not-valid: 
+    redirect-to: Login Page
+
+  login-processing: 
+    post-authentication-procedure-name: "SELECT GROUPE    INTO :G_USER_GROUP   FROM T_USER  WHERE MATRICULE = :APP_USER; -- On suppose que l'utilisateur se connecte avec son matricule"
+    switch-in-session: false
+
+  real-application-security: 
+    ras-mode: Disabled
+
+- # ====== Authentication: F_LIBRERY ===========================
+  id: 16583078664363307
+  identification: 
+    name: F_LIBRERY
+
+  subscription: 
+    version-number: 115078314
+
+  settings: 
+    type: Personnalisation
+    nom-de-fonction-d'authentification: LIBRARY_F
+    activer-les-attributs-d'authentification-hérités: false
+
+  session-not-valid: 
+    redirect-to: Login Page
+
+  login-processing: 
+    switch-in-session: false
+
+  real-application-security: 
+    ras-mode: Disabled
+
+- # ====== Authentication: Custom Login T_USER =================
+  id: 17246660092246593
+  identification: 
+    name: Custom Login T_USER
+
+  subscription: 
+    version-number: 121440983
+
+  settings: 
+    type: Personnalisation
+    nom-de-fonction-d'authentification: f_authenticate_user
+    activer-les-attributs-d'authentification-hérités: false
+
+  session-not-valid: 
+    redirect-to: Login Page
+
+  login-processing: 
+    post-authentication-procedure-name: p_post_auth
+    switch-in-session: true
+
+  real-application-security: 
+    ras-mode: Disabled
+
+- # ====== Authentication: Comptes de base de données ==========
+  id: 74584700431494929123
+  identification: 
+    name: Comptes de base de données
+
+  subscription: 
+    master: 
+      referenced-id: 44322717263667374068
+
+  settings: 
+    type: Personnalisation
+    nom-de-fonction-d'authentification: LIBRARY_F
+    activer-les-attributs-d'authentification-hérités: false
+
+  session-not-valid: 
+    redirect-to: Login Page
+
+  login-processing: 
+    switch-in-session: false
+
+  real-application-security: 
+    ras-mode: Disabled
+

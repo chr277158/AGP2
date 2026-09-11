@@ -1,0 +1,4698 @@
+---
+# ====== Page: Cc ============================================
+id: 4
+identification: 
+  name: Cc
+  alias: CC1
+  title: Cc
+
+appearance: 
+  page-mode: Modal Dialog
+  dialog-template: Theme Default
+  template-options: 
+  - '#DEFAULT#'
+
+dialog: 
+  chained: true
+  resizable: true
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: true
+
+javascript: 
+  file-urls: 
+  - '#APP_FILES#jquery.maskedinput.min.js'
+  execute-when-page-loads: |
+    $("#P4_REF_AO").mask("A#.##.#.####");
+    //$("#P4_BUDGET").mask("## ###.###,###")
+    //$("#P4_BUDGET").mask("FML999G999G999G999G990D00");
+
+css: 
+  inline: |
+    @media print {
+        /* 1. Masquer toute la barre de boutons du bas (Annuler, Imprimer, etc.) */
+        .t-Dialog-footer, .t-ButtonRegion {
+            display: none !important;
+        }
+    
+        /* 2. (Sécurité) Masquer spécifiquement les boutons par leur classe générique APEX */
+        button.t-Button, .t-Button {
+            display: none !important;
+        }
+        
+        /* 3. Masquer les éléments de navigation et de debug */
+        .t-Header, .t-Footer, .apex-debug-bar, .t-Body-nav {
+            display: none !important;
+        }
+    
+        /* 4. Afficher le titre personnalisé */
+        body::before {
+            content: attr(data-page-title);
+            display: block;
+            text-align: center;
+            font-size: 24pt;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            width: 100%;
+        }
+        
+        /* 5. Réinitialiser les marges et l'affichage pour l'impression */
+        body, .t-Dialog-page {
+            background: white !important;
+            margin: 0 !important;
+            overflow: visible !important;
+        }
+    }
+    
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: Off
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: Yes - Enable page to be re-posted
+  reload-on-submit: Only for Success
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Statut ======================================
+  id: 11248901627437160
+  identification: 
+    name: Statut
+    type: Contenu statique
+
+  layout: 
+    sequence: 40
+    parent-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    row-css-classes: 
+    - u-color-21-bg
+    - u-color-21-text
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    column-css-classes: 
+    - u-color-20-bg
+    - u-color-21-text
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    css-classes: 
+    - u-color-22-bg
+    - u-color-0-text
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: New =========================================
+  id: 36812703147425151
+  identification: 
+    name: New
+    title: Demande de clarification des prestataires
+    type: Contenu statique
+
+  layout: 
+    sequence: 180
+    parent-region: ' تحيين المعطيات' # 90709273647946911
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: rem =========================================
+  id: 79150944245392130
+  identification: 
+    name: rem
+    title: 'ملاحظات '
+    type: Contenu statique
+
+  layout: 
+    sequence: 190
+    parent-region: Dates # 143172088021832427488
+    slot: SUB_REGIONS
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region:  تحيين المعطيات =============================
+  id: 90709273647946911
+  identification: 
+    name: ' تحيين المعطيات'
+    title: ' '
+    type: Panneau
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: SP
+    include-rowid-column: false
+
+  layout: 
+    sequence: 60
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: معلومات أساسية عن الصفقة  ===================
+  id: 143172087682992427485
+  identification: 
+    name: 'معلومات أساسية عن الصفقة '
+    type: Contenu statique
+
+  layout: 
+    sequence: 60
+    parent-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: true
+
+- # ====== Region: Fichiers de lancement =======================
+  id: 143172087764536427486
+  identification: 
+    name: Fichiers de lancement
+    type: Panneau
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: FICHIER_LNCEMENT
+    include-rowid-column: false
+
+  layout: 
+    sequence: 120
+    parent-region: 'معلومات أساسية عن الصفقة ' # 143172087682992427485
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: false
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Dates =======================================
+  id: 143172088021832427488
+  identification: 
+    name: Dates
+    type: Contenu statique
+
+  layout: 
+    sequence: 70
+    parent-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--scrollBody
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: HTML
+      développer-les-raccourcis: false
+
+- # ====== Region: APPEL D’OFFFRES  ============================
+  id: 147246497468263709741
+  identification: 
+    name: 'APPEL D’OFFFRES '
+    type: Panneau
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: CC
+    include-rowid-column: false
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: false
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    edit: 
+      enabled: true
+      allowed-operations: 
+      - Add Row
+      - Update Row
+      - Delete Row
+      lost-update-type: Row Values
+
+- # ====== Region: Boutons =====================================
+  id: 147246514675276709826
+  identification: 
+    name: Boutons
+    type: Contenu statique
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_03
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Buttons Container
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      sortie-au-format: Texte (caractères spéciaux d'échappement)
+      afficher-les-sauts-de-ligne: true
+
+page-items: 
+- # ====== Page Item: P4_CAUTION_P =============================
+  id: 2658242753412579
+  identification: 
+    name: P4_CAUTION_P
+    type: Changer
+
+  label: 
+    label: Caution Provisoire
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 230
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: CAUTION_P
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_PV_CCT ================================
+  id: 4362071255992747
+  identification: 
+    name: P4_PV_CCT
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 80
+    region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: PV_CCT
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_PROGRAMME_OUVERTURE_DE_PLIS_1 =========
+  id: 4362269626992748
+  identification: 
+    name: P4_PROGRAMME_OUVERTURE_DE_PLIS_1
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 90
+    region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: PROGRAMME_OUVERTURE_DE_PLIS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_CREER_PAR =============================
+  id: 4362300052992749
+  identification: 
+    name: P4_CREER_PAR
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 100
+    region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: CREER_PAR
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_CRÉATION =========================
+  id: 4362452567992750
+  identification: 
+    name: P4_DATE_CRÉATION
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 110
+    region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: DATE_CRÉATION
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_PROGRAMME_DE_LANCEMENT ================
+  id: 4362512102992751
+  identification: 
+    name: P4_PROGRAMME_DE_LANCEMENT
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 120
+    region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: PROGRAMME_DE_LANCEMENT
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_STATUS ================================
+  id: 6888040403581815
+  identification: 
+    name: P4_STATUS
+    type: Groupe de boutons d'option
+
+  label: 
+    label: Statut
+    alignment: Left
+
+  settings: 
+    nombre-de-colonnes: 1
+    action-de-page-lors-de-la-sélection: Aucun
+
+  layout: 
+    sequence: 50
+    region: Statut # 11248901627437160
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+    column-css-classes: 
+    - '--ut-palette-warning-contrast'
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC2:هذا الملف تمت معالجته  و إرجاع الضمانات الوقتية الرجاء تحديد حالة الملف;4,مثمر;5,غير مثمر;6'
+    display-extra-values: true
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: STATUS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    authorization-scheme: Droits de contribution # 74585100534688929216
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    escape-special-characters: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_ID_2 ==================================
+  id: 19694644910023399
+  identification: 
+    name: P4_ID_2
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 10
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_ID_CC =================================
+  id: 19694738209023400
+  identification: 
+    name: P4_ID_CC
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 20
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: ID_CC
+    data-type: NUMBER
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_PROPOSITION_COMMISSION ================
+  id: 19694828147023401
+  identification: 
+    name: P4_PROPOSITION_COMMISSION
+    type: Changer
+
+  label: 
+    label: Proposition Commission
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 30
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: PROPOSITION_COMMISSION
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_PROPOSITION ======================
+  id: 19694892143023402
+  identification: 
+    name: P4_DATE_PROPOSITION
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 40
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DATE_PROPOSITION
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_CC_POUR_LANCEMENT =====================
+  id: 19695041821023403
+  identification: 
+    name: P4_CC_POUR_LANCEMENT
+    type: Changer
+
+  label: 
+    label: CC Pour Lancement
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 120
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: CC_POUR_LANCEMENT
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_CC ===============================
+  id: 19695152044023404
+  identification: 
+    name: P4_DATE_CC
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 60
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DATE_CC
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_CRITERES_EVALUATION ===================
+  id: 19695227535023405
+  identification: 
+    name: P4_CRITERES_EVALUATION
+    type: Changer
+
+  label: 
+    label: Criteres Evaluation
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 70
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: CRITERES_EVALUATION
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_CRITERES =========================
+  id: 19695344237023406
+  identification: 
+    name: P4_DATE_CRITERES
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 130
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DATE_CRITERES
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_AVIS_DE_PRESSE ========================
+  id: 19695375660023407
+  identification: 
+    name: P4_AVIS_DE_PRESSE
+    type: Changer
+
+  label: 
+    label: Avis De Presse
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 110
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: AVIS_DE_PRESSE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_AVIS81 ===========================
+  id: 19695494744023408
+  identification: 
+    name: P4_DATE_AVIS81
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 140
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DATE_AVIS
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DESIGNATION_DE_LA_COMMISSION ==========
+  id: 19695665992023409
+  identification: 
+    name: P4_DESIGNATION_DE_LA_COMMISSION
+    type: Changer
+
+  label: 
+    label: Designation De La Commission
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 80
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DESIGNATION_DE_LA_COMMISSION
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_DESIGNATION ======================
+  id: 19695749380023410
+  identification: 
+    name: P4_DATE_DESIGNATION
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 150
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DATE_DESIGNATION
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_PROGRAM_LANC ==========================
+  id: 19695851096023411
+  identification: 
+    name: P4_PROGRAM_LANC
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 90
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: PROGRAM_LANC
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_PROGRAM_LANC =====================
+  id: 19695968709023412
+  identification: 
+    name: P4_DATE_PROGRAM_LANC
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 160
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DATE_PROGRAM_LANC
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_MAIL_PRESTATAIRE ======================
+  id: 19696013487023413
+  identification: 
+    name: P4_MAIL_PRESTATAIRE
+    type: Changer
+
+  label: 
+    label: Mail Prestataire
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 170
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: MAIL_PRESTATAIRE
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_MAIL =============================
+  id: 19696140635023414
+  identification: 
+    name: P4_DATE_MAIL
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 180
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DATE_MAIL
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_PROGRAMME_OUVERTURE_DE_PLIS ===========
+  id: 19696219996023415
+  identification: 
+    name: P4_PROGRAMME_OUVERTURE_DE_PLIS
+    type: Changer
+
+  label: 
+    label: Programe De lancemnt
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 100
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: PROGRAMME_OUVERTURE_DE_PLIS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_PROGRAM_OUVERTURE ================
+  id: 19696343990023416
+  identification: 
+    name: P4_DATE_PROGRAM_OUVERTURE
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 200
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DATE_PROGRAM_OUVERTURE
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_NOTE_OUVERTURE_PLIS ===================
+  id: 19696455926023417
+  identification: 
+    name: P4_NOTE_OUVERTURE_PLIS
+    type: Changer
+
+  label: 
+    label: Note Ouverture Plis
+    alignment: Left
+
+  settings: 
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 210
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: NOTE_OUVERTURE_PLIS
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_NOTE_OP ==========================
+  id: 19696495783023418
+  identification: 
+    name: P4_DATE_NOTE_OP
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 220
+    region: Fichiers de lancement # 143172087764536427486
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: Fichiers de lancement # 143172087764536427486
+    column: DATE_NOTE_OP
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_NEW_NTB ===============================
+  id: 37164915394163194
+  identification: 
+    name: P4_NEW_NTB
+    type: Sélecteur de date
+
+  label: 
+    label: تاريخ ارجاع كراسات الشروط حسب المحضر
+    alignment: Left
+
+  settings: 
+    afficher-l'heure: false
+    afficher-en-tant-que: Fenêtre instantanée
+    date-minimale: Aucun
+    date-maximale: Aucun
+    plusieurs-mois: Non
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 40
+    region: Dates # 143172088021832427488
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_ID_1 ==================================
+  id: 50381673282946873
+  identification: 
+    name: P4_ID_1
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: ' تحيين المعطيات' # 90709273647946911
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: ID
+    data-type: NUMBER
+    query-only: true
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_ارسال_مقترح_تركيبة_لجنة_التقييم =
+  id: 50416327699195032
+  identification: 
+    name: P4_تاريخ_ارسال_مقترح_تركيبة_لجنة_التقييم
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 100
+    region: ' تحيين المعطيات' # 90709273647946911
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_ارسال_مقترح_تركيبة_لجنة_التقييم
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر ==
+  id: 50416810485195037
+  identification: 
+    name: P4_تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 130
+    region: ' تحيين المعطيات' # 90709273647946911
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_ارجاع_كراسات_الشروط_حسب_المحضر
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_امضاء_تقرير_تقييم_العروض ========
+  id: 50417330530195042
+  identification: 
+    name: P4_تاريخ_امضاء_تقرير_تقييم_العروض
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 140
+    region: ' تحيين المعطيات' # 90709273647946911
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_امضاء_تقرير_تقييم_العروض
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_تقديم_الملف_للجنة_الشراءات ======
+  id: 50417357994195043
+  identification: 
+    name: P4_تاريخ_تقديم_الملف_للجنة_الشراءات
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 150
+    region: ' تحيين المعطيات' # 90709273647946911
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_تقديم_الملف_للجنة_الشراءات
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_تبليغ_الصفقة ====================
+  id: 50417822571195047
+  identification: 
+    name: P4_تاريخ_تبليغ_الصفقة
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 170
+    region: ' تحيين المعطيات' # 90709273647946911
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_تبليغ_الصفقة
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_المكلف_بالملف =========================
+  id: 50417981873195049
+  identification: 
+    name: P4_المكلف_بالملف
+    type: Liste SELECT
+
+  label: 
+    label: المكلف بالملف
+    alignment: Left
+
+  settings: 
+    action-de-page-lors-de-la-sélection: Aucun
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 190
+    region: ' تحيين المعطيات' # 90709273647946911
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: 5
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+    column-attributes: 
+    - null
+    - align="center"
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: SQL Query
+    sql-query: |
+      select T_USER.NOM as NOM,
+      T_USER.NOM as N
+       from T_USER 
+      
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: المكلف_بالملف
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_طريقة_ابرام_الصفقة ====================
+  id: 50434890647195047
+  identification: 
+    name: P4_طريقة_ابرام_الصفقة
+    type: Liste SELECT
+
+  label: 
+    label: طريقة ابرام الصفقة
+    alignment: Left
+
+  settings: 
+    action-de-page-lors-de-la-sélection: Aucun
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 100
+    region: 'معلومات أساسية عن الصفقة ' # 143172087682992427485
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:استشارة مفتوحة;استشارة مفتوحة,استشارة مضيقة;استشارة مضيقة,طلب عروض مفتوح;طلب عروض مفتوح,استشارة بالتفاوض المباشر;استشارة بالتفاوض المباشر'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: طريقة_ابرام_الصفقة
+    data-type: VARCHAR2
+    query-only: true
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_نوعية_الطلب ===========================
+  id: 50435082214195049
+  identification: 
+    name: P4_نوعية_الطلب
+    type: Liste SELECT
+
+  label: 
+    label: نوعية الطلب
+    alignment: Left
+
+  settings: 
+    action-de-page-lors-de-la-sélection: Aucun
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 90
+    region: 'معلومات أساسية عن الصفقة ' # 143172087682992427485
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Exploitation;Exploitation,Étude;Étude'
+    display-extra-values: false
+    display-null-value: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: نوعية_الطلب
+    data-type: VARCHAR2
+    query-only: true
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_اللجنة_المختصة ========================
+  id: 50435231926195050
+  identification: 
+    name: P4_اللجنة_المختصة
+    type: Liste SELECT
+
+  label: 
+    label: اللجنة المختصة
+    alignment: Left
+
+  settings: 
+    action-de-page-lors-de-la-sélection: Aucun
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 110
+    region: 'معلومات أساسية عن الصفقة ' # 143172087682992427485
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:CRA;CRA,CME;CME,CAE;CAE,CSM;CSM'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: اللجنة_المختصة
+    data-type: VARCHAR2
+    query-only: true
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_ورود_CPT_ممضاة ==================
+  id: 50465327104195065
+  identification: 
+    name: P4_تاريخ_ورود_CPT_ممضاة
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 20
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_ورود_CPT_ممضاة
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_ورود_تعيين_تركيبة_لجنة_التقييم ==
+  id: 50465544044195067
+  identification: 
+    name: P4_تاريخ_ورود_تعيين_تركيبة_لجنة_التقييم
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 50
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_ورود_تعيين_تركيبة_لجنة_التقييم
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_تقديم_كراسات_الشروط_للمصادقة ====
+  id: 50465600752195068
+  identification: 
+    name: P4_تاريخ_تقديم_كراسات_الشروط_للمصادقة
+    type: Sélecteur de date
+
+  label: 
+    label: تاريخ_تقديم_كراسات_الشروط_للمصادقة
+    alignment: Left
+
+  settings: 
+    afficher-l'heure: false
+    afficher-en-tant-que: Fenêtre instantanée
+    date-minimale: Aucun
+    date-maximale: Aucun
+    plusieurs-mois: Non
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 30
+    region: Dates # 143172088021832427488
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_تقديم_كراسات_الشروط_للمصادقة
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_ACORD =================================
+  id: 50465738836195069
+  identification: 
+    name: P4_ACORD
+    type: Sélecteur de date
+
+  label: 
+    label: تاريخ مصادقة اللجنة على كراسات الشروط
+    alignment: Left
+
+  settings: 
+    afficher-l'heure: false
+    afficher-en-tant-que: Fenêtre instantanée
+    date-minimale: Aucun
+    date-maximale: Aucun
+    plusieurs-mois: Non
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 60
+    region: Dates # 143172088021832427488
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form-fieldContainer--preTextBlock
+    - t-Form-fieldContainer--postTextBlock
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_مصادقة_اللجنة_على_كراسات_الشروط
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسا
+  id: 50465859803195070
+  identification: 
+    name: P4_تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 70
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسا
+  id: 50466015092195072
+  identification: 
+    name: P4_تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط2
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 80
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_ورود_محضر_مصادقة_اللجنة_على_كراسات_الشروط2
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_LC ===============================
+  id: 50466138684195073
+  identification: 
+    name: P4_DATE_LC
+    type: Sélecteur de date
+
+  label: 
+    label: التاريخ الإعلان عن المنافسة
+    alignment: Left
+
+  settings: 
+    afficher-l'heure: false
+    afficher-en-tant-que: Fenêtre instantanée
+    date-minimale: Aucun
+    date-maximale: Aucun
+    plusieurs-mois: Non
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 90
+    region: Dates # 143172088021832427488
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: التاريخ__للإعلان_عن_المنافسة
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_ارسال_التقرير_للتقييم_الفني =====
+  id: 50466277890195075
+  identification: 
+    name: P4_تاريخ_ارسال_التقرير_للتقييم_الفني
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 140
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_ارسال_التقرير_للتقييم_الفني
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ__لجنة_الصفقات ===================
+  id: 50466601641195078
+  identification: 
+    name: P4_تاريخ__لجنة_الصفقات
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 150
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ__لجنة_الصفقات
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DECISION ==============================
+  id: 50466741127195079
+  identification: 
+    name: P4_DECISION
+    type: Sélecteur de date
+
+  label: 
+    label: تاريخ قرار لجنة الصفقات
+    alignment: Left
+
+  settings: 
+    afficher-l'heure: false
+    afficher-en-tant-que: Fenêtre instantanée
+    date-minimale: Aucun
+    date-maximale: Aucun
+    plusieurs-mois: Non
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 160
+    region: Dates # 143172088021832427488
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: 6
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form-fieldContainer--preTextBlock
+    - t-Form-fieldContainer--postTextBlock
+    width: 30
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_قرار__لجنة_الصفقات
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_نشر_نتائج_المنافسة ==============
+  id: 50466769668195080
+  identification: 
+    name: P4_تاريخ_نشر_نتائج_المنافسة
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 170
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_نشر_نتائج_المنافسة
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_تاريخ_ارجاع_الضمانات_الوقتية ==========
+  id: 50466982821195082
+  identification: 
+    name: P4_تاريخ_ارجاع_الضمانات_الوقتية
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 180
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: ' تحيين المعطيات' # 90709273647946911
+    column: تاريخ_ارجاع_الضمانات_الوقتية
+    data-type: DATE
+    query-only: true
+    primary-key: false
+
+  default: 
+    type: Static
+    static-value: '&P4_تاريخ_قرار__لجنة_الصفقات. + 120'
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    authorization-scheme: Droits d'administration # 74585100381861929216
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_NB ====================================
+  id: 50489399635278167
+  identification: 
+    name: P4_NB
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 2
+    region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: REF_AO
+    data-type: VARCHAR2
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_BUDGET ================================
+  id: 50857505789785244
+  identification: 
+    name: P4_BUDGET
+    type: Champ de texte
+
+  label: 
+    label: 'التكلفة التقديرية '
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 40
+    region: 'معلومات أساسية عن الصفقة ' # 143172087682992427485
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: FML999G999G999G999G990D999
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 50
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: BUDGET
+    data-type: VARCHAR2
+    query-only: true
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_NEW_2 =================================
+  id: 79277826667392274
+  identification: 
+    name: P4_NEW_2
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 3
+    region: rem # 79150944245392130
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: SQL Query (return single value)
+    sql-query: |
+      select count(*)
+       from REMARQUE REMARQUE 
+       where REMARQUE.REF_DOS = :P4_NB
+    used: Always, replacing any existing value in session state
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_REM ===================================
+  id: 79278103259392277
+  identification: 
+    name: P4_REM
+    type: Afficher uniquement
+
+  label: 
+    label: لا توجد ملاحظات في هذا الملف حاليا
+    alignment: Left
+
+  settings: 
+    format: Texte brut
+    basé-sur: Valeur d'élément
+    afficher-les-sauts-de-ligne: true
+    envoyer-lors-de-la-soumission-de-la-page: true
+
+  layout: 
+    sequence: 30
+    region: rem # 79150944245392130
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: 1
+    new-column: true
+    column-span: 7
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_ID ====================================
+  id: 35010368693439685239
+  identification: 
+    name: P4_ID
+    type: Masqué
+
+  settings: 
+    valeur-protégée: true
+
+  layout: 
+    sequence: 10
+    region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: ID
+    data-type: NUMBER
+    query-only: false
+    primary-key: true
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DÉTAIL_DE_RÉPONSE =====================
+  id: 35010375226280685244
+  identification: 
+    name: P4_DÉTAIL_DE_RÉPONSE
+    type: Champ de texte
+
+  label: 
+    label: الفترة المحددة لتسليم العروض
+    alignment: Left
+
+  settings: 
+    sous-type: Texte
+    supprimer-les-espaces: Début et fin
+    casse-du-texte: AUCUNE MODIFICATION
+    soumettre-lorsque-la-touche-entrée-est-activée: false
+    désactivé: false
+
+  layout: 
+    sequence: 50
+    region: 'معلومات أساسية عن الصفقة ' # 143172087682992427485
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 4
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 5
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: DÉTAIL_DE_RÉPONSE
+    data-type: VARCHAR2
+    query-only: true
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_OBJET_CCT =============================
+  id: 35010375633057685244
+  identification: 
+    name: P4_OBJET_CCT
+    type: Zone de texte
+
+  label: 
+    label: Titre
+    alignment: Left
+
+  settings: 
+    redimensionnable: true
+    hauteur-automatique: true
+    compteur-de-caractères: false
+    supprimer-les-espaces: Début et fin
+
+  layout: 
+    sequence: 80
+    region: 'معلومات أساسية عن الصفقة ' # 143172087682992427485
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    width: 60
+    height: 5
+
+  validation: 
+    value-required: false
+    maximum-length: 500
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: OBJET_CCT
+    data-type: VARCHAR2
+    query-only: true
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_NATURE_DE_DEPENSE =====================
+  id: 35010376002866685245
+  identification: 
+    name: P4_NATURE_DE_DEPENSE
+    type: Liste SELECT
+
+  label: 
+    label: Nature De Depense
+    alignment: Left
+
+  settings: 
+    action-de-page-lors-de-la-sélection: Aucun
+
+  multiple-values: 
+    type: No
+
+  layout: 
+    sequence: 70
+    region: 'معلومات أساسية عن الصفقة ' # 143172087682992427485
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 3
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    height: 1
+
+  validation: 
+    value-required: false
+
+  list-of-values: 
+    type: Static Values
+    static-values: 'STATIC:Exploitation;Exploitation,Investissement;Investissement'
+    display-extra-values: true
+    display-null-value: true
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: NATURE_DE_DEPENSE
+    data-type: VARCHAR2
+    query-only: true
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_JOURS_REST ============================
+  id: 35010392319317685242
+  identification: 
+    name: P4_JOURS_REST
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 10
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  appearance: 
+    format-mask: 'DD-MON-YYYY HH24:MI:SS'
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: JOURS_REST
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_DE_LANC ==========================
+  id: 35010406396567685259
+  identification: 
+    name: P4_DATE_DE_LANC
+    type: Masqué
+
+  settings: 
+    valeur-protégée: false
+
+  layout: 
+    sequence: 110
+    region: Dates # 143172088021832427488
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: DATE_DE_LANC
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Request (Memory Only)
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: false
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_LIMITE_PROPOSÉE ==================
+  id: 35010406779218685260
+  identification: 
+    name: P4_DATE_LIMITE_PROPOSÉE
+    type: Sélecteur de date
+
+  label: 
+    label: آخر أجال تقديم العروض
+    alignment: Left
+
+  settings: 
+    afficher-l'heure: true
+    afficher-en-tant-que: Fenêtre instantanée
+    date-minimale: Aucun
+    date-maximale: Aucun
+    plusieurs-mois: Non
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 120
+    region: Dates # 143172088021832427488
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: 'DD-MON-YYYY HH24:MI'
+    width: 32
+    value-placeholder: أخر اجل لتقديم العروض
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: DATE_LIMITE_PROPOSÉE
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P4_DATE_OUVERTURE_DES_PLIS ===============
+  id: 35010407204998685260
+  identification: 
+    name: P4_DATE_OUVERTURE_DES_PLIS
+    type: Sélecteur de date
+
+  label: 
+    label: تاريخ فتح العروض
+    alignment: Left
+
+  settings: 
+    afficher-l'heure: true
+    afficher-en-tant-que: Fenêtre instantanée
+    date-minimale: Aucun
+    date-maximale: Aucun
+    plusieurs-mois: Non
+    utiliser-les-valeurs-par-défaut: true
+
+  layout: 
+    sequence: 130
+    region: Dates # 143172088021832427488
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Optional - Floating
+    template-options: 
+    - '#DEFAULT#'
+    format-mask: 'DD-MON-YYYY HH24:MI'
+    width: 32
+
+  validation: 
+    value-required: false
+    maximum-length: 255
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+    column: DATE_OUVERTURE_DES_PLIS
+    data-type: DATE
+    query-only: false
+    primary-key: false
+
+  session-state: 
+    storage: Per Request (Memory Only)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: avis_de_presse ==============================
+  id: 1603453237291470
+  identification: 
+    button-name: avis_de_presse
+    label: Ajout Demandes de renseignements
+
+  layout: 
+    sequence: 30
+    region: New # 36812703147425151
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:8:&SESSION.::&DEBUG.::P8_REF_AE:&P4_NB.'
+      page: 8 # etat avis de presse
+      values: 
+        p8_ref_ae: '&P4_NB.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: Vew =========================================
+  id: 1603822294291471
+  identification: 
+    button-name: Vew
+    label: 'Voir les demandes '
+
+  layout: 
+    sequence: 20
+    region: New # 36812703147425151
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: Automatic
+    new-column: true
+    column-span: 4
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:9:&SESSION.::&DEBUG.::P9_REF:&P4_NB.'
+      page: 9 # Demande de clarification 
+      values: 
+        p9_ref: '&P4_NB.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: SAVE ========================================
+  id: 1640534661291490
+  identification: 
+    button-name: SAVE
+    label: Appliquer les modifications
+
+  layout: 
+    sequence: 30
+    region: Boutons # 147246514675276709826
+    slot: CHANGE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Submit Page
+    execute-validations: false
+    show-processing: false
+    warn-on-unsaved-changes: Do Not Check
+    database-action: SQL UPDATE action
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P4_ID
+
+- # ====== Button: CANCEL ======================================
+  id: 1640961073291490
+  identification: 
+    button-name: CANCEL
+    label: Annuler
+
+  layout: 
+    sequence: 10
+    region: Boutons # 147246514675276709826
+    slot: CLOSE
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: false
+
+- # ====== Button: Voir_Rem ====================================
+  id: 6722567770876553
+  identification: 
+    button-name: Voir_Rem
+    label: 'مشاهدة الملاحظات '
+
+  layout: 
+    sequence: 20
+    region: rem # 79150944245392130
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: 1
+    new-column: true
+    column-span: 4
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:29:&SESSION.::&DEBUG.::P29_REF:&P4_ID.'
+      page: 29 # Remarque
+      values: 
+        p29_ref: '&P4_ID.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: Ajout_Rem ===================================
+  id: 6722923166876553
+  identification: 
+    button-name: Ajout_Rem
+    label: 'إضافة ملاحظة جديدة '
+
+  layout: 
+    sequence: 40
+    region: rem # 79150944245392130
+    slot: BODY
+    start-new-layout: false
+    start-new-row: false
+    column: 8
+    new-column: true
+    column-span: 4
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:27:&SESSION.::&DEBUG.::P27_ID_CC,P27_REF_DOS:&P4_ID.,&P4_NB.'
+      page: 27 # crée remarque
+      values: 
+        p27_id_cc: '&P4_ID.'
+        p27_ref_dos: '&P4_NB.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+dynamic-actions: 
+- # ====== Dynamic Action: DA_SET_DATE_CRITERES ================
+  id: 1645025576291495
+  identification: 
+    name: DA_SET_DATE_CRITERES
+
+  execution: 
+    sequence: 190
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_CRITERES_EVALUATION
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_CRITERES_EVALUATION
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1645486167291495
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_CRITERES_EVALUATION
+      caractères-spéciaux-d'échappement: false
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_CRITERES
+
+    execution: 
+      sequence: 10
+      event: DA_SET_DATE_CRITERES # 1645025576291495
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 1646001849291495
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_CRITERES
+
+    execution: 
+      sequence: 10
+      event: DA_SET_DATE_CRITERES # 1645025576291495
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: proposition =========================
+  id: 1646447592291495
+  identification: 
+    name: proposition
+
+  execution: 
+    sequence: 170
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_PROPOSITION_COMMISSION
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_PROPOSITION_COMMISSION
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1646873295291495
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_PROPOSITION_COMMISSION
+      caractères-spéciaux-d'échappement: false
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_PROPOSITION
+
+    execution: 
+      sequence: 10
+      event: proposition # 1646447592291495
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 1647404142291495
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_PROPOSITION
+
+    execution: 
+      sequence: 10
+      event: proposition # 1646447592291495
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: DA_SET_DATE_CC ======================
+  id: 1647839643291495
+  identification: 
+    name: DA_SET_DATE_CC
+
+  execution: 
+    sequence: 180
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_CC_POUR_LANCEMENT
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_CC_POUR_LANCEMENT
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1648285404291495
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_CC_POUR_LANCEMENT
+      caractères-spéciaux-d'échappement: false
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_CC
+
+    execution: 
+      sequence: 10
+      event: DA_SET_DATE_CC # 1647839643291495
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 1648803755291495
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_CC
+
+    execution: 
+      sequence: 10
+      event: DA_SET_DATE_CC # 1647839643291495
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: DA_SET_DATE_AVIS ====================
+  id: 1649267921291495
+  identification: 
+    name: DA_SET_DATE_AVIS
+
+  execution: 
+    sequence: 200
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_AVIS_DE_PRESSE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_AVIS_DE_PRESSE
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1649732184291495
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_AVIS_DE_PRESSE
+      caractères-spéciaux-d'échappement: false
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_AVIS81
+
+    execution: 
+      sequence: 10
+      event: DA_SET_DATE_AVIS # 1649267921291495
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 1650247471291495
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_AVIS81
+
+    execution: 
+      sequence: 10
+      event: DA_SET_DATE_AVIS # 1649267921291495
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: New_2 ===============================
+  id: 1650657585291496
+  identification: 
+    name: New_2
+
+  execution: 
+    sequence: 9
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  client-side-condition: 
+    type: Item is not in list
+    item: P0_MAT
+    list: 
+    - 91591
+    - 915912
+    - 91492
+    - 80503
+    - 3259
+
+  actions: 
+  - # ====== Action: Désactiver ==================================
+    id: 1651094553291496
+    identification: 
+      action: Désactiver
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_BUDGET
+      - ' P4_DÉTAIL_DE_RÉPONSE'
+      - ' P4_NATURE_DE_DEPENSE'
+      - ' P4_OBJET_CCT'
+      - ' P4_نوعية_الطلب'
+      - ' P4_طريقة_ابرام_الصفقة'
+      - ' P4_اللجنة_المختصة'
+
+    execution: 
+      sequence: 10
+      event: New_2 # 1650657585291496
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: DA_DESIGNATION_DE_LA_COMMISSION =====
+  id: 1651519091291496
+  identification: 
+    name: DA_DESIGNATION_DE_LA_COMMISSION
+
+  execution: 
+    sequence: 210
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_DESIGNATION_DE_LA_COMMISSION
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_DESIGNATION_DE_LA_COMMISSION
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1651976880291496
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_DESIGNATION_DE_LA_COMMISSION
+      caractères-spéciaux-d'échappement: false
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_DESIGNATION
+
+    execution: 
+      sequence: 10
+      event: DA_DESIGNATION_DE_LA_COMMISSION # 1651519091291496
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 1652498763291496
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_DESIGNATION
+
+    execution: 
+      sequence: 10
+      event: DA_DESIGNATION_DE_LA_COMMISSION # 1651519091291496
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: DA_PROGRAM_LANC =====================
+  id: 1652920294291496
+  identification: 
+    name: DA_PROGRAM_LANC
+
+  execution: 
+    sequence: 220
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_PROGRAM_LANC
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_PROGRAM_LANC
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1653377186291496
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_PROGRAM_LANC
+      caractères-spéciaux-d'échappement: true
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_PROGRAM_LANC
+
+    execution: 
+      sequence: 10
+      event: DA_PROGRAM_LANC # 1652920294291496
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 1653945306291496
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_PROGRAM_LANC
+
+    execution: 
+      sequence: 10
+      event: DA_PROGRAM_LANC # 1652920294291496
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: DA_MAIL =============================
+  id: 1654281553291496
+  identification: 
+    name: DA_MAIL
+
+  execution: 
+    sequence: 230
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_MAIL_PRESTATAIRE
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_MAIL_PRESTATAIRE
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1654848274291498
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_MAIL_PRESTATAIRE
+      caractères-spéciaux-d'échappement: false
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_MAIL
+
+    execution: 
+      sequence: 10
+      event: DA_MAIL # 1654281553291496
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 1655293677291498
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_MAIL
+
+    execution: 
+      sequence: 10
+      event: DA_MAIL # 1654281553291496
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: DA_PROGRAM_OUVERTURE ================
+  id: 1655706803291498
+  identification: 
+    name: DA_PROGRAM_OUVERTURE
+
+  execution: 
+    sequence: 240
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_PROGRAMME_OUVERTURE_DE_PLIS
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_PROGRAMME_OUVERTURE_DE_PLIS
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1656173471291498
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_PROGRAMME_OUVERTURE_DE_PLIS
+      caractères-spéciaux-d'échappement: false
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_PROGRAM_OUVERTURE
+
+    execution: 
+      sequence: 10
+      event: DA_PROGRAM_OUVERTURE # 1655706803291498
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 1656767659291498
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_PROGRAM_OUVERTURE
+
+    execution: 
+      sequence: 10
+      event: DA_PROGRAM_OUVERTURE # 1655706803291498
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: DA_NOTE_OP ==========================
+  id: 1657086433291498
+  identification: 
+    name: DA_NOTE_OP
+
+  execution: 
+    sequence: 250
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_NOTE_OUVERTURE_PLIS
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_NOTE_OUVERTURE_PLIS
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1657664624291498
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_NOTE_OUVERTURE_PLIS
+      caractères-spéciaux-d'échappement: false
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_NOTE_OP
+
+    execution: 
+      sequence: 10
+      event: DA_NOTE_OP # 1657086433291498
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 1658132503291498
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_NOTE_OP
+
+    execution: 
+      sequence: 10
+      event: DA_NOTE_OP # 1657086433291498
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: New_3 ===============================
+  id: 1658472841291498
+  identification: 
+    name: New_3
+
+  execution: 
+    sequence: 9
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Exécuter le code JavaScript =================
+    id: 1659014327291498
+    identification: 
+      action: Exécuter le code JavaScript
+
+    settings: 
+      code: apex.util.getTopApex().jQuery(".ui-dialog-content").dialog("option", "title", "Référence Dossier  " + $v("P4_NB") );
+
+    execution: 
+      sequence: 10
+      event: New_3 # 1658472841291498
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: activation_modif_admin_zone1 ========
+  id: 1661220974291500
+  identification: 
+    name: activation_modif_admin_zone1
+
+  execution: 
+    sequence: 140
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: After Refresh
+    selection-type: Region
+    region: 'معلومات أساسية عن الصفقة ' # 143172087682992427485
+
+  client-side-condition: 
+    type: Item is in list
+    item: P0_MAT
+    list: 
+    - 91591
+    - 92491
+
+  actions: 
+  - # ====== Action: Désactiver ==================================
+    id: 1661686760291500
+    identification: 
+      action: Désactiver
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_BUDGET
+      - P4_DÉTAIL_DE_RÉPONSE
+      - P4_NATURE_DE_DEPENSE
+      - P4_OBJET_CCT
+      - نوعية الطلب
+      - P4_طريقة_ابرام_الصفقة
+      - اللجنة المختصة
+
+    execution: 
+      sequence: 10
+      event: activation_modif_admin_zone1 # 1661220974291500
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+  - # ====== Action: activation ==================================
+    id: 1662201225291500
+    identification: 
+      name: activation
+      action: Activer
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_BUDGET
+      - P4_DÉTAIL_DE_RÉPONSE
+      - P4_NATURE_DE_DEPENSE
+      - P4_OBJET_CCT
+      - نوعية الطلب
+      - P4_طريقة_ابرام_الصفقة
+      - اللجنة المختصة
+
+    execution: 
+      sequence: 10
+      event: activation_modif_admin_zone1 # 1661220974291500
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: PV ==================================
+  id: 1662636376291500
+  identification: 
+    name: PV
+
+  execution: 
+    sequence: 100
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_DÉTAIL_DE_RÉPONSE
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1663135014291500
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      valeur: Y
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_PV_CCT
+
+    execution: 
+      sequence: 10
+      event: PV # 1662636376291500
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: New_1 ===============================
+  id: 1663569698291500
+  identification: 
+    name: New_1
+
+  execution: 
+    sequence: 60
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_DATE_OUVERTURE_DES_PLIS
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 1663999018291500
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: "TO_DATE(:P4_DATE_OUVERTURE_DES_PLIS, 'DD-MM-YYYY')"
+      caractères-spéciaux-d'échappement: true
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_JOURS_REST
+
+    execution: 
+      sequence: 10
+      event: New_1 # 1663569698291500
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: New =================================
+  id: 1664404920291501
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 70
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: CANCEL # 1640961073291490
+
+  actions: 
+  - # ====== Action: Fermer la boîte de dialogue =================
+    id: 1664954770291501
+    identification: 
+      action: Fermer la boîte de dialogue
+
+    execution: 
+      sequence: 10
+      event: New # 1664404920291501
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: DA_date de lanc =====================
+  id: 4469104380676144
+  identification: 
+    name: DA_date de lanc
+
+  execution: 
+    sequence: 270
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_DATE_LC
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 4469213416676145
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression JavaScript
+      expression-javascript: $v("P4_DATE_LC")
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_DATE_DE_LANC
+
+    execution: 
+      sequence: 10
+      event: DA_date de lanc # 4469104380676144
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: date lancement statut ===============
+  id: 4470217458676155
+  identification: 
+    name: date lancement statut
+
+  execution: 
+    sequence: 280
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_DATE_OUVERTURE_DES_PLIS
+
+  actions: 
+  - # ====== Action: Exécuter le code côté serveur ===============
+    id: 4470345256676156
+    identification: 
+      action: Exécuter le code côté serveur
+
+    settings: 
+      langue: PE.PROPERTY.SOURCE_SNIPPET_LANG.LOV.PLSQL.D
+      code-pl/sql: |2
+         
+        
+          -- Règle 2 : DATE_OUVERTURE_DES_PLIS  
+          IF :P4_DATE_OUVERTURE_DES_PLIS IS NOT NULL 
+             AND TO_DATE(:P4_DATE_OUVERTURE_DES_PLIS, 'DD-MM-YYYY') < SYSDATE
+             AND :P4_STATUS < 3
+          THEN
+            :P4_STATUS := 3;
+          END IF;
+        
+
+    execution: 
+      sequence: 10
+      event: date lancement statut # 4470217458676155
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+      stop-execution-on-error: true
+      wait-for-result: true
+
+- # ====== Dynamic Action: affiche REM =========================
+  id: 6707318267625545
+  identification: 
+    name: affiche REM
+
+  execution: 
+    sequence: 4
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_NEW_2
+    value: 0
+
+  actions: 
+  - # ====== Action: Afficher ====================================
+    id: 6707446570625546
+    identification: 
+      action: Afficher
+
+    affected-elements: 
+      selection-type: Button
+      button: Voir_Rem # 6722567770876553
+
+    execution: 
+      sequence: 9
+      event: affiche REM # 6707318267625545
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+  - # ====== Action: Masquer =====================================
+    id: 6707552468625547
+    identification: 
+      action: Masquer
+
+    affected-elements: 
+      selection-type: Button
+      button: Voir_Rem # 6722567770876553
+
+    execution: 
+      sequence: 6
+      event: affiche REM # 6707318267625545
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Afficher ====================================
+    id: 7560080972892881
+    identification: 
+      action: Afficher
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_REM
+
+    execution: 
+      sequence: 7
+      event: affiche REM # 6707318267625545
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Masquer =====================================
+    id: 7560232861892882
+    identification: 
+      action: Masquer
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_REM
+
+    execution: 
+      sequence: 8
+      event: affiche REM # 6707318267625545
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: Nouveau =============================
+  id: 6710262874625574
+  identification: 
+    name: Nouveau
+
+  execution: 
+    sequence: 300
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_STATUS
+
+  client-side-condition: 
+    type: JavaScript expression
+    javascript-expression: apex.item("P4_STATUS").getValue() <= 4 && apex.item("P4_CAUTION_P").getValue() == 'N'
+
+  actions: 
+  - # ====== Action: Masquer =====================================
+    id: 6710298316625575
+    identification: 
+      action: Masquer
+
+    affected-elements: 
+      selection-type: Region
+      region: Statut # 11248901627437160
+
+    execution: 
+      sequence: 10
+      event: Nouveau # 6710262874625574
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+
+  - # ====== Action: Afficher ====================================
+    id: 6710402250625576
+    identification: 
+      action: Afficher
+
+    affected-elements: 
+      selection-type: Region
+      region: Statut # 11248901627437160
+
+    execution: 
+      sequence: 10
+      event: Nouveau # 6710262874625574
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+
+- # ====== Dynamic Action: DA_CAUTION ==========================
+  id: 7344929128823541
+  identification: 
+    name: DA_CAUTION
+
+  execution: 
+    sequence: 260
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Change
+    selection-type: Item(s)
+    item(s): 
+    - P4_CAUTION_P
+
+  client-side-condition: 
+    type: Item = Value
+    item: P4_CAUTION_P
+    value: Y
+
+  actions: 
+  - # ====== Action: Définir une valeur ==========================
+    id: 7345019766823542
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Expression PL/SQL
+      expression-pl/sql: SYSDATE
+      eléments-à-soumettre: 
+      - P4_CAUTION_P
+      caractères-spéciaux-d'échappement: false
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_تاريخ_ارجاع_الضمانات_الوقتية
+
+    execution: 
+      sequence: 10
+      event: DA_CAUTION # 7344929128823541
+      fire-when-event-result-is: True
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+  - # ====== Action: Définir une valeur ==========================
+    id: 7345234968823544
+    identification: 
+      action: Définir une valeur
+
+    settings: 
+      définir-un-type: Affectation statique
+      supprimer-l'événement-de-modification: false
+
+    affected-elements: 
+      selection-type: Item(s)
+      item(s): 
+      - P4_تاريخ_ارجاع_الضمانات_الوقتية
+
+    execution: 
+      sequence: 10
+      event: DA_CAUTION # 7344929128823541
+      fire-when-event-result-is: False
+      fire-on-initialization: true
+      stop-execution-on-error: true
+      wait-for-result: true
+
+processes: 
+- # ====== Process: Initialize form Cc =========================
+  id: 1602285279291470
+  identification: 
+    name: Initialize form Cc
+    type: Panneau - Initialisation
+    execution-chain: None
+    form-region: ' تحيين المعطيات' # 90709273647946911
+
+  execution: 
+    sequence: 20
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Traiter le panneau Cc_1 ====================
+  id: 1602751715291470
+  identification: 
+    name: Traiter le panneau Cc_1
+    type: Panneau - Traitement de ligne automatique (DML)
+    execution-chain: None
+    form-region: ' تحيين المعطيات' # 90709273647946911
+
+  settings: 
+    type-de-cible: Source de région
+    empêcher-les-pertes-de-mise-à-jour: true
+    verrouiller-la-ligne: Non
+    renvoyer-des-clés-primaires-après-l'insertion: true
+
+  execution: 
+    sequence: 20
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Initialiser le panneau Cc ==================
+  id: 1605969090291471
+  identification: 
+    name: Initialiser le panneau Cc
+    type: Panneau - Initialisation
+    execution-chain: None
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+
+  execution: 
+    sequence: 10
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Traiter le panneau Cc ======================
+  id: 1606358145291473
+  identification: 
+    name: Traiter le panneau Cc
+    type: Panneau - Traitement de ligne automatique (DML)
+    execution-chain: None
+    form-region: 'APPEL D’OFFFRES ' # 147246497468263709741
+
+  settings: 
+    type-de-cible: Source de région
+    empêcher-les-pertes-de-mise-à-jour: true
+    verrouiller-la-ligne: Non
+    renvoyer-des-clés-primaires-après-l'insertion: true
+
+  execution: 
+    sequence: 10
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Initialize form Cc copie Page 4 ============
+  id: 1623730241291481
+  identification: 
+    name: Initialize form Cc copie Page 4
+    type: Panneau - Initialisation
+    execution-chain: None
+    form-region: Fichiers de lancement # 143172087764536427486
+
+  execution: 
+    sequence: 30
+    point: Before Header
+    run-process: Once Per Page Visit (default)
+
+- # ====== Process: Process form Fichiers de lancement =========
+  id: 1624094350291481
+  identification: 
+    name: Process form Fichiers de lancement
+    type: Panneau - Traitement de ligne automatique (DML)
+    execution-chain: None
+    form-region: Fichiers de lancement # 143172087764536427486
+
+  settings: 
+    type-de-cible: Table/vue
+    propriétaire-de-table: SCHÉMA D&#x27;ANALYSE
+    nom-de-table: FICHIER_LNCEMENT
+    empêcher-les-pertes-de-mise-à-jour: true
+    verrouiller-la-ligne: Non
+    renvoyer-des-clés-primaires-après-l'insertion: true
+
+  execution: 
+    sequence: 40
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+- # ====== Process: Fermer la boîte de dialogue ================
+  id: 1641566419291493
+  identification: 
+    name: Fermer la boîte de dialogue
+    type: Fermer la boîte de dialogue
+    execution-chain: None
+
+  settings: 
+    afficher-les-messages-de-succès: false
+
+  execution: 
+    sequence: 70
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+
+  server-side-condition: 
+    type: Request is contained in Value
+    value: SAVE,DELETE
+
+- # ====== Process: enregistrement des création ================
+  id: 1641778319291493
+  identification: 
+    name: enregistrement des création
+    type: Exécuter le code
+    execution-chain: None
+
+  source: 
+    location: Local Database
+    language: PL/SQL
+    pl/sql-code: |
+      
+          INSERT INTO SUIVI_MODIF (MODIFIER_PAR, DATE_MODIF, ID_OBJET) VALUES (:P0_USER, sysdate, :P4_ID);
+      
+
+  execution: 
+    sequence: 50
+    point: Processing
+    run-process: Once Per Page Visit (default)
+
+  error: 
+    display-location: Inline in Notification
+

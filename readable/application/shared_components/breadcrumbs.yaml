@@ -1,0 +1,335 @@
+---
+- # ====== Breadcrumb: Chemin de navigation ====================
+  id: 74584700736997929123
+  identification: 
+    name: Chemin de navigation
+
+  entries: 
+  - # ====== Entry: Gestion des Rappels ==========================
+    id: 1240227327610150
+    identification: 
+      name: Gestion des Rappels
+      page-number: 32
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:32:&APP_SESSION.::&DEBUG.:::'
+        page: 32 # Gestion des Rappels
+
+  - # ====== Entry: Page d&#x27;accueil ==========================
+    id: 1674679866314776
+    identification: 
+      name: Page d&#x27;accueil
+      page-number: 1
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:1:&APP_SESSION.::&DEBUG.:::'
+        page: 1 # Page d'accueil
+
+  - # ====== Entry: قائمة الصفقات المبرمجة =======================
+    id: 2953779871556986
+    identification: 
+      name: قائمة الصفقات المبرمجة
+      page-number: 41
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:41:&APP_SESSION.::&DEBUG.:::'
+        page: 41 # قائمة الصفقات المبرمجة
+
+  - # ====== Entry: test install =================================
+    id: 3238529512744378
+    identification: 
+      name: test install
+      page-number: 38
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:38:&APP_SESSION.::&DEBUG.:::'
+        page: 38 # test install
+
+  - # ====== Entry: جدول الاشغال =================================
+    id: 4145892424107390
+    identification: 
+      name: جدول الاشغال
+      page-number: 34
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:34:&APP_SESSION.::&DEBUG.:::'
+        page: 34 # جدول الاشغال
+
+  - # ====== Entry: Dossiers En Attente ==========================
+    id: 7244696070868232
+    identification: 
+      name: Dossiers En Attente
+      page-number: 39
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:39:&APP_SESSION.::&DEBUG.:::'
+        page: 39 # Dossiers En Attente
+
+  - # ====== Entry: testee =======================================
+    id: 7602125343966342
+    identification: 
+      name: testee
+      page-number: 22
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:22:&APP_SESSION.::&DEBUG.:::'
+        page: 22 # testee
+
+  - # ====== Entry: مراحل التقدم =================================
+    id: 13221216544782603
+    identification: 
+      name: مراحل التقدم
+      page-number: 21
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:21:&SESSION.::&DEBUG.:::'
+        page: 21 # متابعة تقدم الملفات
+
+    security: 
+      authorization-scheme: Droits de lecteur # 74585100429726929216
+
+  - # ====== Entry: متابع التغيرات ===============================
+    id: 13645447621425718
+    identification: 
+      name: متابع التغيرات
+      page-number: 26
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:26:&APP_SESSION.::&DEBUG.:::'
+        page: 26 # متابع التغيرات
+
+  - # ====== Entry: Contrats =====================================
+    id: 14258421014892693
+    identification: 
+      name: Contrats
+      page-number: 35
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:35:&APP_SESSION.::&DEBUG.:::'
+        page: 35 # Contrats
+
+  - # ====== Entry: Tableau de bord des Dossiers =================
+    id: 15966220466156006
+    identification: 
+      name: Tableau de bord des Dossiers
+      page-number: 44
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:44:&APP_SESSION.::&DEBUG.:::'
+        page: 44 # Tableau de bord 
+
+  - # ====== Entry: test =========================================
+    id: 16597686687970362
+    identification: 
+      name: test
+      page-number: 10002
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10002:&APP_SESSION.::&DEBUG.:::'
+        page: 10002 # chargement des données
+
+  - # ====== Entry: heur =========================================
+    id: 17860421136637629
+    identification: 
+      name: heur
+      page-number: 47
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:47:&APP_SESSION.::&DEBUG.:::'
+        page: 47 # Congé
+
+  - # ====== Entry: heur sup =====================================
+    id: 18844423338659121
+    identification: 
+      name: heur sup
+      page-number: 48
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:48:&APP_SESSION.::&DEBUG.:::'
+        page: 48 # heur sup
+
+  - # ====== Entry: Mes Congés ===================================
+    id: 19527565799531545
+    identification: 
+      name: Mes Congés
+      page-number: 51
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:51:&APP_SESSION.::&DEBUG.:::'
+        page: 51 # Mes Congés
+
+  - # ====== Entry: classement ===================================
+    id: 19798138739516782
+    identification: 
+      name: classement
+      page-number: 53
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:53:&APP_SESSION.::&DEBUG.:::'
+        page: 53 # classement
+
+  - # ====== Entry: suivi des contrats ===========================
+    id: 45220292909289695995
+    identification: 
+      name: suivi des contrats
+      page-number: 30
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:30:&APP_SESSION.::&DEBUG.:::'
+        page: 30 # suivi des contrats
+
+  - # ====== Entry: Etat - APPEL D’OFFFRES =======================
+    id: 74585123809468929246
+    identification: 
+      name: Etat - APPEL D’OFFFRES
+      page-number: 2
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:2:&APP_SESSION.::&DEBUG.:::'
+        page: 2 # Etat - des Dossiers
+
+  - # ====== Entry: Recherche - APPEL D’OFFFRES ==================
+    id: 74585138377005929262
+    identification: 
+      name: Recherche - APPEL D’OFFFRES
+      page-number: 3
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:3:&APP_SESSION.::&DEBUG.:::'
+        page: 3 # Recherche - DOSSIERS
+
+  - # ====== Entry: Calendrier ===================================
+    id: 74585162755218929355
+    identification: 
+      name: Calendrier
+      page-number: 5
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:5:&APP_SESSION.::&DEBUG.:::'
+        page: 5 # Calendrier
+
+  - # ====== Entry: Administration ===============================
+    id: 74585366124815929650
+    identification: 
+      name: Administration
+      page-number: 10000
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:10000:&SESSION.::&DEBUG.:::'
+        page: 10000 # Administration
+
+    security: 
+      authorization-scheme: Droits d'administration # 74585100381861929216
+
+  - # ====== Entry: Gestion de Compte ============================
+    id: 75262715185460761508
+    identification: 
+      name: Gestion de Compte
+      page-number: 11
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:11:&APP_SESSION.::&DEBUG.:::'
+        page: 11 # Gestion de Compte
+
+  - # ====== Entry: suivi modification ===========================
+    id: 81368724796944357531
+    identification: 
+      name: suivi modification
+      page-number: 7
+
+    execution: 
+      sequence: 10
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:7:&APP_SESSION.::&DEBUG.:::'
+        page: 7 # suivi modification
+
