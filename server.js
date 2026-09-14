@@ -218,6 +218,15 @@ async function initializeDatabase() {
     const passwordHash = `${salt}:${scryptSync(password, salt, 64).toString('hex')}`;
     await insertUser.run(Number(user.ID_1), user.NOM || 'Sans nom', String(user.MATRICULE || ''), user.GROUPE || 'READER', user.FONCTION || 'Non renseignée', user.TEL || 'Non renseigné', passwordHash);
   }
+
+  const existingAdmin = await database.prepare('SELECT id FROM users WHERE matricule = ?').get('admin');
+  if (!existingAdmin) {
+    const salt = randomBytes(16).toString('hex');
+    const password = 'admin123';
+    const passwordHash = `${salt}:${scryptSync(password, salt, 64).toString('hex')}`;
+    await database.prepare('INSERT INTO users (name, matricule, role, function_name, phone, password_hash, active) VALUES (?, ?, ?, ?, ?, ?, 1)')
+      .run('Administrateur', 'admin', 'ADMINISTRATOR', 'Gestion', '00000000', passwordHash);
+  }
 }
 
 await initializeDatabase();
