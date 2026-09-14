@@ -55,7 +55,7 @@ function App() {
   const [contrats, setContrats] = useState([]);
   const [users, setUsers] = useState([]);
   const [leaves, setLeaves] = useState([]);
-  const [currentUser, setCurrentUser] = useState({ name: '', matricule: '', function: '' });
+  const [currentUser, setCurrentUser] = useState({ name: '', matricule: '', function: '', role: 'READER' });
   const [signedIn, setSignedIn] = useState(null);
   const [loginError, setLoginError] = useState('');
   const [stats, setStats] = useState({ total: 0, active: 0, contracts: 0, reminders: 0, budget: 0 });
@@ -63,8 +63,16 @@ function App() {
   const [showForm, setShowForm] = useState(false);
   const [showLeaveForm, setShowLeaveForm] = useState(false);
   const [leaveDays, setLeaveDays] = useState(0);
-  const [notice, setNotice] = useState('');
+  const [notice, setNotice] = useState(null);
   const [selectedDossier, setSelectedDossier] = useState(null);
+
+  function notify(message, tone = 'info') {
+    setNotice({ message, tone });
+    if (typeof window !== 'undefined') {
+      window.clearTimeout(notify.timeoutId);
+      notify.timeoutId = window.setTimeout(() => setNotice(null), 4000);
+    }
+  }
 
   async function fetchJson(url, options = {}) {
     const requestOptions = { credentials: 'include', ...options };
@@ -104,11 +112,19 @@ function App() {
       , fetchJson('/api/my-leaves'), fetchJson('/api/me')
     ])
       .then(([items, summary, contractItems, userItems, leaveItems, user]) => { setDossiers(items); setStats(summary); setContrats(contractItems); setUsers(userItems); setLeaves(leaveItems); setCurrentUser(user); setSignedIn(true); })
-      .catch((error) => { setSignedIn(false); if (error) setNotice('Connectez-vous pour accéder à votre espace.'); });
+      .catch((error) => { setSignedIn(false); if (error) notify('Connectez-vous pour accéder à votre espace.', 'warning'); });
   }, []);
 
+  const isAdmin = currentUser.role === 'ADMINISTRATOR';
+  const visibleNavItems = navItems.filter((item) => item.key !== 'users' || isAdmin);
   const filtered = dossiers.filter((item) => `${item.reference} ${item.title} ${item.owner} ${item.status}`.toLowerCase().includes(query.toLowerCase()));
   const title = page === 'dossier-detail' ? 'Détail du dossier' : page === 'dashboard-dossiers' ? 'Dossiers suivis' : page === 'dashboard-actifs' ? 'Dossiers actifs' : page === 'dashboard-contracts' ? 'Contrats en cours' : page === 'dashboard-reminders' ? 'Rappels à traiter' : navItems.find((item) => item.key === page)?.label || 'Tableau de bord';
+
+  useEffect(() => {
+    if (page === 'users' && !isAdmin) {
+      setPage('dashboard');
+    }
+  }, [page, isAdmin]);
 
   function openDossierDetail(id) {
     fetchJson(`/api/dossiers/${id}`)
@@ -116,7 +132,7 @@ function App() {
         setSelectedDossier(dossier);
         setPage('dossier-detail');
       })
-      .catch((error) => setNotice(error.message));
+      .catch((error) => notify(error.message, 'error'));
   }
 
   if (signedIn === null) return null;
@@ -139,8 +155,8 @@ function App() {
         if (!response.ok) throw new Error(result.error || 'Création du dossier impossible.');
         return result;
       })
-      .then((item) => { setDossiers((current) => [item, ...current]); setShowForm(false); setNotice('Dossier créé avec succès.'); })
-      .catch((error) => setNotice(error.message));
+      .then((item) => { setDossiers((current) => [item, ...current]); setShowForm(false); notify('Dossier créé avec succès.', 'success'); })
+      .catch((error) => notify(error.message, 'error'));
   }
 
   function createLeave(event) {
@@ -153,8 +169,8 @@ function App() {
     const payload = { type: form.get('type'), requestDate: form.get('requestDate'), dateStart, dateEnd, holidays, address: form.get('address'), numberOfDays };
     fetch('/api/my-leaves', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       .then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error || 'Création impossible.'); return result; })
-      .then((item) => { setLeaves((current) => [item, ...current]); setShowLeaveForm(false); setLeaveDays(0); setNotice('Demande de congé créée avec succès.'); })
-      .catch((error) => setNotice(error.message));
+      .then((item) => { setLeaves((current) => [item, ...current]); setShowLeaveForm(false); setLeaveDays(0); notify('Demande de congé créée avec succès.', 'success'); })
+      .catch((error) => notify(error.message, 'error'));
   }
 
   function updateLeaveDays(event) {
@@ -166,14 +182,14 @@ function App() {
     <aside className="sidebar">
       <div className="brand"><div className="brand-mark">A</div><div><strong>AGP</strong><span>Suivi des dossiers</span></div></div>
       <div className="workspace-label">ESPACE DE TRAVAIL</div>
-      <nav>{navItems.map(({ label, icon: Icon, key }) => <button key={key} className={page === key ? 'nav-item active' : 'nav-item'} onClick={() => setPage(key)}><Icon size={18} /><span>{label}</span>{key === 'dossiers' && <b className="nav-count">18</b>}</button>)}</nav>
+      <nav>{visibleNavItems.map(({ label, icon: Icon, key }) => <button key={key} className={page === key ? 'nav-item active' : 'nav-item'} onClick={() => setPage(key)}><Icon size={18} /><span>{label}</span>{key === 'dossiers' && <b className="nav-count">18</b>}</button>)}</nav>
       <div className="sidebar-bottom"><button className="nav-item"><Settings2 size={18} /><span>Paramètres</span></button><button className="nav-item"><CircleHelp size={18} /><span>Centre d’aide</span></button><div className="user-card"><div className="avatar">{getInitials(currentUser.name)}</div><div><strong>{currentUser.name}</strong><span>{currentUser.function || currentUser.role}</span></div><ChevronDown size={16} /></div></div>
     </aside>
     <main className="main-content">
       <header className="topbar"><button className="mobile-menu"><Menu size={20} /></button><div className="breadcrumbs"><span>AGP</span><span>/</span><strong>{title}</strong></div><div className="top-actions"><button className="icon-button" title="Notifications"><Bell size={19} /><i /></button><div className="top-avatar">{getInitials(currentUser.name)}</div><button className="logout-button" onClick={() => { fetch('/api/logout', { method: 'POST' }); setSignedIn(false); }} title="Se déconnecter"><LogOut size={17} /><span>Se déconnecter</span></button></div></header>
       <section className="page-content">
         <div className="page-heading"><div><p className="eyebrow">MARDI 02 SEPTEMBRE 2026</p><h1>{page === 'dashboard' ? `Bonjour ${currentUser.name}, voici votre activité.` : title}</h1><p className="subheading">Pilotez les appels d’offres et gardez une vue claire sur vos engagements.</p></div>{page === 'leaves' ? <button className="primary-button" onClick={() => setShowLeaveForm(true)}><CalendarDays size={18} />Nouveau congé</button> : canManageDossiers(currentUser.role) ? <button className="primary-button" onClick={() => setShowForm(true)}><FilePlus2 size={18} />Nouveau dossier</button> : null}</div>
-        {notice && <div className="notice"><ShieldCheck size={17} />{notice}<button onClick={() => setNotice('')}><X size={16} /></button></div>}
+        {notice && <div className={`notice notice-${notice.tone}`}><ShieldCheck size={17} />{notice.message}<button onClick={() => setNotice(null)}><X size={16} /></button></div>}
         {page === 'dashboard' ? <Dashboard stats={stats} dossiers={dossiers} contrats={contrats} onOpen={() => setPage('dossiers')} onSelectDossier={openDossierDetail} onSelectStat={(key) => setPage(key)} /> : page === 'dashboard-dossiers' ? <DashboardStatDetailView kind="dossiers" items={dossiers} onBack={() => setPage('dashboard')} onOpenDossier={openDossierDetail} /> : page === 'dashboard-actifs' ? <DashboardStatDetailView kind="actifs" items={dossiers.filter((item) => item.status === 'En cours' || item.status === 'Publié')} onBack={() => setPage('dashboard')} onOpenDossier={openDossierDetail} /> : page === 'dashboard-contracts' ? <DashboardStatDetailView kind="contracts" items={contrats.map((item) => ({ id: item.ID, reference: item.N_CONTRAT_BC || item.REF_AO || `CTR-${item.ID}`, title: item.OBJET || item.TITULAIRE_DU_MARCHÉ || 'Contrat sans intitulé', owner: item.RESPONSABLE || item.DEMANDEUR || 'Non renseigné', budget: Number(String(item.MONTANT || 0).replace(/\s/g, '').replace(',', '.')) || 0, status: item.ETAT || 'En attente', progress: item.ETAT === 'Clôturé' ? 100 : 55, date: item.DATE_FIN_DU_MARCHÉ }))} onBack={() => setPage('dashboard')} onOpenDossier={() => setPage('dashboard')} /> : page === 'dashboard-reminders' ? <DashboardStatDetailView kind="reminders" items={dossiers.filter((item) => item.status === 'À lancer' || item.status === 'En attente').slice(0, 10)} onBack={() => setPage('dashboard')} onOpenDossier={openDossierDetail} /> : page === 'dossier-detail' ? <DossierDetailView dossier={selectedDossier} onBack={() => { setSelectedDossier(null); setPage('dashboard'); }} users={users} /> : page === 'users' ? <UsersView users={users} setUsers={setUsers} /> : page === 'leaves' ? <LeavesView leaves={leaves} user={currentUser} /> : page === 'profile' ? <ProfileView user={currentUser} onSaved={setCurrentUser} /> : <ListView page={page} items={page === 'contrats' ? contrats : filtered} query={query} setQuery={setQuery} onOpen={canManageDossiers(currentUser.role) ? () => setShowForm(true) : undefined} onSelectDossier={openDossierDetail} />}
       </section>
     </main>
@@ -201,13 +217,13 @@ function LoginView({ error, onLogin, onError }) {
   }
   return <div className="signed-out"><div className="signed-out-mark">A</div><p className="eyebrow">ESPACE AGP</p><h1>Connexion requise</h1><p>Identifiez-vous pour accéder à votre espace.</p><form className="modal" onSubmit={submit}><label>Matricule<input name="matricule" required autoComplete="username" /></label><label>Mot de passe<input name="password" type="password" required autoComplete="current-password" /></label>{error && <p className="form-error">{error}</p>}<button className="primary-button" type="submit">Se connecter</button></form></div>;
 }
-function ProfileView({ user, onSaved }) {
+function ProfileView({ user, onSaved, onNotify }) {
   function save(event) {
     event.preventDefault();
     const formElement = event.currentTarget;
     const form = new FormData(formElement);
     const payload = Object.fromEntries(['name', 'matricule', 'function', 'phone', 'password'].map((key) => [key, form.get(key)]));
-    fetch(`/api/users/${user.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error); return result; }).then((updated) => { onSaved(updated); formElement.reset(); }).catch((error) => alert(error.message));
+    fetch(`/api/users/${user.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error); return result; }).then((updated) => { onSaved(updated); formElement.reset(); onNotify('Profil mis à jour.', 'success'); }).catch((error) => onNotify(error.message, 'error'));
   }
   return <section className="panel profile-panel"><div className="panel-heading"><div><p className="eyebrow">ESPACE PERSONNEL</p><h2>Mon profil</h2></div></div><form className="profile-form" onSubmit={save}><label>Nom et prénom<input name="name" defaultValue={user.name} required /></label><label>Matricule<input name="matricule" defaultValue={user.matricule} required /></label><label>Fonction<input name="function" defaultValue={user.function} /></label><label>Téléphone<input name="phone" defaultValue={user.phone} /></label><label>Nouveau mot de passe<input name="password" type="password" placeholder="Laisser vide pour conserver l’actuel" minLength="6" /></label><button className="primary-button" type="submit">Enregistrer mes modifications</button></form></section>;
 }
@@ -233,16 +249,16 @@ function buildLeavePrintHtml(leave, user, checked) {
   const field = (value) => escapeHtml(value || '-');
   return `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>طباعة مطلب إجازة</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:"Times New Roman",serif;background:#f0f0f0}.a4{width:210mm;min-height:297mm;background:#fff;margin:0 auto 20px;padding:15mm;position:relative;border:3px double #000;direction:rtl}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8mm}.header-date,.header-org{font-size:13pt;font-weight:bold}.header-org{text-align:left;line-height:1.5}.titre{text-align:center;font-size:22pt;font-style:italic;text-decoration:underline;font-weight:bold;margin-bottom:6mm}.checkboxes{display:flex;justify-content:space-around;direction:rtl;font-size:12pt;font-weight:bold;padding:4pt 6pt;margin-bottom:5mm}.checkboxes span{white-space:nowrap}.main-table{width:100%;border-collapse:collapse;font-size:13pt;font-weight:bold;direction:rtl}.main-table td{padding:12pt 8pt;vertical-align:middle}.lbl{text-align:right;white-space:nowrap;width:25%}.val{text-align:right;min-width:120px}.val2{text-align:right;min-width:120px;direction:ltr}.sep{width:12mm}.footer-sign{margin-top:20mm;display:flex;justify-content:space-between;direction:rtl;font-size:13pt;font-weight:bold}@media print{body{background:#fff}.a4{margin:0}}</style></head><body><div class="a4"><div class="header"><div class="header-org"><div>المجمع الكيميائي التونسي</div><div>الإدارة الجهوية للمعامل بقابس</div></div><div class="header-date">قابس في : ${formatDate(leave.DATE_DEMANDE)}</div></div><div class="titre">مطلب إجازة</div><div class="checkboxes"><span>${checked('SOLDE')} &nbsp; خالصة الأجر</span><span>${checked('NON_SOLDE')} &nbsp; غير خالصة الأجر</span><span>${checked('FAMILIAL')} &nbsp; لأسباب عائلية</span><span>${checked('AUTORISE')} &nbsp; مرخص فيها</span><span>${checked('COMPENSATION')} &nbsp; تعويض</span></div><table class="main-table"><tr><td class="lbl">الاسم و اللقب :</td><td class="val">${field(user.name)}</td><td class="sep"></td><td class="lbl">الرقم الآلي :</td><td class="val">${field(user.matricule)}</td></tr><tr><td class="lbl">المصلحة :</td><td class="val" colspan="2">${field(user.service || 'الإدارة الجهوية للمعامل بقابس')}</td><td class="lbl">المهنة :</td><td class="val">${field(user.function)}</td></tr><tr><td class="lbl">عدد الأيام المطلوبة :</td><td class="val">${leave.NBR_JOURS || 0}</td><td class="sep"></td><td class="lbl" colspan="2">من ضمنها : ( ${leave.NBR_FERIES || 0} يوم) أعياد رسمية</td></tr><tr><td class="lbl">تاريخ بداية الإجازة :</td><td class="val2">${formatDate(leave.DATE_DEBUT)}</td><td class="sep"></td><td class="lbl">تاريخ الرجوع :</td><td class="val2">${formatDate(leave.DATE_FIN)}</td></tr><tr><td class="lbl">الرصيد السابق :</td><td class="val">${leave.SOLDE_AVANT ?? '-'}</td><td class="sep"></td><td class="lbl">الرصيد الحالي :</td><td class="val">${leave.SOLDE_APRES ?? '-'}</td></tr><tr><td class="lbl" colspan="2">العنوان أثناء الإجازة : ${field(leave.ADRESSE_CONGE)} قابس</td><td class="sep"></td><td class="lbl">رقم الهاتف :</td><td class="val2">${field(user.phone)}</td></tr></table><div class="footer-sign"><span>إمضاء المعني بالأمر</span><span>إمضاء رئيس المصلحة</span></div></div><script>window.onload=()=>window.print();</script></body></html>`;
 }
-function UsersView({ users, setUsers }) {
+function UsersView({ users, setUsers, onNotify }) {
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('Tous');
   const [showAdd, setShowAdd] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const groups = ['Tous', ...new Set(users.map(({ role }) => role))];
   const filtered = users.filter((user) => (group === 'Tous' || user.role === group) && `${user.name} ${user.matricule} ${user.function}`.toLowerCase().includes(query.toLowerCase()));
-  const toggle = (user) => fetch(`/api/users/${user.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: !user.active }) }).then((r) => r.json()).then((updated) => setUsers((current) => current.map((item) => item.id === updated.id ? updated : item)));
-  const edit = (event) => { event.preventDefault(); const form = new FormData(event.currentTarget); const payload = Object.fromEntries(['name', 'matricule', 'role', 'function', 'phone', 'password'].map((key) => [key, form.get(key)])); payload.active = form.get('active') === 'on'; fetch(`/api/users/${editingUser.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error); return result; }).then((updated) => { setUsers((current) => current.map((item) => item.id === updated.id ? updated : item)); setEditingUser(null); }).catch((error) => alert(error.message)); };
-  const add = (event) => { event.preventDefault(); const form = new FormData(event.currentTarget); const payload = Object.fromEntries(['name', 'matricule', 'role', 'function', 'phone'].map((key) => [key, form.get(key)])); fetch('/api/users', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then((r) => r.json()).then((user) => { setUsers((current) => [user, ...current]); setShowAdd(false); }); };
+  const toggle = (user) => fetch(`/api/users/${user.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: !user.active }) }).then((r) => r.json()).then((updated) => setUsers((current) => current.map((item) => item.id === updated.id ? updated : item))).catch((error) => onNotify(error.message, 'error'));
+  const edit = (event) => { event.preventDefault(); const form = new FormData(event.currentTarget); const payload = Object.fromEntries(['name', 'matricule', 'role', 'function', 'phone', 'password'].map((key) => [key, form.get(key)])); payload.active = form.get('active') === 'on'; fetch(`/api/users/${editingUser.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error); return result; }).then((updated) => { setUsers((current) => current.map((item) => item.id === updated.id ? updated : item)); setEditingUser(null); onNotify('Utilisateur modifié.', 'success'); }).catch((error) => onNotify(error.message, 'error')); };
+  const add = (event) => { event.preventDefault(); const form = new FormData(event.currentTarget); const payload = Object.fromEntries(['name', 'matricule', 'role', 'function', 'phone'].map((key) => [key, form.get(key)])); fetch('/api/users', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then((r) => r.json()).then((user) => { setUsers((current) => [user, ...current]); setShowAdd(false); onNotify('Utilisateur ajouté.', 'success'); }).catch((error) => onNotify(error.message, 'error')); };
   return <><div className="admin-summary"><div><p className="eyebrow">CONTRÔLE DES ACCÈS</p><h2>Utilisateurs et habilitations</h2><p>Gérez les comptes autorisés à accéder à l’espace AGP.</p></div><button className="primary-button" onClick={() => setShowAdd(true)}><UserPlus size={18} />Ajouter un utilisateur</button></div><div className="filter-bar"><div className="search-box"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher un nom ou matricule..." /></div><select className="filter-button" value={group} onChange={(event) => setGroup(event.target.value)}>{groups.map((item) => <option key={item}>{item}</option>)}</select></div><section className="panel list-panel"><div className="panel-heading"><div><p className="eyebrow">ANNUAIRE INTERNE</p><h2>{filtered.length} utilisateurs</h2></div><span className="admin-badge"><ShieldCheck size={15} />Accès administrateur</span></div><div className="table-wrap"><table><thead><tr><th>Utilisateur</th><th>Matricule</th><th>Groupe</th><th>Fonction</th><th>Téléphone</th><th>État</th><th>Action</th></tr></thead><tbody>{filtered.map((user) => <tr key={user.id}><td><div className="person-cell"><div className="person-avatar">{user.name.slice(0, 2)}</div><strong>{user.name}</strong></div></td><td>{user.matricule}</td><td><span className="role-chip">{user.role}</span></td><td>{user.function}</td><td>{user.phone}</td><td><span className={`status ${user.active ? 'teal' : 'gray'}`}><i />{user.active ? 'Actif' : 'Désactivé'}</span></td><td><button className="table-action" onClick={() => toggle(user)}>{user.active ? 'Désactiver' : 'Activer'}</button></td></tr>)}</tbody></table></div></section>{showAdd && <div className="modal-backdrop"><form className="modal" onSubmit={add}><div className="modal-header"><div><p className="eyebrow">NOUVEAU COMPTE</p><h2>Ajouter un utilisateur</h2></div><button type="button" className="close-button" onClick={() => setShowAdd(false)}><X size={19} /></button></div><label>Nom complet<input name="name" required placeholder="Nom et prénom" /></label><div className="form-grid"><label>Matricule<input name="matricule" required /></label><label>Groupe<select name="role" defaultValue="READER"><option>READER</option><option>CONTRIBUTOR</option><option>ADMINISTRATOR</option></select></label></div><label>Fonction<input name="function" placeholder="Fonction" /></label><label>Téléphone<input name="phone" placeholder="98 000 000" /></label><div className="modal-actions"><button type="button" className="secondary-button" onClick={() => setShowAdd(false)}>Annuler</button><button className="primary-button" type="submit"><UserPlus size={17} />Créer le compte</button></div></form></div>}</>;
 }
 function Deadline({ day, month, title, refText, tone }) { return <div className="deadline"><div className={`date-tile ${tone}`}><strong>{day}</strong><span>{month}</span></div><div><strong>{title}</strong><span>{refText}</span></div><ChevronDown className="deadline-arrow" size={17} /></div> }
