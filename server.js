@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -5,22 +6,99 @@ import { scryptSync, randomBytes, timingSafeEqual } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { XMLParser } from 'fast-xml-parser';
 import ExcelJS from 'exceljs';
+import pg from 'pg';
 
+const { Pool } = pg;
 const app = express();
 const port = process.env.PORT || 3001;
 app.use(express.json());
 
 const xmlPath = path.join(process.cwd(), 'données', 'cc (1).xml');
 const dataPath = path.join(process.cwd(), 'données');
-const database = new DatabaseSync(path.join(process.cwd(), 'agp.sqlite'));
 const statusNames = { 1: 'À lancer', 2: 'En attente', 3: 'En cours', 4: 'Publié', 5: 'En cours', 6: 'Clôturé' };
+const sessions = new Map();
+const hasLocalXml = fs.existsSync(xmlPath);
+const hasLocalDataDir = fs.existsSync(dataPath);
+
+if (!hasLocalDataDir) {
+  fs.mkdirSync(dataPath, { recursive: true });
+}
 
 function parseBudget(value) {
   if (value === undefined || value === null || value === '') return 0;
   return Number(String(value).replace(/\s/g, '').replace(',', '.')) || 0;
 }
 
+function toPostgresQuery(sql, params = []) {
+  let number = 0;
+  const text = sql.replace(/\?/g, () => {
+    number += 1;
+    return `$${number}`;
+  });
+  return { text, values: params };
+}
+
+function createDatabaseAdapter() {
+  const databaseUrl = process.env.DATABASE_URL;
+
+  if (databaseUrl) {
+    const pool = new Pool({
+      connectionString: databaseUrl,
+      ssl: databaseUrl.includes('sslmode=require') ? { rejectUnauthorized: false } : false
+    });
+
+    return {
+      async exec(sql) {
+        const statements = sql.split(';').map((part) => part.trim()).filter(Boolean);
+        for (const statement of statements) {
+          await pool.query(statement);
+        }
+      },
+      prepare(sql) {
+        const execute = async (...params) => {
+          const query = toPostgresQuery(sql, params);
+          return pool.query(query.text, query.values);
+        };
+
+        return {
+          async run(...params) {
+            const sqlToRun = /^\s*INSERT\b/i.test(sql) && !/RETURNING\b/i.test(sql)
+              ? `${sql.trim()} RETURNING id`
+              : sql;
+            const result = await pool.query(toPostgresQuery(sqlToRun, params).text, toPostgresQuery(sqlToRun, params).values);
+            return { lastInsertRowid: result.rows?.[0]?.id ?? null, changes: result.rowCount ?? 0 };
+          },
+          async get(...params) {
+            const result = await execute(...params);
+            return result.rows[0] ?? undefined;
+          },
+          async all(...params) {
+            const result = await execute(...params);
+            return result.rows ?? [];
+          }
+        };
+      }
+    };
+  }
+
+  const sqlite = new DatabaseSync(path.join(process.cwd(), 'agp.sqlite'));
+  return {
+    exec(sql) {
+      sqlite.exec(sql);
+    },
+    prepare(sql) {
+      return sqlite.prepare(sql);
+    }
+  };
+}
+
+const database = createDatabaseAdapter();
+
 function loadDossiers() {
+  if (!hasLocalXml) {
+    return [];
+  }
+
   const xml = fs.readFileSync(xmlPath, 'utf8');
   const parsed = new XMLParser({ isArray: (name) => name === 'ROW' }).parse(xml);
   return parsed.ROWSET.ROW.map((row) => ({
@@ -44,17 +122,27 @@ function excelDate(value, fieldName = '') {
 }
 
 async function loadXlsx(fileName) {
-  const workbook = new ExcelJS.Workbook();
-  await workbook.xlsx.readFile(path.join(dataPath, fileName));
-  const sheet = workbook.worksheets[0];
-  const headers = sheet.getRow(1).values.slice(1);
-  const rows = [];
-  sheet.eachRow((row, rowNumber) => {
-    if (rowNumber === 1) return;
-    const values = row.values.slice(1);
-       rows.push(Object.fromEntries(headers.map((header, index) => [header, excelDate(values[index], header)])));
-  });
-  return rows;
+  const filePath = path.join(dataPath, fileName);
+  if (!fs.existsSync(filePath)) {
+    return [];
+  }
+
+  try {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(filePath);
+    const sheet = workbook.worksheets[0];
+    const headers = sheet.getRow(1).values.slice(1);
+    const rows = [];
+    sheet.eachRow((row, rowNumber) => {
+      if (rowNumber === 1) return;
+      const values = row.values.slice(1);
+      rows.push(Object.fromEntries(headers.map((header, index) => [header, excelDate(values[index], header)])));
+    });
+    return rows;
+  } catch (error) {
+    console.warn(`Ignoring unreadable data file ${fileName}: ${error.message}`);
+    return [];
+  }
 }
 
 const dossiers = loadDossiers();
@@ -67,51 +155,54 @@ const tables = await Promise.all([
   ['utilisateurs', 't_user (2).xlsx'], ['notes', 'user_notes (1).xlsx'],
   ['heuresSupplementaires', 'heur_spp.xlsx']
 ].map(async ([name, fileName]) => [name, await loadXlsx(fileName)])).then(Object.fromEntries);
-database.exec(`CREATE TABLE IF NOT EXISTS users (
-  id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL,
-  matricule TEXT NOT NULL UNIQUE,
-  role TEXT NOT NULL DEFAULT 'READER',
-  function_name TEXT,
-  phone TEXT,
-  password_hash TEXT,
-  active INTEGER NOT NULL DEFAULT 1,
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-)`);
-const insertUser = database.prepare(`INSERT INTO users (id, name, matricule, role, function_name, phone, password_hash)
-  VALUES (?, ?, ?, ?, ?, ?, ?)
-  ON CONFLICT(id) DO UPDATE SET name = excluded.name, matricule = excluded.matricule,
-    role = excluded.role, function_name = excluded.function_name, phone = excluded.phone`);
-for (const user of tables.utilisateurs) {
-  const password = String(user.MDP || randomBytes(16).toString('hex'));
-  const salt = randomBytes(16).toString('hex');
-  const passwordHash = `${salt}:${scryptSync(password, salt, 64).toString('hex')}`;
-  insertUser.run(Number(user.ID_1), user.NOM || 'Sans nom', String(user.MATRICULE || ''), user.GROUPE || 'READER', user.FONCTION || 'Non renseignée', user.TEL || 'Non renseigné', passwordHash);
-}
-const userFields = 'id, name, matricule, role, function_name AS function, phone, active, created_at';
-const currentUserId = 6;
-const sessions = new Map();
 
-database.exec(`
+await database.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL,
+    matricule TEXT NOT NULL UNIQUE,
+    role TEXT NOT NULL DEFAULT 'READER',
+    function_name TEXT,
+    phone TEXT,
+    password_hash TEXT,
+    active INTEGER NOT NULL DEFAULT 1,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+  );
+
   CREATE TABLE IF NOT EXISTS dossier_history (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
     dossier_id INTEGER NOT NULL,
     label TEXT NOT NULL,
     note TEXT NOT NULL,
     actor TEXT NOT NULL,
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
   );
 
   CREATE TABLE IF NOT EXISTS dossier_attachments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
     dossier_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     type TEXT NOT NULL,
     size TEXT NOT NULL,
-    uploaded_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    uploaded_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     data_url TEXT
   );
 `);
+
+const insertUser = database.prepare(`INSERT INTO users (id, name, matricule, role, function_name, phone, password_hash)
+  VALUES (?, ?, ?, ?, ?, ?, ?)
+  ON CONFLICT(id) DO UPDATE SET name = excluded.name, matricule = excluded.matricule,
+    role = excluded.role, function_name = excluded.function_name, phone = excluded.phone`);
+
+for (const user of tables.utilisateurs || []) {
+  const password = String(user.MDP || randomBytes(16).toString('hex'));
+  const salt = randomBytes(16).toString('hex');
+  const passwordHash = `${salt}:${scryptSync(password, salt, 64).toString('hex')}`;
+  await insertUser.run(Number(user.ID_1), user.NOM || 'Sans nom', String(user.MATRICULE || ''), user.GROUPE || 'READER', user.FONCTION || 'Non renseignée', user.TEL || 'Non renseigné', passwordHash);
+}
+
+const userFields = 'id, name, matricule, role, function_name AS "function", phone, active, created_at';
+const currentUserId = 6;
 
 function buildDefaultHistory(dossier, assignee = null) {
   const actor = assignee?.name || dossier.owner || 'Chef de projet';
@@ -129,11 +220,11 @@ function buildDefaultAttachments(dossier) {
   ];
 }
 
-function buildDossierDetailPayload(dossier) {
+async function buildDossierDetailPayload(dossier) {
   if (!dossier) return null;
-  const assignee = database.prepare('SELECT id, name FROM users WHERE id = ?').get(dossier.assigned_to);
-  const historyRows = database.prepare('SELECT * FROM dossier_history WHERE dossier_id = ? ORDER BY created_at DESC').all(dossier.id);
-  const attachmentRows = database.prepare('SELECT * FROM dossier_attachments WHERE dossier_id = ? ORDER BY uploaded_at DESC').all(dossier.id);
+  const assignee = await database.prepare('SELECT id, name FROM users WHERE id = ?').get(dossier.assigned_to);
+  const historyRows = await database.prepare('SELECT * FROM dossier_history WHERE dossier_id = ? ORDER BY created_at DESC').all(dossier.id);
+  const attachmentRows = await database.prepare('SELECT * FROM dossier_attachments WHERE dossier_id = ? ORDER BY uploaded_at DESC').all(dossier.id);
   const history = historyRows.length ? historyRows.map((row) => ({
     id: row.id,
     label: row.label,
@@ -188,8 +279,8 @@ function getVisibleDossiersForUser(userId, role) {
 
 function today() { return new Date().toISOString().slice(0, 10); }
 
-app.post('/api/login', (req, res) => {
-  const user = database.prepare('SELECT id, password_hash FROM users WHERE matricule = ? AND active = 1').get(String(req.body.matricule || '').trim());
+app.post('/api/login', async (req, res) => {
+  const user = await database.prepare('SELECT id, password_hash FROM users WHERE matricule = ? AND active = 1').get(String(req.body.matricule || '').trim());
   if (!user || !req.body.password) return res.status(401).json({ error: 'Matricule ou mot de passe incorrect.' });
   const [salt, storedHash] = String(user.password_hash || '').split(':');
   const suppliedHash = scryptSync(String(req.body.password), salt, 64);
@@ -201,12 +292,14 @@ app.post('/api/login', (req, res) => {
 });
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', app: 'AGP' }));
-app.get('/api/dossiers', requireSession, (req, res) => {
-  const requester = database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
+
+app.get('/api/dossiers', requireSession, async (req, res) => {
+  const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
   res.json(getVisibleDossiersForUser(req.userId, requester?.role));
 });
-app.get('/api/dossiers/:id', requireSession, (req, res) => {
-  const requester = database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
+
+app.get('/api/dossiers/:id', requireSession, async (req, res) => {
+  const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
   const dossierId = Number(req.params.id);
   const dossier = dossiers.find((item) => Number(item.id) === dossierId);
   if (!dossier) return res.status(404).json({ error: 'Dossier introuvable.' });
@@ -214,53 +307,64 @@ app.get('/api/dossiers/:id', requireSession, (req, res) => {
   if (!visible.some((item) => Number(item.id) === dossierId)) {
     return res.status(403).json({ error: 'Vous ne pouvez pas consulter ce dossier.' });
   }
-  res.json(buildDossierDetailPayload(dossier));
+  res.json(await buildDossierDetailPayload(dossier));
 });
+
 app.get('/api/tables', (_req, res) => res.json(Object.fromEntries(Object.entries(tables).map(([name, rows]) => [name, rows.length]))));
 app.get('/api/tables/:table', (req, res) => {
   const rows = tables[req.params.table];
   if (!rows) return res.status(404).json({ error: 'Table non trouvée' });
   res.json(rows);
 });
-app.get('/api/users', requireSession, (_req, res) => res.json(database.prepare(`SELECT ${userFields} FROM users ORDER BY id DESC`).all().map((user) => ({ ...user, active: Boolean(user.active) }))));
-app.post('/api/users', requireSession, (req, res) => {
-  const requester = database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
+
+app.get('/api/users', requireSession, async (_req, res) => {
+  const rows = await database.prepare(`SELECT ${userFields} FROM users ORDER BY id DESC`).all();
+  res.json(rows.map((user) => ({ ...user, active: Boolean(user.active) })));
+});
+
+app.post('/api/users', requireSession, async (req, res) => {
+  const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
   if (requester?.role !== 'ADMINISTRATOR') return res.status(403).json({ error: 'Droits administrateur requis.' });
   const { name, matricule, role = 'READER', function: functionName = 'Non renseignée', phone = 'Non renseigné' } = req.body;
   if (!name || !matricule) return res.status(400).json({ error: 'Nom et matricule obligatoires' });
   try {
-    const result = database.prepare(`INSERT INTO users (name, matricule, role, function_name, phone) VALUES (?, ?, ?, ?, ?)`).run(name, matricule, role, functionName, phone);
-    const user = database.prepare(`SELECT ${userFields} FROM users WHERE id = ?`).get(result.lastInsertRowid);
+    const result = await database.prepare(`INSERT INTO users (name, matricule, role, function_name, phone) VALUES (?, ?, ?, ?, ?)`)
+      .run(name, matricule, role, functionName, phone);
+    const user = await database.prepare(`SELECT ${userFields} FROM users WHERE id = ?`).get(result.lastInsertRowid);
     res.status(201).json({ ...user, active: Boolean(user.active) });
   } catch (error) {
     res.status(409).json({ error: error.message.includes('UNIQUE') ? 'Ce matricule existe déjà' : 'Création impossible' });
   }
 });
-app.put('/api/users/:id', requireSession, (req, res) => {
-  const requester = database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
+
+app.put('/api/users/:id', requireSession, async (req, res) => {
+  const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
   const targetId = Number(req.params.id);
   if (requester?.role !== 'ADMINISTRATOR' && req.userId !== targetId) return res.status(403).json({ error: 'Vous ne pouvez modifier que votre profil.' });
-  const current = database.prepare('SELECT id FROM users WHERE id = ?').get(targetId);
+  const current = await database.prepare('SELECT id FROM users WHERE id = ?').get(targetId);
   if (!current) return res.status(404).json({ error: 'Utilisateur non trouvé' });
   const fields = { name: req.body.name, matricule: req.body.matricule, function_name: req.body.function, phone: req.body.phone, active: requester?.role === 'ADMINISTRATOR' && req.body.active !== undefined ? (req.body.active ? 1 : 0) : undefined };
   if (requester?.role === 'ADMINISTRATOR' && req.body.role !== undefined) fields.role = req.body.role;
   if (req.body.password) { const salt = randomBytes(16).toString('hex'); fields.password_hash = `${salt}:${scryptSync(String(req.body.password), salt, 64).toString('hex')}`; }
   const updates = Object.entries(fields).filter(([, value]) => value !== undefined);
-  if (updates.length) database.prepare(`UPDATE users SET ${updates.map(([field]) => `${field} = ?`).join(', ')} WHERE id = ?`).run(...updates.map(([, value]) => value), targetId);
-  const user = database.prepare(`SELECT ${userFields} FROM users WHERE id = ?`).get(targetId);
+  if (updates.length) await database.prepare(`UPDATE users SET ${updates.map(([field]) => `${field} = ?`).join(', ')} WHERE id = ?`).run(...updates.map(([, value]) => value), targetId);
+  const user = await database.prepare(`SELECT ${userFields} FROM users WHERE id = ?`).get(targetId);
   res.json({ ...user, active: Boolean(user.active) });
 });
-app.get('/api/me', requireSession, (req, res) => {
-  const user = database.prepare(`SELECT ${userFields} FROM users WHERE id = ?`).get(req.userId);
+
+app.get('/api/me', requireSession, async (req, res) => {
+  const user = await database.prepare(`SELECT ${userFields} FROM users WHERE id = ?`).get(req.userId);
   res.json({ ...user, active: Boolean(user.active) });
 });
-app.get('/api/my-leaves', requireSession, (req, res) => {
-  const currentUser = database.prepare('SELECT matricule FROM users WHERE id = ?').get(req.userId);
+
+app.get('/api/my-leaves', requireSession, async (req, res) => {
+  const currentUser = await database.prepare('SELECT matricule FROM users WHERE id = ?').get(req.userId);
   const leaves = tables.conges.filter((leave) => String(leave.MATRICULE) === String(currentUser.matricule));
   res.json(leaves);
 });
-app.post('/api/my-leaves', requireSession, (req, res) => {
-  const currentUser = database.prepare('SELECT matricule FROM users WHERE id = ?').get(req.userId);
+
+app.post('/api/my-leaves', requireSession, async (req, res) => {
+  const currentUser = await database.prepare('SELECT matricule FROM users WHERE id = ?').get(req.userId);
   const sourceUser = tables.utilisateurs.find((user) => String(user.MATRICULE) === String(currentUser.matricule));
   const { type, requestDate, dateStart, dateEnd, address = '', holidays = 0 } = req.body;
   if (!type || !dateStart || !dateEnd || dateEnd < dateStart) return res.status(400).json({ error: 'Type et période de congé obligatoires' });
@@ -272,14 +376,16 @@ app.post('/api/my-leaves', requireSession, (req, res) => {
   tables.conges.unshift(leave);
   res.status(201).json(leave);
 });
+
 app.post('/api/logout', (req, res) => {
   const token = req.headers.cookie?.match(/(?:^|;\s*)agp_session=([^;]+)/)?.[1];
   if (token) sessions.delete(token);
   res.setHeader('Set-Cookie', 'agp_session=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0');
   res.status(204).end();
 });
-app.get('/api/stats', requireSession, (req, res) => {
-  const requester = database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
+
+app.get('/api/stats', requireSession, async (req, res) => {
+  const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
   const visibleDossiers = getVisibleDossiersForUser(req.userId, requester?.role);
   res.json({
     total: visibleDossiers.length,
@@ -289,14 +395,15 @@ app.get('/api/stats', requireSession, (req, res) => {
     budget: visibleDossiers.reduce((total, { budget }) => total + budget, 0)
   });
 });
-app.post('/api/dossiers', requireSession, (req, res) => {
-  const requester = database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
+
+app.post('/api/dossiers', requireSession, async (req, res) => {
+  const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
   if (!canManageDossiers(requester?.role)) return res.status(403).json({ error: 'Seuls un administrateur ou un contributeur peuvent créer un dossier.' });
 
   const { reference, title, owner, budget, date } = req.body;
   const assignedToId = Number(req.body.assigned_to);
   if (!reference || !title || !date) return res.status(400).json({ error: 'Référence, intitulé et date sont obligatoires.' });
-  const assignee = database.prepare('SELECT id, name FROM users WHERE id = ? AND active = 1').get(assignedToId);
+  const assignee = await database.prepare('SELECT id, name FROM users WHERE id = ? AND active = 1').get(assignedToId);
   if (!assignee) return res.status(400).json({ error: 'Veuillez sélectionner un utilisateur valide pour l’attribution.' });
 
   const dossier = {
@@ -312,15 +419,15 @@ app.post('/api/dossiers', requireSession, (req, res) => {
   };
 
   dossiers.unshift(dossier);
-  res.status(201).json(buildDossierDetailPayload(dossier));
+  res.status(201).json(await buildDossierDetailPayload(dossier));
 });
 
-app.post('/api/dossiers/:id/steps', requireSession, (req, res) => {
+app.post('/api/dossiers/:id/steps', requireSession, async (req, res) => {
   const dossierId = Number(req.params.id);
   const dossier = dossiers.find((item) => Number(item.id) === dossierId);
   if (!dossier) return res.status(404).json({ error: 'Dossier non trouvé.' });
 
-  const requester = database.prepare('SELECT role, name FROM users WHERE id = ?').get(req.userId);
+  const requester = await database.prepare('SELECT role, name FROM users WHERE id = ?').get(req.userId);
   if (!canManageDossiers(requester?.role) && Number(dossier.assigned_to) !== Number(req.userId)) {
     return res.status(403).json({ error: 'Vous n’êtes pas autorisé à modifier ce dossier.' });
   }
@@ -331,10 +438,10 @@ app.post('/api/dossiers/:id/steps', requireSession, (req, res) => {
   }
 
   const actor = requester?.name || 'Chef de projet';
-  const result = database.prepare('INSERT INTO dossier_history (dossier_id, label, note, actor) VALUES (?, ?, ?, ?)')
+  const result = await database.prepare('INSERT INTO dossier_history (dossier_id, label, note, actor) VALUES (?, ?, ?, ?)')
     .run(dossierId, String(label), String(note).trim(), actor);
 
-  const row = database.prepare('SELECT * FROM dossier_history WHERE id = ?').get(result.lastInsertRowid);
+  const row = await database.prepare('SELECT * FROM dossier_history WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json({
     id: row.id,
     dossier_id: row.dossier_id,
@@ -345,12 +452,12 @@ app.post('/api/dossiers/:id/steps', requireSession, (req, res) => {
   });
 });
 
-app.post('/api/dossiers/:id/attachments', requireSession, (req, res) => {
+app.post('/api/dossiers/:id/attachments', requireSession, async (req, res) => {
   const dossierId = Number(req.params.id);
   const dossier = dossiers.find((item) => Number(item.id) === dossierId);
   if (!dossier) return res.status(404).json({ error: 'Dossier non trouvé.' });
 
-  const requester = database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
+  const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
   if (!canManageDossiers(requester?.role) && Number(dossier.assigned_to) !== Number(req.userId)) {
     return res.status(403).json({ error: 'Vous n’êtes pas autorisé à modifier ce dossier.' });
   }
@@ -360,10 +467,10 @@ app.post('/api/dossiers/:id/attachments', requireSession, (req, res) => {
     return res.status(400).json({ error: 'La pièce jointe est incomplète.' });
   }
 
-  const result = database.prepare('INSERT INTO dossier_attachments (dossier_id, name, type, size, uploaded_at, data_url) VALUES (?, ?, ?, ?, ?, ?)')
+  const result = await database.prepare('INSERT INTO dossier_attachments (dossier_id, name, type, size, uploaded_at, data_url) VALUES (?, ?, ?, ?, ?, ?)')
     .run(dossierId, String(name), String(type), String(size), new Date().toISOString(), dataUrl || null);
 
-  const row = database.prepare('SELECT * FROM dossier_attachments WHERE id = ?').get(result.lastInsertRowid);
+  const row = await database.prepare('SELECT * FROM dossier_attachments WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json({
     id: row.id,
     name: row.name,
@@ -374,4 +481,9 @@ app.post('/api/dossiers/:id/attachments', requireSession, (req, res) => {
   });
 });
 
-app.listen(port, () => console.log(`AGP API listening on http://localhost:${port}`));
+if (!process.env.VERCEL) {
+  app.listen(port, () => console.log(`AGP API listening on http://localhost:${port}`));
+}
+
+export { app };
+export default app;
