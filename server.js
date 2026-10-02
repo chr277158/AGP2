@@ -122,7 +122,8 @@ function createDatabaseAdapter(usePostgres = Boolean(process.env.DATABASE_URL)) 
   return createSqliteDatabaseAdapter();
 }
 
-let database = createDatabaseAdapter();
+let usingPostgresDatabase = Boolean(process.env.DATABASE_URL);
+let database = createDatabaseAdapter(usingPostgresDatabase);
 
 function resolveProcurementStatus(statusValue) {
   if (statusValue === undefined || statusValue === null || statusValue === '') {
@@ -273,7 +274,11 @@ async function initializeDatabase() {
   try {
     await database.exec(schemaSql(Boolean(process.env.DATABASE_URL)));
   } catch (error) {
+    if (process.env.VERCEL) {
+      throw new Error(`Neon indisponible sur Vercel : ${error.message}`);
+    }
     console.warn('PostgreSQL unavailable. Falling back to SQLite:', error.message);
+    usingPostgresDatabase = false;
     database = createDatabaseAdapter(false);
     await database.exec(schemaSql(false));
   }
@@ -290,7 +295,7 @@ async function initializeDatabase() {
     await insertUser.run(Number(user.ID_1), user.NOM || 'Sans nom', String(user.MATRICULE || ''), user.GROUPE || 'READER', user.FONCTION || 'Non renseignée', user.TEL || 'Non renseigné', passwordHash);
   }
 
-  if (process.env.DATABASE_URL) {
+  if (usingPostgresDatabase) {
     await database.prepare(`SELECT setval(
       pg_get_serial_sequence('users', 'id'),
       COALESCE(MAX(id), 1),

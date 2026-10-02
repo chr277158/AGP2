@@ -299,7 +299,7 @@ function LoginView({ error, onLogin, onError }) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ matricule: form.get('matricule'), password: form.get('password') }) })
-      .then(async (response) => { const text = await response.text(); let result; try { result = JSON.parse(text); } catch { throw new Error(response.status === 404 ? 'Service de connexion indisponible. Redémarrez le serveur.' : 'Réponse invalide du serveur.'); } if (!response.ok) throw new Error(result.error || 'Connexion refusée.'); return result; })
+      .then(async (response) => { const text = await response.text(); let result; try { result = JSON.parse(text); } catch { throw new Error(response.status === 404 ? 'Service de connexion indisponible. Vérifiez le déploiement de l’API.' : `Réponse invalide du serveur (HTTP ${response.status}). Vérifiez les journaux Vercel.`); } if (!response.ok) throw new Error(result.error || 'Connexion refusée.'); return result; })
       .then(() => fetch('/api/me').then(async (response) => { if (!response.ok) throw new Error('Session impossible à établir.'); return response.json(); }).then(onLogin))
       .catch((loginError) => onError(loginError.message));
   }
