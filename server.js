@@ -197,6 +197,16 @@ async function initializeDatabase() {
       uploaded_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       data_url TEXT
     );
+
+    CREATE TABLE IF NOT EXISTS dossier_discussions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      dossier_id INTEGER NOT NULL,
+      kind TEXT NOT NULL,
+      message TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'Ouverte',
+      actor TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
   `;
 
   try {
@@ -344,6 +354,17 @@ app.get('/api/dossiers/:id', requireSession, async (req, res) => {
   res.json(await buildDossierDetailPayload(dossier));
 });
 
+app.get('/api/dossiers/:id/discussions', requireSession, async (req, res) => {
+  const dossierId = Number(req.params.id);
+  const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
+  const visible = getVisibleDossiersForUser(req.userId, requester?.role);
+  if (!visible.some((item) => Number(item.id) === dossierId)) {
+    return res.status(404).json({ error: 'Dossier introuvable.' });
+  }
+  const rows = await database.prepare('SELECT * FROM dossier_discussions WHERE dossier_id = ? ORDER BY created_at DESC, id DESC').all(dossierId);
+  res.json(rows.map((row) => ({ id: row.id, kind: row.kind, message: row.message, status: row.status, actor: row.actor, date: row.created_at })));
+});
+
 app.get('/api/tables', (_req, res) => res.json(Object.fromEntries(Object.entries(tables).map(([name, rows]) => [name, rows.length]))));
 app.get('/api/tables/:table', (req, res) => {
   const rows = tables[req.params.table];
@@ -452,7 +473,7 @@ app.post('/api/dossiers', requireSession, async (req, res) => {
   const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
   if (!canManageDossiers(requester?.role)) return res.status(403).json({ error: 'Seuls un administrateur ou un contributeur peuvent créer un dossier.' });
 
-  const { reference, title, owner, budget, date } = req.body;
+  const { reference, title, budget, date, nature_depense, mode_passation, nature_commande, commission, description } = req.body;
   const assignedToId = Number(req.body.assigned_to);
   if (!reference || !title || !date) return res.status(400).json({ error: 'Référence, intitulé et date sont obligatoires.' });
   const assignee = await database.prepare('SELECT id, name FROM users WHERE id = ? AND active = 1').get(assignedToId);
@@ -462,12 +483,17 @@ app.post('/api/dossiers', requireSession, async (req, res) => {
     id: Date.now(),
     reference,
     title,
-    owner: owner || assignee.name,
+    owner: assignee.name,
     assigned_to: assignee.id,
     budget: Number(budget) || 0,
     date,
+    nature_depense,
+    mode_passation,
+    nature_commande,
+    commission,
+    description: String(description || '').trim(),
     progress: 0,
-    status: 'À lancer'
+    status: ['À lancer', 'En attente', 'En cours'].includes(req.body.status) ? req.body.status : 'À lancer'
   };
 
   dossiers.unshift(dossier);
@@ -502,6 +528,24 @@ app.post('/api/dossiers/:id/steps', requireSession, async (req, res) => {
     actor: row.actor,
     date: String(row.created_at).slice(0, 10)
   });
+});
+
+app.post('/api/dossiers/:id/discussions', requireSession, async (req, res) => {
+  const dossierId = Number(req.params.id);
+  const dossier = dossiers.find((item) => Number(item.id) === dossierId);
+  if (!dossier) return res.status(404).json({ error: 'Dossier introuvable.' });
+  const requester = await database.prepare('SELECT role, name FROM users WHERE id = ?').get(req.userId);
+  const visible = getVisibleDossiersForUser(req.userId, requester?.role);
+  if (!visible.some((item) => Number(item.id) === dossierId)) {
+    return res.status(403).json({ error: 'Vous ne pouvez pas commenter ce dossier.' });
+  }
+  const kind = req.body.kind === 'clarification' ? 'clarification' : req.body.kind === 'remark' ? 'remark' : null;
+  const message = String(req.body.message || '').trim();
+  if (!kind || !message) return res.status(400).json({ error: 'Type et contenu sont obligatoires.' });
+  const result = await database.prepare('INSERT INTO dossier_discussions (dossier_id, kind, message, actor) VALUES (?, ?, ?, ?)')
+    .run(dossierId, kind, message, requester?.name || 'Utilisateur');
+  const row = await database.prepare('SELECT * FROM dossier_discussions WHERE id = ?').get(result.lastInsertRowid);
+  res.status(201).json({ id: row.id, kind: row.kind, message: row.message, status: row.status, actor: row.actor, date: row.created_at });
 });
 
 app.post('/api/dossiers/:id/attachments', requireSession, async (req, res) => {
