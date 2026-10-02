@@ -15,7 +15,29 @@ app.use(express.json());
 
 const xmlPath = path.join(process.cwd(), 'données', 'cc (1).xml');
 const dataPath = path.join(process.cwd(), 'données');
-const statusNames = { 1: 'À lancer', 2: 'En attente', 3: 'En cours', 4: 'Publié', 5: 'En cours', 6: 'Clôturé' };
+const procurementStatusNames = {
+  1: 'À lancer',
+  2: 'Préparation AO',
+  3: 'AO lancée',
+  4: 'Évaluation',
+  5: 'Décision commission',
+  6: 'Attribué',
+  7: 'Contrat signé',
+  8: 'Exécution',
+  9: 'Clôturé'
+};
+const legacyStatusAliases = {
+  'En attente': 'Préparation AO',
+  'En cours': 'AO lancée',
+  'Publié': 'AO lancée',
+  'A_LANCER': 'À lancer',
+  'AO_LANCEE': 'AO lancée',
+  'EVALUATION': 'Évaluation',
+  'ATTRIBUE': 'Attribué',
+  'CONTRAT_SIGNE': 'Contrat signé',
+  'CLOTURE': 'Clôturé'
+};
+const statusNames = procurementStatusNames;
 const sessions = new Map();
 const hasLocalXml = fs.existsSync(xmlPath);
 const hasLocalDataDir = fs.existsSync(dataPath);
@@ -103,6 +125,23 @@ function createDatabaseAdapter(usePostgres = Boolean(process.env.DATABASE_URL)) 
 
 let database = createDatabaseAdapter();
 
+function resolveProcurementStatus(statusValue) {
+  if (statusValue === undefined || statusValue === null || statusValue === '') {
+    return 'À lancer';
+  }
+
+  const normalized = String(statusValue).trim();
+  if (legacyStatusAliases[normalized]) {
+    return legacyStatusAliases[normalized];
+  }
+
+  if (statusNames[Number(normalized)]) {
+    return statusNames[Number(normalized)];
+  }
+
+  return statusNames[normalized] || normalized;
+}
+
 function loadDossiers() {
   if (!hasLocalXml) {
     return [];
@@ -110,17 +149,32 @@ function loadDossiers() {
 
   const xml = fs.readFileSync(xmlPath, 'utf8');
   const parsed = new XMLParser({ isArray: (name) => name === 'ROW' }).parse(xml);
-  return parsed.ROWSET.ROW.map((row) => ({
-    id: Number(row.ID),
-    reference: row.REF_AO || `DOS-${row.ID}`,
-    title: row.OBJET_CCT || 'Sans intitulé',
-    owner: row.CREER_PAR || 'Non renseigné',
-    budget: parseBudget(row.BUDGET),
-    status: statusNames[row.STATUS] || 'En attente',
-    progress: statusNames[row.STATUS] === 'Clôturé' ? 100 : Number(row.STATUS) === 4 ? 68 : Number(row.STATUS) === 3 ? 45 : 20,
-    date: row.DATE_LIMITE_PROPOSÉE || row.DATE_OUVERTURE_DES_PLIS || row.DATE_DE_LANC || row.DATE_DE_CRÉATION || null,
-    nature: row.NATURE_DE_DEPENSE || 'Non renseignée'
-  }));
+  return parsed.ROWSET.ROW.map((row) => {
+    const status = resolveProcurementStatus(row.STATUS);
+    const progressMap = {
+      'À lancer': 15,
+      'Préparation AO': 30,
+      'AO lancée': 55,
+      'Évaluation': 72,
+      'Décision commission': 82,
+      'Attribué': 88,
+      'Contrat signé': 92,
+      'Exécution': 96,
+      'Clôturé': 100
+    };
+
+    return {
+      id: Number(row.ID),
+      reference: row.REF_AO || `DOS-${row.ID}`,
+      title: row.OBJET_CCT || 'Sans intitulé',
+      owner: row.CREER_PAR || 'Non renseigné',
+      budget: parseBudget(row.BUDGET),
+      status,
+      progress: progressMap[status] ?? 20,
+      date: row.DATE_LIMITE_PROPOSÉE || row.DATE_OUVERTURE_DES_PLIS || row.DATE_DE_LANC || row.DATE_DE_CRÉATION || null,
+      nature: row.NATURE_DE_DEPENSE || 'Non renseignée'
+    };
+  });
 }
 
 function excelDate(value, fieldName = '') {

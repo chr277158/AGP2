@@ -18,7 +18,47 @@ const navItems = [
   , { label: 'Mon profil', icon: Settings2, key: 'profile' }
 ];
 
-const statusClass = { 'En cours': 'teal', 'À lancer': 'amber', Publié: 'blue', Clôturé: 'gray', 'En attente': 'rose' };
+const PROCUREMENT_STATUS_OPTIONS = [
+  'À lancer',
+  'Préparation AO',
+  'AO lancée',
+  'Évaluation',
+  'Décision commission',
+  'Attribué',
+  'Contrat signé',
+  'Exécution',
+  'Clôturé'
+];
+const PROCUREMENT_COMMISSION_OPTIONS = ['CAE', 'CME', 'CRA'];
+const PROCUREMENT_STEP_OPTIONS = [
+  'Réception de la demande',
+  'Désignation de la commission',
+  'Définition des critères',
+  'Cahier des charges',
+  'Validation DCCC',
+  'Approbation de la commission',
+  'Lancement de l’appel d’offres',
+  'Ouverture des plis',
+  'Évaluation technique et financière',
+  'Note à la commission CRA/CAE/CME',
+  'Décision de la commission',
+  'Création du contrat',
+  'Signature du contrat',
+  'Demande du cautionnement définitif (20 jours)',
+  'Paiement des factures',
+  'Clôture du dossier'
+];
+const statusClass = {
+  'À lancer': 'amber',
+  'Préparation AO': 'rose',
+  'AO lancée': 'blue',
+  'Évaluation': 'teal',
+  'Décision commission': 'amber',
+  Attribué: 'blue',
+  'Contrat signé': 'teal',
+  Exécution: 'teal',
+  Clôturé: 'gray'
+};
 
 function normalizeReference(value) {
   return String(value ?? '').trim().toUpperCase();
@@ -222,10 +262,10 @@ function DossierCreateView({ language, users, currentUser, onCancel, onSubmit })
         <div className="create-fields">
           <label>{t('Référence du dossier', 'رقم الملف')}<input name="reference" onChange={(event) => { event.target.value = normalizeReference(event.target.value); }} placeholder="AO-2026-015" required /></label>
           <label className="span-two">{t('Objet de l’appel d’offres', 'موضوع طلب العروض')}<input name="title" required /></label>
-          <label>{t('Statut', 'الحالة')}<select name="status" defaultValue="À lancer" required><option value="À lancer">{t('À lancer', 'قيد التحضير')}</option><option value="En attente">{t('En attente', 'في الانتظار')}</option><option value="En cours">{t('En cours', 'قيد التنفيذ')}</option></select></label>
+          <label>{t('Statut', 'الحالة')}<select name="status" defaultValue="À lancer" required>{PROCUREMENT_STATUS_OPTIONS.map((status) => <option key={status} value={status}>{t(status, status)}</option>)}</select></label>
           <label>{t('Mode de passation', 'طريقة إبرام الصفقة')}<select name="mode_passation" required><option value="">{t('Sélectionner', 'اختر')}</option><option value="Consultation restreinte">استشارة مضيقة (Consultation restreinte)</option><option value="Consultation ouverte">استشارة مفتوحة (Consultation ouverte)</option><option value="Négociation directe">استشارة بالتفاوض المباشر (Négociation directe)</option><option value="Appel d’offres ouvert">طلب عروض مفتوح (Appel d’offres ouvert)</option></select></label>
           <label>{t('Nature de la commande', 'نوعية الطلب')}<select name="nature_commande" required><option value="">{t('Sélectionner', 'اختر')}</option><option>Etude</option><option>Service</option></select></label>
-          <label>{t('Commission compétente', 'اللجنة المختصة')}<select name="commission" required><option value="">{t('Sélectionner', 'اختر')}</option><option>CAE</option><option>CME</option><option>CRA</option><option>CSM</option></select></label>
+          <label>{t('Commission compétente', 'اللجنة المختصة')}<select name="commission" required><option value="">{t('Sélectionner', 'اختر')}</option>{PROCUREMENT_COMMISSION_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
           <label>{t('Responsable du dossier', 'المكلف بالملف')}<select name="assigned_to" defaultValue={currentUser.id || ''} required>{activeUsers.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}</select></label>
         </div>
       </section>
@@ -317,7 +357,7 @@ function ListView({ page, items, query, setQuery, onOpen, onSelectDossier }) {
   const visibleRows = rows.filter((item) => !statusFilter || item.status === statusFilter);
   const t = (fr, ar) => text(language, fr, ar);
   return <>
-    <div className="filter-bar"><div className="search-box"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('Rechercher par référence, intitulé ou responsable...', 'ابحث بالمرجع أو الموضوع أو المسؤول...')} /></div><select className="filter-button" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="">{t('Tous les statuts', 'كل الحالات')}</option>{['À lancer', 'En attente', 'En cours', 'Publié', 'Clôturé'].map((status) => <option key={status} value={status}>{text(language, status, ({ 'À lancer': 'قيد التحضير', 'En attente': 'في الانتظار', 'En cours': 'قيد التنفيذ', Publié: 'منشور', Clôturé: 'مغلق' })[status])}</option>)}</select></div>
+    <div className="filter-bar"><div className="search-box"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('Rechercher par référence, intitulé ou responsable...', 'ابحث بالمرجع أو الموضوع أو المسؤول...')} /></div><select className="filter-button" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="">{t('Tous les statuts', 'كل الحالات')}</option>{PROCUREMENT_STATUS_OPTIONS.map((status) => <option key={status} value={status}>{text(language, status, ({ 'À lancer': 'قيد التحضير', 'Préparation AO': 'تحضير طلب العروض', 'AO lancée': 'طلب عروض منشور', 'Évaluation': 'التقييم', 'Décision commission': 'قرار اللجنة', Attribué: 'مُسند', 'Contrat signé': 'العقد موقع', Exécution: 'التنفيذ', Clôturé: 'مغلق' })[status] || status)}</option>)}</select></div>
     <section className="panel list-panel"><div className="panel-heading"><div><p className="eyebrow">{page === 'appels' ? t('REGISTRE DES APPELS D’OFFRES', 'سجل طلبات العروض') : t('REGISTRE MÉTIER', 'السجل')}</p><h2>{page === 'appels' ? t(`${visibleRows.length} appels d’offres`, `${visibleRows.length} طلبات عروض`) : t(`${visibleRows.length} enregistrements`, `${visibleRows.length} سجلات`)}</h2></div>{onOpen && <button className="secondary-button" onClick={onOpen}><FilePlus2 size={17} />{t('Nouveau dossier', 'ملف جديد')}</button>}</div><DossierTable items={visibleRows} onSelectDossier={onSelectDossier} /></section>
   </>;
 }
@@ -529,11 +569,7 @@ function DossierDetailView({ dossier, onBack, users }) {
         </div>
         <form className="step-form" onSubmit={handleAddStep}>
           <select value={stepLabel} onChange={(event) => setStepLabel(event.target.value)}>
-            <option value="Analyse">{t('Analyse', 'تحليل')}</option>
-            <option value="Validation">{t('Validation', 'مصادقة')}</option>
-            <option value="Appel d’offres">{t('Appel d’offres', 'طلب عروض')}</option>
-            <option value="Négociation">{t('Négociation', 'تفاوض')}</option>
-            <option value="Décision">{t('Décision', 'قرار')}</option>
+            {PROCUREMENT_STEP_OPTIONS.map((step) => <option key={step} value={step}>{step}</option>)}
           </select>
           <textarea value={stepNote} onChange={(event) => setStepNote(event.target.value)} rows="3" placeholder={t('Ajouter une note sur cette étape...', 'أضف ملاحظة لهذه المرحلة...')} />
           <button type="submit" className="primary-button">{t('Ajouter une étape', 'إضافة مرحلة')}</button>
