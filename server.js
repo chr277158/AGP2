@@ -457,11 +457,14 @@ app.get('/api/users', requireSession, async (req, res) => {
 app.post('/api/users', requireSession, async (req, res) => {
   const requester = await database.prepare('SELECT role FROM users WHERE id = ?').get(req.userId);
   if (!canManageUsers(requester?.role)) return res.status(403).json({ error: 'Droits administrateur requis.' });
-  const { name, matricule, role = 'READER', function: functionName = 'Non renseignée', phone = 'Non renseigné' } = req.body;
-  if (!name || !matricule) return res.status(400).json({ error: 'Nom et matricule obligatoires' });
+  const { name, matricule, role = 'READER', function: functionName = 'Non renseignée', phone = 'Non renseigné', password } = req.body;
+  if (!name || !matricule || !password) return res.status(400).json({ error: 'Nom, matricule et mot de passe obligatoires.' });
+  if (password.length < 8) return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 8 caractères.' });
+  const salt = randomBytes(16).toString('hex');
+  const passwordHash = `${salt}:${scryptSync(password, salt, 64).toString('hex')}`;
   try {
-    const result = await database.prepare(`INSERT INTO users (name, matricule, role, function_name, phone) VALUES (?, ?, ?, ?, ?)`)
-      .run(name, matricule, role, functionName, phone);
+    const result = await database.prepare(`INSERT INTO users (name, matricule, role, function_name, phone, password_hash) VALUES (?, ?, ?, ?, ?, ?)`)
+      .run(name, matricule, role, functionName, phone, passwordHash);
     const user = await database.prepare(`SELECT ${userFields} FROM users WHERE id = ?`).get(result.lastInsertRowid);
     res.status(201).json({ ...user, active: Boolean(user.active) });
   } catch (error) {
