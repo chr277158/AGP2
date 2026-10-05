@@ -39,11 +39,6 @@ const legacyStatusAliases = {
 };
 const statusNames = procurementStatusNames;
 const hasLocalXml = fs.existsSync(xmlPath);
-const hasLocalDataDir = fs.existsSync(dataPath);
-
-if (!hasLocalDataDir) {
-  fs.mkdirSync(dataPath, { recursive: true });
-}
 
 function parseBudget(value) {
   if (value === undefined || value === null || value === '') return 0;
