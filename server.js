@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { createHash, scryptSync, randomBytes, timingSafeEqual } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { XMLParser } from 'fast-xml-parser';
@@ -13,8 +14,24 @@ const app = express();
 const port = process.env.PORT || 3001;
 app.use(express.json());
 
-const xmlPath = path.join(process.cwd(), 'données', 'cc (1).xml');
-const dataPath = path.join(process.cwd(), 'données');
+// Remplace 'données' par 'donnees' pour éviter les problèmes d'encodage et d'accents sur Linux/Vercel
+const xmlPath = path.join(process.cwd(), 'donnees', 'cc (1).xml');
+
+// Sur Vercel (serverless), le dossier du projet est en lecture seule (/var/task/).
+// On utilise os.tmpdir() pour le stockage temporaire si de l'écriture/mkdir est nécessaire.
+const dataPath = process.env.VERCEL
+  ? path.join(os.tmpdir(), 'donnees')
+  : path.join(process.cwd(), 'donnees');
+
+// Création sécurisée du dossier dataPath si nécessaire
+if (!fs.existsSync(dataPath)) {
+  try {
+    fs.mkdirSync(dataPath, { recursive: true });
+  } catch (error) {
+    console.warn(`Impossible de créer le dossier ${dataPath}:`, error.message);
+  }
+}
+
 const procurementStatusNames = {
   1: 'À lancer',
   2: 'Préparation AO',
@@ -26,6 +43,7 @@ const procurementStatusNames = {
   8: 'Exécution',
   9: 'Clôturé'
 };
+
 const legacyStatusAliases = {
   'En attente': 'Préparation AO',
   'En cours': 'AO lancée',
@@ -37,6 +55,7 @@ const legacyStatusAliases = {
   'CONTRAT_SIGNE': 'Contrat signé',
   'CLOTURE': 'Clôturé'
 };
+
 const statusNames = procurementStatusNames;
 const hasLocalXml = fs.existsSync(xmlPath);
 
@@ -55,7 +74,11 @@ function toPostgresQuery(sql, params = []) {
 }
 
 function createSqliteDatabaseAdapter() {
-  const sqlite = new DatabaseSync(path.join(process.cwd(), 'agp.sqlite'));
+  const dbPath = process.env.VERCEL
+    ? path.join(os.tmpdir(), 'agp.sqlite')
+    : path.join(process.cwd(), 'agp.sqlite');
+
+  const sqlite = new DatabaseSync(dbPath);
   return {
     exec(sql) {
       sqlite.exec(sql);
@@ -142,34 +165,39 @@ function loadDossiers() {
     return [];
   }
 
-  const xml = fs.readFileSync(xmlPath, 'utf8');
-  const parsed = new XMLParser({ isArray: (name) => name === 'ROW' }).parse(xml);
-  return parsed.ROWSET.ROW.map((row) => {
-    const status = resolveProcurementStatus(row.STATUS);
-    const progressMap = {
-      'À lancer': 15,
-      'Préparation AO': 30,
-      'AO lancée': 55,
-      'Évaluation': 72,
-      'Décision commission': 82,
-      'Attribué': 88,
-      'Contrat signé': 92,
-      'Exécution': 96,
-      'Clôturé': 100
-    };
+  try {
+    const xml = fs.readFileSync(xmlPath, 'utf8');
+    const parsed = new XMLParser({ isArray: (name) => name === 'ROW' }).parse(xml);
+    return (parsed.ROWSET?.ROW || []).map((row) => {
+      const status = resolveProcurementStatus(row.STATUS);
+      const progressMap = {
+        'À lancer': 15,
+        'Préparation AO': 30,
+        'AO lancée': 55,
+        'Évaluation': 72,
+        'Décision commission': 82,
+        'Attribué': 88,
+        'Contrat signé': 92,
+        'Exécution': 96,
+        'Clôturé': 100
+      };
 
-    return {
-      id: Number(row.ID),
-      reference: row.REF_AO || `DOS-${row.ID}`,
-      title: row.OBJET_CCT || 'Sans intitulé',
-      owner: row.CREER_PAR || 'Non renseigné',
-      budget: parseBudget(row.BUDGET),
-      status,
-      progress: progressMap[status] ?? 20,
-      date: row.DATE_LIMITE_PROPOSÉE || row.DATE_OUVERTURE_DES_PLIS || row.DATE_DE_LANC || row.DATE_DE_CRÉATION || null,
-      nature: row.NATURE_DE_DEPENSE || 'Non renseignée'
-    };
-  });
+      return {
+        id: Number(row.ID),
+        reference: row.REF_AO || `DOS-${row.ID}`,
+        title: row.OBJET_CCT || 'Sans intitulé',
+        owner: row.CREER_PAR || 'Non renseigné',
+        budget: parseBudget(row.BUDGET),
+        status,
+        progress: progressMap[status] ?? 20,
+        date: row.DATE_LIMITE_PROPOSÉE || row.DATE_OUVERTURE_DES_PLIS || row.DATE_DE_LANC || row.DATE_DE_CRÉATION || null,
+        nature: row.NATURE_DE_DEPENSE || 'Non renseignée'
+      };
+    });
+  } catch (error) {
+    console.warn(`Erreur lors de la lecture du fichier XML : ${error.message}`);
+    return [];
+  }
 }
 
 function excelDate(value, fieldName = '') {
@@ -180,7 +208,7 @@ function excelDate(value, fieldName = '') {
 }
 
 async function loadXlsx(fileName) {
-  const filePath = path.join(dataPath, fileName);
+  const filePath = path.join(process.cwd(), 'donnees', fileName);
   if (!fs.existsSync(filePath)) {
     return [];
   }
@@ -189,6 +217,8 @@ async function loadXlsx(fileName) {
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.readFile(filePath);
     const sheet = workbook.worksheets[0];
+    if (!sheet) return [];
+    
     const headers = sheet.getRow(1).values.slice(1);
     const rows = [];
     sheet.eachRow((row, rowNumber) => {
@@ -270,7 +300,7 @@ async function initializeDatabase() {
     await database.exec(schemaSql(Boolean(process.env.DATABASE_URL)));
   } catch (error) {
     if (process.env.VERCEL) {
-      throw new Error(`Neon indisponible sur Vercel : ${error.message}`);
+      throw new Error(`Base de données indisponible sur Vercel : ${error.message}`);
     }
     console.warn('PostgreSQL unavailable. Falling back to SQLite:', error.message);
     usingPostgresDatabase = false;
@@ -311,7 +341,6 @@ async function initializeDatabase() {
 await initializeDatabase();
 
 const userFields = 'id, name, matricule, role, function_name AS "function", phone, active, created_at';
-const currentUserId = 6;
 
 function buildDefaultHistory(dossier, assignee = null) {
   const actor = assignee?.name || dossier.owner || 'Chef de projet';
@@ -510,13 +539,13 @@ app.get('/api/me', requireSession, async (req, res) => {
 
 app.get('/api/my-leaves', requireSession, async (req, res) => {
   const currentUser = await database.prepare('SELECT matricule FROM users WHERE id = ?').get(req.userId);
-  const leaves = tables.conges.filter((leave) => String(leave.MATRICULE) === String(currentUser.matricule));
+  const leaves = (tables.conges || []).filter((leave) => String(leave.MATRICULE) === String(currentUser.matricule));
   res.json(leaves);
 });
 
 app.post('/api/my-leaves', requireSession, async (req, res) => {
   const currentUser = await database.prepare('SELECT matricule FROM users WHERE id = ?').get(req.userId);
-  const sourceUser = tables.utilisateurs.find((user) => String(user.MATRICULE) === String(currentUser.matricule));
+  const sourceUser = (tables.utilisateurs || []).find((user) => String(user.MATRICULE) === String(currentUser.matricule));
   const { type, requestDate, dateStart, dateEnd, address = '', holidays = 0 } = req.body;
   if (!type || !dateStart || !dateEnd || dateEnd < dateStart) return res.status(400).json({ error: 'Type et période de congé obligatoires' });
   const start = new Date(`${dateStart}T00:00:00Z`);
@@ -524,6 +553,7 @@ app.post('/api/my-leaves', requireSession, async (req, res) => {
   const holidayDays = Math.max(0, Math.trunc(Number(holidays) || 0));
   const numberOfDays = Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start ? 0 : Math.max(0, Math.floor((end - start) / 86400000) - holidayDays);
   const leave = { CONGE_ID: Date.now(), MATRICULE: currentUser.matricule, NOM_PRENOM: sourceUser?.NOM || '', FONCTION: sourceUser?.FONCTION || '', TELEPHONE: sourceUser?.TEL || '', SERVICE: 'الإقتناء المجمع للخدمات', TYPE_CONGE: type, NBR_JOURS: numberOfDays, NBR_FERIES: holidayDays, DATE_DEBUT: dateStart, DATE_FIN: dateEnd, ADRESSE_CONGE: address, DATE_DEMANDE: requestDate || today(), STATUT: 'EN_ATTENTE' };
+  tables.conges = tables.conges || [];
   tables.conges.unshift(leave);
   res.status(201).json(leave);
 });
@@ -544,8 +574,8 @@ app.get('/api/stats', requireSession, async (req, res) => {
   res.json({
     total: visibleDossiers.length,
     active: visibleDossiers.filter(({ status }) => status === 'En cours' || status === 'Publié').length,
-    contracts: tables.contrats.length,
-    reminders: tables.notes.length,
+    contracts: (tables.contrats || []).length,
+    reminders: (tables.notes || []).length,
     budget: visibleDossiers.reduce((total, { budget }) => total + budget, 0)
   });
 });
