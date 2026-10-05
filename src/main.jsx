@@ -152,16 +152,33 @@ function App() {
   }
 
   useEffect(() => {
+    fetchJson('/api/me')
+      .then((user) => { setCurrentUser(user); setSignedIn(true); })
+      .catch(() => setSignedIn(false));
+  }, []);
+
+  useEffect(() => {
+    if (!signedIn) return;
+
     Promise.all([
       fetchJson('/api/dossiers'),
       fetchJson('/api/stats'),
       fetchJson('/api/tables/contrats'),
-      fetchJson('/api/users')
-      , fetchJson('/api/my-leaves'), fetchJson('/api/me')
+      currentUser.role === 'ADMINISTRATOR' ? fetchJson('/api/users') : Promise.resolve([]),
+      fetchJson('/api/my-leaves')
     ])
-      .then(([items, summary, contractItems, userItems, leaveItems, user]) => { setDossiers(items); setStats(summary); setContrats(contractItems); setUsers(userItems); setLeaves(leaveItems); setCurrentUser(user); setSignedIn(true); })
-      .catch((error) => { setSignedIn(false); if (error) notify('Connectez-vous pour accéder à votre espace.', 'warning'); });
-  }, []);
+      .then(([items, summary, contractItems, userItems, leaveItems]) => {
+        setDossiers(items);
+        setStats(summary);
+        setContrats(contractItems);
+        setUsers(userItems);
+        setLeaves(leaveItems);
+      })
+      .catch((error) => {
+        if (error.message.includes('Session expirée')) setSignedIn(false);
+        else notify(error.message, 'error');
+      });
+  }, [signedIn, currentUser.role]);
 
   const isAdmin = currentUser.role === 'ADMINISTRATOR';
   const visibleNavItems = navItems.filter((item) => item.key !== 'users' || isAdmin);
@@ -184,7 +201,7 @@ function App() {
   }
 
   if (signedIn === null) return null;
-  if (!signedIn) return <LoginView error={loginError} onLogin={(user) => { setCurrentUser(user); setSignedIn(true); setLoginError(''); window.location.reload(); }} onError={setLoginError} />;
+  if (!signedIn) return <LoginView error={loginError} onLogin={(user) => { setCurrentUser(user); setSignedIn(true); setLoginError(''); }} onError={setLoginError} />;
 
   function createDossier(event) {
     event.preventDefault();
