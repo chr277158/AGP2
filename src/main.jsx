@@ -5,6 +5,7 @@ import './styles.css';
 import './admin.css';
 import './leave.css';
 import './workflow.css';
+import './profile.css';
 
 const navItems = [
   { label: 'Tableau de bord', icon: LayoutDashboard, key: 'dashboard' },
@@ -235,17 +236,17 @@ function App() {
     const dateStart = form.get('dateStart');
     const dateEnd = form.get('dateEnd');
     const holidays = Math.max(0, Math.trunc(Number(form.get('holidays') || 0)));
-    const numberOfDays = calculateLeaveDays(dateStart, dateEnd, holidays);
+    const numberOfDays = calculateLeaveDays(dateStart, dateEnd);
     const payload = { type: form.get('type'), requestDate: form.get('requestDate'), dateStart, dateEnd, holidays, address: form.get('address'), numberOfDays };
     fetch('/api/my-leaves', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       .then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error || 'Création impossible.'); return result; })
-      .then((item) => { setLeaves((current) => [item, ...current]); setShowLeaveForm(false); setLeaveDays(0); notify('Demande de congé créée avec succès.', 'success'); })
+      .then((item) => { setLeaves((current) => [item, ...current]); setCurrentUser((user) => ({ ...user, leave_balance: item.SOLDE_APRES })); setShowLeaveForm(false); setLeaveDays(0); notify('Demande de congé créée et validée automatiquement.', 'success'); })
       .catch((error) => notify(error.message, 'error'));
   }
 
   function updateLeaveDays(event) {
     const form = event.currentTarget.form;
-    setLeaveDays(calculateLeaveDays(form.dateStart.value, form.dateEnd.value, form.holidays.value));
+    setLeaveDays(calculateLeaveDays(form.dateStart.value, form.dateEnd.value));
   }
 
   return <LanguageContext.Provider value={language}><div className="app-shell" dir={language === 'ar' ? 'rtl' : 'ltr'}>
@@ -257,7 +258,7 @@ function App() {
     </aside>
     <main className="main-content">
       <header className="topbar"><button className="mobile-menu"><Menu size={20} /></button><div className="breadcrumbs"><span>AGP</span><span>/</span><strong>{text(language, title, ({ 'Tableau de bord': 'لوحة القيادة', 'Détail du dossier': 'تفاصيل الملف', 'Nouveau dossier': 'ملف جديد', Dossiers: 'الملفات', "Appels d’offres": 'طلبات العروض', Contrats: 'العقود' })[title] || title)}</strong></div><div className="top-actions"><div className="language-switch" role="group" aria-label="Langue"><button type="button" className={language === 'fr' ? 'selected' : ''} onClick={() => setLanguage('fr')}>FR</button><button type="button" className={language === 'ar' ? 'selected' : ''} onClick={() => setLanguage('ar')}>عربي</button></div><button className="icon-button" title={text(language, 'Notifications', 'الإشعارات')}><Bell size={19} /><i /></button><div className="top-avatar">{getInitials(currentUser.name)}</div><button className="logout-button" onClick={() => { fetch('/api/logout', { method: 'POST' }); setSignedIn(false); }} title={text(language, 'Se déconnecter', 'تسجيل الخروج')}><LogOut size={17} /><span>{text(language, 'Se déconnecter', 'تسجيل الخروج')}</span></button></div></header>
-      <section className={`page-content ${page === 'dossier-new' ? 'creating-dossier' : ''}`}>
+      <section className={`page-content page-${page} ${page === 'dossier-new' ? 'creating-dossier' : ''}`}>
         {page === 'dossier-new' && <DossierCreateView language={language} users={users} currentUser={currentUser} onCancel={() => setPage('appels')} onSubmit={createDossier} />}
         {page !== 'dossier-new' && <div className="page-heading"><div><p className="eyebrow">{text(language, 'SUIVI DES MARCHÉS', 'متابعة الصفقات')}</p><h1>{page === 'dashboard' ? text(language, `Bonjour ${currentUser.name}, voici votre activité.`, `مرحباً ${currentUser.name}، إليك ملخص نشاطك.`) : text(language, title, ({ 'Détail du dossier': 'تفاصيل الملف', "Appels d’offres": 'طلبات العروض', Dossiers: 'الملفات' })[title] || title)}</h1><p className="subheading">{text(language, 'Pilotez les appels d’offres et gardez une vue claire sur vos engagements.', 'تابع طلبات العروض والتزاماتك بوضوح.')}</p></div>{page === 'leaves' ? <button className="primary-button" onClick={() => setShowLeaveForm(true)}><CalendarDays size={18} />{text(language, 'Nouveau congé', 'طلب إجازة')}</button> : canManageDossiers(currentUser.role) ? <button className="primary-button" onClick={() => setPage('dossier-new')}><FilePlus2 size={18} />{text(language, 'Créer un dossier', 'إنشاء ملف')}</button> : null}</div>}
         {notice && <div className={`notice notice-${notice.tone}`}><ShieldCheck size={17} />{notice.message}<button onClick={() => setNotice(null)}><X size={16} /></button></div>}
@@ -307,9 +308,38 @@ function Dashboard({ stats, dossiers, onOpen, onSelectDossier, onSelectStat }) {
 function Stat({ icon: Icon, label, value, change, tone, onClick }) { return <button type="button" className="stat-card is-clickable" onClick={onClick}><div className={`stat-icon ${tone}`}><Icon size={20} /></div><div className="stat-copy"><span>{label}</span><strong>{value}</strong><small className={tone}>{change}</small></div></button> }
 function LeavesView({ leaves, user }) {
   const totalDays = leaves.reduce((sum, leave) => sum + Number(leave.NBR_JOURS || 0), 0);
-  return <><div className="admin-summary"><div><p className="eyebrow">HISTORIQUE PERSONNEL</p><h2>Mes Congés</h2><p>Consultez uniquement vos demandes de congé et leur évolution.</p></div><div className="leave-total"><strong>{totalDays}</strong><span>jours demandés</span></div></div><section className="panel list-panel"><div className="panel-heading"><div><p className="eyebrow">MES DEMANDES</p><h2>{leaves.length} demande{leaves.length > 1 ? 's' : ''}</h2></div><span className="admin-badge"><ShieldCheck size={15} />Données personnelles</span></div><div className="table-wrap"><table><thead><tr><th>Période</th><th>Type</th><th>Durée</th><th>Solde avant</th><th>Solde après</th><th>Demande déposée le</th><th>Statut</th><th>Imprimer</th></tr></thead><tbody>{leaves.map((leave) => <tr key={leave.CONGE_ID}><td><strong>{formatDate(leave.DATE_DEBUT)} → {formatDate(leave.DATE_FIN)}</strong></td><td>{leave.TYPE_CONGE || 'Non renseigné'}</td><td><strong>{leave.NBR_JOURS || 0} jours</strong><span className="muted">{leave.NBR_FERIES || 0} jour(s) férié(s)</span></td><td>{leave.SOLDE_AVANT ?? '-'} jours</td><td>{leave.SOLDE_APRES ?? '-'} jours</td><td>{formatDate(leave.DATE_DEMANDE)}</td><td><span className={`status ${leave.STATUT === 'VALIDE' ? 'teal' : 'amber'}`}><i />{leave.STATUT || 'EN_ATTENTE'}</span></td><td><button className="table-action" onClick={() => printLeaveRequest(leave, user)} title="Imprimer la demande"><Printer size={16} />Imprimer</button></td></tr>)}</tbody></table></div>{leaves.length === 0 && <div className="empty-state"><CalendarDays size={30} /><p>Aucun congé enregistré pour votre compte.</p></div>}</section></>;
+  const [balance, setBalance] = useState(Number(user.leave_balance || 0));
+  const [showBalanceForm, setShowBalanceForm] = useState(false);
+  const [balanceError, setBalanceError] = useState('');
+
+  useEffect(() => {
+    fetch('/api/me').then((response) => response.ok ? response.json() : null).then((profile) => {
+      if (profile) setBalance(Number(profile.leave_balance || 0));
+    }).catch(() => {});
+  }, [user.id]);
+
+  function saveBalance(event) {
+    event.preventDefault();
+    const nextBalance = Number(new FormData(event.currentTarget).get('balance'));
+    fetch('/api/my-leave-balance', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ balance: nextBalance }) })
+      .then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error || 'Mise à jour impossible.'); return result; })
+      .then((result) => { setBalance(result.leave_balance); setShowBalanceForm(false); setBalanceError(''); })
+      .catch((error) => setBalanceError(error.message));
+  }
+
+  return <><div className="admin-summary"><div><p className="eyebrow">HISTORIQUE PERSONNEL</p><h2>Mes Congés</h2><p>Consultez uniquement vos demandes de congé et leur évolution.</p></div><div className="leave-summary-actions"><div className="leave-total"><strong>{balance}</strong><span>jours de congé disponibles</span></div><div className="leave-total leave-request-total"><strong>{totalDays}</strong><span>jours demandés</span></div><button className="secondary-button" onClick={() => setShowBalanceForm(true)}><Settings2 size={16} />Régler mon solde</button></div></div><section className="panel list-panel"><div className="panel-heading"><div><p className="eyebrow">MES DEMANDES</p><h2>{leaves.length} demande{leaves.length > 1 ? 's' : ''}</h2></div><span className="admin-badge"><ShieldCheck size={15} />Données personnelles</span></div><div className="table-wrap"><table><thead><tr><th>Période</th><th>Type</th><th>Durée</th><th>Solde avant</th><th>Solde après</th><th>Demande déposée le</th><th>Statut</th><th>Imprimer</th></tr></thead><tbody>{leaves.map((leave) => <tr key={leave.CONGE_ID}><td><strong>{formatDate(leave.DATE_DEBUT)} → {formatDate(leave.DATE_FIN)}</strong></td><td>{leave.TYPE_CONGE || 'Non renseigné'}</td><td><strong>{leave.NBR_JOURS || 0} jours</strong><span className="muted">{leave.NBR_FERIES || 0} jour(s) férié(s)</span></td><td>{leave.SOLDE_AVANT ?? '-'} jours</td><td>{leave.SOLDE_APRES ?? '-'} jours</td><td>{formatDate(leave.DATE_DEMANDE)}</td><td><span className={`status ${leave.STATUT === 'VALIDE' ? 'teal' : 'amber'}`}><i />{leave.STATUT || 'EN_ATTENTE'}</span></td><td><button className="table-action" onClick={() => printLeaveRequest(leave, user)} title="Imprimer la demande"><Printer size={16} />Imprimer</button></td></tr>)}</tbody></table></div>{leaves.length === 0 && <div className="empty-state"><CalendarDays size={30} /><p>Aucun congé enregistré pour votre compte.</p></div>}</section>{showBalanceForm && <div className="modal-backdrop"><form className="modal" onSubmit={saveBalance}><div className="modal-header"><div><p className="eyebrow">SOLDE PERSONNEL</p><h2>Régler mon solde de congé</h2></div><button type="button" className="close-button" onClick={() => { setShowBalanceForm(false); setBalanceError(''); }}><X size={19} /></button></div><label>Solde disponible (jours)<input name="balance" type="number" min="0" step="0.01" defaultValue={balance} required /></label>{balanceError && <p className="form-error">{balanceError}</p>}<div className="modal-actions"><button type="button" className="secondary-button" onClick={() => { setShowBalanceForm(false); setBalanceError(''); }}>Annuler</button><button className="primary-button" type="submit"><Settings2 size={17} />Enregistrer le solde</button></div></form></div>}</>;
 }
 function formatDate(value) { return value ? new Date(value).toLocaleDateString('fr-FR') : '-'; }
+function formatPrintDate(value) {
+  if (!value) return '-';
+  const parts = String(value).match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+  if (parts) return `${parts[1]}/${parts[2].padStart(2, '0')}/${parts[3].padStart(2, '0')}`;
+  const frenchParts = String(value).match(/^(\d{1,2})[/.](\d{1,2})[/.](\d{4})$/);
+  if (frenchParts) return `${frenchParts[3]}/${frenchParts[2].padStart(2, '0')}/${frenchParts[1].padStart(2, '0')}`;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+}
 function getInitials(name) { return String(name || '?').trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join('').toUpperCase(); }
 function LoginView({ error, onLogin, onError }) {
   function submit(event) {
@@ -327,23 +357,39 @@ function ProfileView({ user, onSaved, onNotify }) {
     event.preventDefault();
     const formElement = event.currentTarget;
     const form = new FormData(formElement);
-    const payload = Object.fromEntries(['name', 'matricule', 'function', 'phone', 'password'].map((key) => [key, form.get(key)]));
-    fetch(`/api/users/${user.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error); return result; }).then((updated) => { onSaved(updated); formElement.reset(); onNotify('Profil mis à jour.', 'success'); }).catch((error) => onNotify(error.message, 'error'));
+    const payload = Object.fromEntries(['name', 'matricule', 'function', 'service', 'phone', 'password'].map((key) => [key, form.get(key)]));
+    fetch(`/api/users/${user.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error); return result; }).then((updated) => { onSaved(updated); formElement.elements.password.value = ''; onNotify('Profil mis à jour.', 'success'); }).catch((error) => onNotify(error.message, 'error'));
   }
-  return <section className="panel profile-panel"><div className="panel-heading"><div><p className="eyebrow">ESPACE PERSONNEL</p><h2>Mon profil</h2></div></div><form className="profile-form" onSubmit={save}><label>Nom et prénom<input name="name" defaultValue={user.name} required /></label><label>Matricule<input name="matricule" defaultValue={user.matricule} required /></label><label>Fonction<input name="function" defaultValue={user.function} /></label><label>Téléphone<input name="phone" defaultValue={user.phone} /></label><label>Nouveau mot de passe<input name="password" type="password" placeholder="Laisser vide pour conserver l’actuel" minLength="6" /></label><button className="primary-button" type="submit">Enregistrer mes modifications</button></form></section>;
+  return <section className="panel profile-panel"><div className="panel-heading"><div><p className="eyebrow">ESPACE PERSONNEL</p><h2>Mon profil</h2></div></div><form className="profile-form" onSubmit={save}><label>Nom et prénom<input name="name" defaultValue={user.name} required /></label><label>Matricule<input name="matricule" defaultValue={user.matricule} required /></label><label>Fonction<input name="function" defaultValue={user.function} /></label><label>Service<input name="service" defaultValue={user.service || ''} /></label><label>Téléphone<input name="phone" defaultValue={user.phone} /></label><label>Nouveau mot de passe<input name="password" type="password" placeholder="Laisser vide pour conserver l’actuel" minLength="6" /></label><button className="primary-button" type="submit">Enregistrer mes modifications</button></form></section>;
 }
-function calculateLeaveDays(dateStart, dateEnd, holidays = 0) {
+function calculateLeaveDays(dateStart, dateEnd) {
   if (!dateStart || !dateEnd) return 0;
   const start = new Date(`${dateStart}T00:00:00`);
   const end = new Date(`${dateEnd}T00:00:00`);
   if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) return 0;
-  return Math.max(0, Math.floor((end - start) / 86400000) - Math.max(0, Math.trunc(Number(holidays) || 0)));
+  return Math.floor((end - start) / 86400000);
 }
 function printLeaveRequest(leave, user) {
   const printWindow = window.open('', '_blank', 'width=900,height=1000');
   if (!printWindow) return;
   const checked = (value) => value === leave.TYPE_CONGE ? '☑' : '☐';
-  printWindow.document.write(buildLeavePrintHtml(leave, user, checked));
+  const printDocument = new DOMParser().parseFromString(buildLeavePrintHtml(leave, user, checked), 'text/html');
+  const serviceLabel = Array.from(printDocument.querySelectorAll('.main-table .lbl')).find((cell) => cell.textContent.includes('المصلحة'));
+  if (serviceLabel?.nextElementSibling) serviceLabel.nextElementSibling.textContent = user.service || '-';
+  const headerDate = printDocument.querySelector('.header-date');
+  if (headerDate) {
+    const dateSpan = printDocument.createElement('span');
+    dateSpan.dir = 'ltr';
+    dateSpan.textContent = formatPrintDate(leave.DATE_DEMANDE);
+    headerDate.replaceChildren(printDocument.createTextNode('قابس في : '), dateSpan);
+  }
+  const dateCells = printDocument.querySelectorAll('.main-table td.val2');
+  if (dateCells[0]) dateCells[0].textContent = formatPrintDate(leave.DATE_DEBUT);
+  if (dateCells[1]) dateCells[1].textContent = formatPrintDate(leave.DATE_FIN);
+  printWindow.document.write(`<!doctype html>${printDocument.documentElement.outerHTML}`);
+  const printStyles = printWindow.document.createElement('style');
+  printStyles.textContent = '@page{size:A4 portrait;margin:8mm}@media print{body{background:#fff}.a4{width:100%;height:281mm;min-height:281mm;margin:0;padding:5mm;border:2px double #000}.main-table td{padding:7pt 5pt}.footer-sign{margin-top:10mm;break-inside:avoid}.header,.titre,.checkboxes,.main-table{break-inside:avoid}}';
+  printWindow.document.head.append(printStyles);
   printWindow.document.close();
   return;
   printWindow.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>مطلب إجازة</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#111;margin:0;font-size:17px}.sheet{border:1px solid #222;padding:34px 38px;min-height:250mm}.brand{text-align:center;font-size:14px;line-height:1.8;margin-bottom:24px}.title{text-align:center;text-decoration:underline;font-size:28px;margin:10px 0 60px}.checks{display:flex;justify-content:space-between;gap:16px;margin-bottom:70px;white-space:nowrap}.details{display:grid;grid-template-columns:1fr 1fr;gap:28px 55px;line-height:2.2}.field{border-bottom:1px dotted #777;min-height:34px}.label{font-weight:bold}.summary{margin-top:48px;border-top:1px solid #222;padding-top:24px;line-height:2.2}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:70px;margin-top:70px;text-align:center}.signature{height:90px;border-bottom:1px solid #222}small{display:block;color:#555;margin-top:18px}</style></head><body><main class="sheet"><div class="brand">الجمهورية التونسية<br>وزارة الشؤون الاجتماعية<br>مطلب إجازة</div><h1 class="title">مطلب إجازة</h1><div class="checks"><span>${checked('SOLDE')} خالصة الأجر</span><span>${checked('NON_SOLDE')} غير خالصة الأجر</span><span>${checked('FAMILIAL')} لأسباب عائلية</span><span>${checked('AUTORISE')} مرخص فيها</span><span>${checked('COMPENSATION')} تعويض</span></div><section class="details"><div><span class="label">الاسم و اللقب:</span> ${escapeHtml(user.name)}</div><div><span class="label">الرقم الآلي:</span> ${escapeHtml(user.matricule)}</div><div><span class="label">المصلحة:</span> ${escapeHtml(user.function || '-')}</div><div><span class="label">الهاتف:</span> ${escapeHtml(user.phone || '-')}</div><div><span class="label">نوع الإجازة:</span> ${escapeHtml(type)}</div><div><span class="label">تاريخ تقديم الطلب:</span> ${formatDate(leave.DATE_DEMANDE)}</div><div><span class="label">تاريخ بداية الإجازة:</span> ${formatDate(leave.DATE_DEBUT)}</div><div><span class="label">تاريخ نهاية الإجازة:</span> ${formatDate(leave.DATE_FIN)}</div></section><section class="summary"><div><span class="label">عدد الأيام المطلوبة:</span> ${leave.NBR_JOURS || 0} يوم</div><div><span class="label">من ضمنها أيام العطل:</span> ${leave.NBR_FERIES || 0} يوم</div><div><span class="label">الرصيد السابق:</span> ${leave.SOLDE_AVANT ?? '-'} يوم</div><div><span class="label">الرصيد الحالي:</span> ${leave.SOLDE_APRES ?? '-'} يوم</div><div><span class="label">الحالة:</span> ${escapeHtml(leave.STATUT || 'EN_ATTENTE')}</div></section><div class="signatures"><div><div class="signature"></div><small>إمضاء العون</small></div><div><div class="signature"></div><small>رأي المسؤول</small></div></div></main><script>window.onload=()=>window.print();</script></body></html>`);
