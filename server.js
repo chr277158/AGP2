@@ -113,7 +113,8 @@ function createPostgresDatabaseAdapter() {
 
       return {
         async run(...params) {
-          const sqlToRun = /^\s*INSERT\b/i.test(sql) && !/RETURNING\b/i.test(sql)
+          const insertsWithoutId = /^\s*INSERT\s+INTO\s+user_leave_balances\b/i.test(sql);
+          const sqlToRun = /^\s*INSERT\b/i.test(sql) && !/RETURNING\b/i.test(sql) && !insertsWithoutId
             ? `${sql.trim()} RETURNING id`
             : sql;
           const query = toPostgresQuery(sqlToRun, params);
